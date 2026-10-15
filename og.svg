@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<title>Ethan Gaither: websites for small businesses</title>
+<rect width="1200" height="630" fill="#F5F1EA"/>
+<rect x="72" y="72" width="72" height="4" fill="#1E4FD6"/>
+<text x="72" y="130" font-family="Helvetica Neue, Arial, sans-serif" font-size="22" letter-spacing="4" fill="#5B554B">BATTLE GROUND, WASHINGTON</text>
+<text x="72" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="100" fill="#17140F">Ethan Gaither</text>
+<text x="72" y="474" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="42" fill="#5B554B">Websites for small businesses</text>
+<!-- a small browser frame with a wireframe inside: the page is about building one -->
+<g transform="translate(776 150)" fill="none" stroke-linejoin="round">
+  <rect x="1" y="1" width="350" height="250" rx="10" stroke="#17140F" stroke-width="2"/>
+  <path d="M1 40H351" stroke="#17140F" stroke-width="2"/>
+  <circle cx="22" cy="21" r="5" stroke="#17140F" stroke-width="2"/>
+  <circle cx="40" cy="21" r="5" stroke="#17140F" stroke-width="2"/>
+  <circle cx="58" cy="21" r="5" stroke="#17140F" stroke-width="2"/>
+  <rect x="84" y="11" width="240" height="20" rx="10" stroke="#5B554B" stroke-width="1.5"/>
+  <rect x="20" y="56" width="312" height="22" rx="4" stroke="#5B554B" stroke-width="1.5"/>
+  <rect x="20" y="90" width="312" height="78" rx="4" stroke="#5B554B" stroke-width="1.5"/>
+  <rect x="34" y="106" width="130" height="10" rx="2" fill="#D9D2C5" stroke="none"/>
+  <rect x="34" y="124" width="92" height="8" rx="2" fill="#D9D2C5" stroke="none"/>
+  <rect x="34" y="142" width="64" height="14" rx="2" fill="#1E4FD6" stroke="none"/>
+  <rect x="20" y="180" width="96" height="56" rx="4" stroke="#5B554B" stroke-width="1.5"/>
+  <rect x="128" y="180" width="96" height="56" rx="4" stroke="#5B554B" stroke-width="1.5"/>
+  <rect x="236" y="180" width="96" height="56" rx="4" stroke="#5B554B" stroke-width="1.5"/>
+</g>
+<rect x="72" y="560" width="1056" height="1" fill="#D9D2C5"/>
+</svg>

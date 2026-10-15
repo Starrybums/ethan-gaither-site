@@ -1,0 +1,13 @@
+# Working files that are not part of the deployed site
+audit/
+engine/
+demo/
+BRIEF.md
+BRIEF-v2.md
+.DS_Store
+.vercel/
+# v1 leftovers in assets/img that the page does not use
+assets/img/blackline-home-*
+assets/img/engine-plate.svg
+assets/img/portrait-placeholder.svg
+assets/img/wafer-placeholder.svg
