@@ -17,6 +17,28 @@ python3 -m http.server 8787
 
 Any static file server works. Opening `index.html` straight from disk also works, except that `404.html` uses root-relative paths and is meant to be served by a host.
 
+## Deploy (live since 2026-10-15)
+
+Live at **https://ethan-gaither.vercel.app** (sample at `/sample/`). This folder is its own git repository; the remote is the public GitHub repo `Starrybums/ethan-gaither-site`. Vercel project `ethan-gaither` builds straight from that repo (no framework, no build step). `.gitignore` keeps `audit/`, `engine/`, `demo/`, the briefs and the unused v1 images out of the repo, so they never reach the host. Vercel does not serve `README.md` or dotfiles.
+
+To ship a change:
+
+```
+git add -A && git commit -m "what changed"
+git push origin main
+```
+
+then create a production deployment from `main` (Fable does this through the Vercel connector; from a logged-in CLI it is `vercel deploy --prod`). Pushing alone does not deploy: the project is not git-linked, on purpose, because the Vercel GitHub app is installed on a different GitHub account.
+
+`vercel.json` sets `cleanUrls` and `trailingSlash: true` (the sample's relative `sample.css` needs `/sample/`), four security headers, and a one-year cache on `assets/`.
+
+### Change the address
+When a custom domain is attached (or the host moves), update these, in this order, then redeploy:
+1. `site.config.js` → `siteUrl`
+2. `index.html` → the baked `<link rel="canonical">`, `og:url` and `og:image` lines in `<head>`
+3. `sitemap.xml` → `<loc>`
+4. `robots.txt` → `Sitemap:`
+
 ## Files
 
 | File | What it is |
