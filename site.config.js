@@ -23,11 +23,11 @@ window.SITE = {
   tagline: "websites for small businesses",
 
   // <title> and social title.
-  title: "Ethan Gaither — websites for small businesses",
+  title: "Web designer in Battle Ground, WA | Ethan Gaither",
 
   // Meta description, 160 characters or fewer.
   description:
-    "Ethan Gaither builds fast, clear websites for small businesses from Battle Ground, Washington. You own the domain, the hosting account, and the code.",
+    "Ethan Gaither builds fast, clear websites for small businesses in Battle Ground, Vancouver and Clark County, WA. You own the domain, hosting and code.",
 
   // [ETHAN] Contact address. This is the default from the build brief; confirm it.
   email: "gaitherethan@icloud.com",
