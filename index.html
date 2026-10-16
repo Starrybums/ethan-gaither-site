@@ -35,9 +35,9 @@
 <script type="module" src="/js/shell.js"></script>
 <link rel="stylesheet" href="/styles/effects.css">
 <!-- "build-live": the build section pins and choreographs only when JavaScript runs, motion is allowed,
-     IntersectionObserver exists and the browser has container query units (the frame is sized with them). Set here, before first paint, so the layout never jumps. type-morph.js sets data-stage
+     IntersectionObserver exists and the browser has container query units and tan(atan2()) (the frame is sized with them). Set here, before first paint, so the layout never jumps. type-morph.js sets data-stage
      on #build as soon as it runs; if it never does (script blocked), the class comes off and the finished page shows. -->
-<script>(function(){try{var d=document.documentElement;if('IntersectionObserver' in window&&window.CSS&&CSS.supports&&CSS.supports('width','1cqw')&&d.classList.contains('motion-ok')){d.className+=' build-live';setTimeout(function(){var b=document.getElementById('build');if(!b||!b.hasAttribute('data-stage'))d.classList.remove('build-live')},5000)}}catch(e){}})()</script>
+<script>(function(){try{var d=document.documentElement;if('IntersectionObserver' in window&&window.CSS&&CSS.supports&&CSS.supports('width','1cqw')&&CSS.supports('scale','calc(tan(atan2(2px,1px)))')&&d.classList.contains('motion-ok')){d.className+=' build-live';setTimeout(function(){var b=document.getElementById('build');if(!b||!b.hasAttribute('data-stage'))d.classList.remove('build-live')},5000)}}catch(e){}})()</script>
 <!-- The build section's two screenshots (about 230 KB) are fetched when the section is within 300 px of the screen, so they do not
      compete with the hero for bandwidth. Without JavaScript the <noscript> copies load as normal images. -->
 <script>document.addEventListener('DOMContentLoaded',function(){var im=document.querySelectorAll('img[data-src]'),go=function(i){i.src=i.getAttribute('data-src');i.removeAttribute('data-src')};if(!('IntersectionObserver' in window)){for(var k=0;k<im.length;k++)go(im[k]);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);go(e.target.querySelector('img[data-src]'))}})},{rootMargin:'300px 0px'});for(var j=0;j<im.length;j++)io.observe(im[j].parentNode)})</script>
@@ -349,20 +349,22 @@
     </div>
   </section>
 
-  <!-- 3D showcase. js/scene3d.js and styles/effects.css drive it (--scene-p); the text column is plain HTML. -->
+  <!-- 3D showcase. js/scene3d.js and styles/effects.css drive it (--scene-p); the text column is plain HTML.
+       The four layers are four different samples, so the stack shows the range. The "Scroll to pull the layers apart"
+       sentence is shown by home.css only while scene3d.js has the section live (.is-live), so it is never false. -->
   <section class="section showcase" id="showcase-3d" data-scene3d aria-labelledby="showcase-title">
     <div class="wrap showcase__grid">
       <div class="showcase__text" data-reveal>
         <p class="eyebrow">In 3D</p>
-        <h2 id="showcase-title">One site, every screen.</h2>
-        <p class="measure">The same sample on a laptop and a phone, each laid out for its own screen. Scroll to pull the layers apart.</p>
-        <p class="actions"><a class="btn" data-fx="magnetic" href="/samples/hollow-oak/">Open the sample</a></p>
+        <h2 id="showcase-title">Four sites, four looks.</h2>
+        <p class="measure">A coffee shop, a restaurant, a fitness studio and a plumber. Each sample has its own design. None of the businesses exist. <span class="showcase__hint">Scroll to pull the layers apart.</span></p>
+        <p class="actions"><a class="btn" data-fx="magnetic" href="/samples/">See all the samples</a></p>
       </div>
       <div class="scene3d" data-scene3d-stage>
         <img data-layer="laptop" src="/assets/img/samples/hollow-oak-desktop.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The Hollow Oak Coffee sample on a laptop: a dark green banner with the headline Good coffee, no rush.">
-        <img data-layer="card" src="/assets/img/samples/hollow-oak-card.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The menu section of the same sample, with coffee and food prices.">
-        <img data-layer="card-2" src="/assets/img/samples/hollow-oak-card-2.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The opening hours and the address with a directions button, from the same sample.">
-        <img data-layer="phone" src="/assets/img/samples/hollow-oak-phone.webp" width="780" height="1688" loading="lazy" decoding="async" alt="The same sample on a phone.">
+        <img data-layer="card" src="/assets/img/samples/casa-ortega-card.webp" width="1200" height="750" loading="lazy" decoding="async" alt="The Casa Ortega sample, a made-up Mexican restaurant: a red page under a row of paper flags, with the name in cream and marigold and a Call to order button.">
+        <img data-layer="card-2" src="/assets/img/samples/tempo-fitness-card.webp" width="1200" height="750" loading="lazy" decoding="async" alt="The Tempo Fitness sample, a made-up group training studio: a near-black page with big white and lime type reading Train on the beat.">
+        <img data-layer="phone" src="/assets/img/samples/summit-plumbing-phone.webp" width="585" height="1266" loading="lazy" decoding="async" alt="The Switchback Plumbing sample, a made-up plumber, on a phone: a navy page with a big orange Call button.">
       </div>
     </div>
   </section>

@@ -1,33 +1,47 @@
 /* js/background.js — the scroll-reactive ink-and-paper background. Owner: effects (WORKER-BRIEFS.md §2.2).
 
-   What it draws: faint ink contour lines over the paper, like an engraved map or a marbled endpaper. Every fourth
-   line is a little heavier, one level is cobalt, and a warm wash pools on the high ground. Scrolling drags the field
-   up (slower than the text) and re-forms it, scroll speed combs the lines sideways, and a mouse bends them around the
-   pointer. Nothing moves on its own: the
-   loop runs only while an eased value is catching up with input, then stops (WCAG 2.2.2: no automatic motion).
+   What it draws: four movements, one after another down the page (BRIEF-v3 §14.1). Each one dissolves into the next
+   in soft patches as the visitor scrolls, and the colour of the marks and of the wash drifts with them:
+     0. Contour lines (the hero): ink lines like an engraved map, every fourth heavier, one level cobalt, a warm wash
+        on the high ground. Scroll speed combs them sideways; a mouse bends them.
+     1. A dot grid (the build): a halftone grid like a design canvas, cobalt crosses every sixth point, a cool wash.
+        The dots swell in drifting islands as the page scrolls, stretch into streaks with scroll speed, and grow
+        under the mouse like a loupe.
+     2. Long slow waves (what you get, the samples): ribbons of fine warm lines that swell with scroll speed and lift
+        around the mouse; the wash cools from warm to cobalt further down.
+     3. A near-still field (the calls to action at the end): paper grain and a soft dusk wash that pools low, moving
+        at a twentieth of the scroll.
+   On the home page the hand-offs follow the sections (#build, #offer, .closing); other pages spread them over their
+   own length, fewer on short pages. Nothing moves on its own: the loop runs only while an eased value is catching up
+   with input, then stops (WCAG 2.2.2: no automatic motion).
 
    Contract:  init(canvasEl, { tokens, reducedMotion, intensity }) → { pause(), resume(), destroy(), update({ tokens }) }
    - canvasEl is #bg-canvas inside .bg (which paints the static gradient fallback). .is-live goes on .bg after the
      first frame; the canvas then fades in over the gradient (styles/shell.css).
-   - tokens: { ink, paper, accent, warm, alpha, dark } from shell.js readTokens(). No mark covers the paper at more
-     than tokens.alpha (70% of it on light paper, see setTokens), so every text colour keeps AA over the densest mark.
-   - intensity 'full' (home) or 'low' (inner pages: fewer lines, lower alpha, no pointer response).
+   - tokens: { ink, paper, accent, warm, alpha, dark } from shell.js readTokens(). Every colour is a token or a mix of
+     two. Whatever the movement, no pixel covers the paper at more than tokens.alpha (70% of it on light paper, see
+     setTokens), and ink is the strongest mark in both schemes, so every text colour keeps AA over the densest mark.
+   - intensity 'full' (home) or 'low' (inner pages: fewer marks, lower alpha, no pointer response).
    - DPR capped at 2 (1.5 below 700 px wide, and a pixel budget on big screens). Paused while the tab is hidden.
    - Frame-time governor: if the last 30 drawn frames average over 4 ms of main-thread time, the render scale steps
      1 → 0.75 → 0.5, then the picture freezes on its last frame. Slow frame intervals (GPU-bound) step the scale too.
-   - WebGL 1, one full-screen triangle, one draw call per frame. No WebGL (or a software-only GPU): returns quietly
-     and the gradient stays. Context loss: back to the gradient until the context is restored.
-   - No layout reads in the loop: sizes are cached on resize and when the page height changes. */
+   - WebGL 1, one full-screen triangle, one draw call per frame. Only the one or two movements on screen are computed
+     (branches on a uniform), and derivatives are taken outside those branches. No WebGL (or a software-only GPU):
+     returns quietly and the gradient stays. Context loss: back to the gradient until the context is restored.
+   - No layout reads in the loop: sizes and section positions are cached on resize and when the page height changes. */
 
 const VERT = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
 
-// Field units: 1 = one viewport height. Gradient noise, domain-warped, contoured with screen-space derivatives.
+// Field units: 1 = one viewport height. uK picks the movement (0..3; between two whole numbers, both are drawn and
+// dissolve into each other). Each movement returns premultiplied colour and alpha; main() caps the alpha at uA.
+// FW(x, e) is fwidth(x) where derivatives exist, else the estimate e; it is only ever used outside a branch.
 const FRAG = `#extension GL_OES_standard_derivatives : enable
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
 #else
 precision mediump float;
 #endif
+FWDEF
 uniform vec2 uR;
 uniform float uS;
 uniform float uT;
@@ -39,6 +53,7 @@ uniform vec3 uAcc;
 uniform vec3 uWarm;
 uniform float uA;
 uniform float uD;
+uniform float uK;
 float hash(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}
 vec2 grad(vec2 i){float a=hash(i)*6.2831853;return vec2(cos(a),sin(a));}
 float noise(vec2 p){
@@ -46,28 +61,81 @@ float noise(vec2 p){
   return mix(mix(dot(grad(i),f),dot(grad(i+vec2(1.,0.)),f-vec2(1.,0.)),u.x),
              mix(dot(grad(i+vec2(0.,1.)),f-vec2(0.,1.)),dot(grad(i+1.),f-1.),u.x),u.y);
 }
+float near(vec2 uv,float k){vec2 d=uv-uM.xy;return uM.z*exp(-dot(d,d)*k);}
+vec4 over(vec3 lc,float la,vec3 wc,float wa){return vec4(lc*la+wc*wa*(1.-la),la+wa*(1.-la));}
+float lineAt(float x,float fw,float wpx){return clamp(wpx*uS+.5-abs(fract(x+.5)-.5)/fw,0.,1.)*(1.-smoothstep(.1,.42,fw));}
+vec4 grid(vec2 uv){
+  float n=uD*4.;
+  vec2 g=vec2(uv.x,uv.y-uT*.55)*n;
+  vec2 id=floor(g),c=fract(g)-.5,ac=abs(c);
+  float h=noise(id*.085+vec2(3.1,-uT*.3));
+  float r=mix(.04,.18,smoothstep(-.3,.45,h))*(1.+near(uv,20.)*1.4);
+  float aa=n/uR.y;
+  float dt=1.-smoothstep(r-aa,r+aa,length(vec2(c.x,c.y/(1.+min(abs(uV)*2.4,1.)))));
+  float x=step(mod(id.x,6.),.5)*step(mod(id.y,6.),.5);
+  float t=n*uS/uR.y*.6;
+  float cr=x*max((1.-smoothstep(t,t+aa,ac.x))*step(ac.y,.42),(1.-smoothstep(t,t+aa,ac.y))*step(ac.x,.42));
+  dt*=(1.-x)*.9;
+  float wa=(.35+.65*smoothstep(-.4,.6,noise(uv*.7+vec2(2.3,-uT*.25))))*uA*.6;
+  float la=(dt+cr)*uA;
+  return over((mix(uInk,uAcc,.7)*dt+uAcc*cr)/max(dt+cr,1e-4),la,uAcc,wa);
+}
+vec4 still(vec2 uv){
+  vec2 g=vec2(uv.x,uv.y-uT*.05)*(uR.y/uS/3.5);
+  vec2 id=floor(g);
+  float on=step(.92,hash(id+17.));
+  float ga=on*(1.-smoothstep(.26,.46,length(fract(g)-.5)))*(.5+.5*hash(id*1.7+3.))*uA;
+  float f=.5+.5*noise(uv*.6+vec2(5.2,-uT*.05));
+  float wa=(.4+.6*smoothstep(.25,.85,f))*mix(1.,.45,clamp(uv.y,0.,1.))*uA*.8;
+  vec3 dusk=mix(uWarm,uAcc,.55+.2*sin(uv.x*1.3+.5));
+  return over(uInk,ga,dusk,wa);
+}
 void main(){
   vec2 uv=gl_FragCoord.xy/uR.y;
-  vec2 p=uv*1.5+vec2(0.,uT*.42);
-  vec2 w=vec2(noise(p*.65+vec2(1.7,uT*.21)),noise(p*.65+vec2(8.3,2.8)-vec2(uT*.16,0.)));
-  vec2 q=p+w*1.15;
-  q.x+=uV*.2*sin(q.y*2.6+uT*.8);
-  vec2 d=uv-uM.xy;
-  q+=d*(uM.z*1.6*exp(-dot(d,d)*16.));
-  float f=noise(q)+.45*noise(q*2.03+4.1);
-  float v=f*uD*(1.+.22*uP);
-  float fw=max(FW,1e-4);
-  float px=abs(fract(v+.5)-.5)/fw;
-  float lvl=floor(v+.5);
-  float acc=step(abs(lvl-2.),.5);
-  float idx=max(step(mod(lvl,4.),.5),acc);
-  float line=clamp((.6+.45*idx)*uS+.5-px,0.,1.)*smoothstep(.42,.1,fw);
-  float la=line*uA*mix(.72,1.,idx);
-  float wa=smoothstep(.22,.75,f)*uA*.5;
-  float a=la+wa*(1.-la);
-  vec3 c=mix(uInk,uAcc,acc)*la+uWarm*wa*(1.-la);
-  float k=min(1.,uA/max(a,1e-4));
-  gl_FragColor=vec4(c*k,a*k);
+  float i0=floor(uK),t=uK-i0;
+  vec4 A=vec4(0.),B=vec4(0.);
+  float v=0.,f=0.,h=0.,sw=0.,yw=0.;
+  bool c0=uK<1.,c2=abs(uK-2.)<1.;
+  if(c0){
+    vec2 p=uv*1.5-vec2(0.,uT*.42);
+    vec2 w=vec2(noise(p*.65+vec2(1.7,uT*.21)),noise(p*.65+vec2(8.3,2.8)-vec2(uT*.16,0.)));
+    vec2 q=p+w*1.15;
+    q.x+=uV*.2*sin(q.y*2.6+uT*.8);
+    vec2 d=uv-uM.xy;
+    q+=d*(uM.z*1.6*exp(-dot(d,d)*16.));
+    f=noise(q)+.45*noise(q*2.03+4.1);
+    v=f*uD*(1.+.22*uP);
+  }
+  if(c2){
+    yw=uv.y-uT*.32;
+    sw=.55*sin(uv.x*1.1+uT*.7+1.4*noise(vec2(uv.x*.4,yw*.3)))+.22*sin(uv.x*2.6-uT*.5+yw*1.3)+.1*sin(uv.x*5.3+yw*2.-uT*.8);
+    sw=sw*(1.+min(abs(uV),1.)*.9)+near(uv,9.)*.5;
+    h=(yw+sw*.14)*uD*2.3;
+  }
+  float fwv=max(FW(v,uD*2.4/uR.y),1e-4);
+  float fwh=max(FW(h,uD*3.2/uR.y),1e-4);
+  if(c0){
+    float lvl=floor(v+.5);
+    float acc=step(abs(lvl-2.),.5);
+    float idx=max(step(mod(lvl,4.),.5),acc);
+    float la=lineAt(v,fwv,.6+.45*idx)*uA*mix(.72,1.,idx);
+    A=over(mix(uInk,uAcc,acc),la,uWarm,(.25+.75*smoothstep(.1,.75,f))*uA*.55);
+  }
+  if(abs(uK-1.)<1.){vec4 o=grid(uv);if(i0<.5)B=o;else A=o;}
+  if(c2){
+    float idx=step(mod(floor(h+.5),5.),.5);
+    float env=smoothstep(-.2,.7,sin(yw*2.2+sw*1.5+.8));
+    float la=lineAt(h,fwh,.95+.35*idx)*uA*mix(.6,1.,env);
+    vec3 wc=mix(uWarm,uAcc,.15+.45*smoothstep(.3,.9,uP));
+    vec4 o=over(mix(uWarm,uInk,idx*.55),la,wc,(.35+.65*env)*uA*.6*(.5+.5*smoothstep(-.3,.6,sw)));
+    if(i0<1.5)B=o;else A=o;
+  }
+  if(uK>2.){vec4 o=still(uv);if(i0<2.5)B=o;else A=o;}
+  if(t>.002){
+    float n=.5+.6*noise(uv*1.6+vec2(7.1,-uT*.3));
+    A=mix(A,B,smoothstep(n-.18,n+.18,t*1.5-.25));
+  }
+  gl_FragColor=A*min(1.,uA/max(A.a,1e-4));
 }`;
 
 const SCALES = [1, 0.75, 0.5];
@@ -113,6 +181,9 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
   let hidden = document.visibilityState === 'hidden';
   let vw = 0, vh = 0, unit = 0, maxScroll = 1, bufW = 0, bufH = 0, bufCssH = 0, dpr = 1, si = 0;
   let colours = null, alpha = 0.1;
+  // Where the movements hand over: three reference positions in page px (the viewport's middle line) and the
+  // half-width of each hand-over. Infinity means that movement is never reached on this page.
+  let bounds = [Infinity, Infinity, Infinity], bw = 1;
 
   // Inputs (targets) and their eased values. Scroll is measured in "unit"s: the viewport height, fixed until the width
   // changes, so a phone's address bar sliding in and out does not make the field jump.
@@ -148,8 +219,8 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
   function setup() {
     const deriv = gl.getExtension('OES_standard_derivatives');
     const src = deriv
-      ? FRAG.replace('FW', 'fwidth(v)')
-      : FRAG.replace('#extension GL_OES_standard_derivatives : enable\n', '').replace('FW', '(uD*2.4/uR.y)');
+      ? FRAG.replace('FWDEF', '#define FW(x,e) fwidth(x)')
+      : FRAG.replace('#extension GL_OES_standard_derivatives : enable\n', '').replace('FWDEF', '#define FW(x,e) (e)');
     const vs = shader(gl.VERTEX_SHADER, VERT);
     const fs = shader(gl.FRAGMENT_SHADER, src);
     prog = gl.createProgram();
@@ -172,7 +243,7 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     uni = {};
-    ['uR', 'uS', 'uT', 'uP', 'uV', 'uM', 'uInk', 'uAcc', 'uWarm', 'uA', 'uD'].forEach((n) => { uni[n] = gl.getUniformLocation(prog, n); });
+    ['uR', 'uS', 'uT', 'uP', 'uV', 'uM', 'uInk', 'uAcc', 'uWarm', 'uA', 'uD', 'uK'].forEach((n) => { uni[n] = gl.getUniformLocation(prog, n); });
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.BLEND);
     gl.clearColor(0, 0, 0, 0);
@@ -189,6 +260,34 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     maxScroll = Math.max(1, docEl.scrollHeight - vh);
     sT = (win.scrollY || 0) / unit;
     pT = clamp((win.scrollY || 0) / maxScroll, 0, 1);
+    measureBounds();
+  }
+  // Home: the dot grid takes over as the build reaches the middle of the screen, the waves at "What you get", and the
+  // still field as the closing calls to action come up (kept reachable at the very bottom). Other pages spread up to
+  // three hand-overs evenly over their own length: one per 1.2 screens of scrolling, so a short page stays calm.
+  function measureBounds() {
+    const y0 = win.scrollY || 0;
+    const top = (sel) => { const el = document.querySelector(sel); return el ? el.getBoundingClientRect().top + y0 : NaN; };
+    const lo = vh * 0.5, hi = maxScroll + vh * 0.5;
+    bw = vh * 0.4;
+    let b = [top('[data-morph-root]') + vh * 0.1, top('#offer'), top('.closing') - vh * 0.2];
+    if (b.every(Number.isFinite)) {
+      b[2] = Math.min(b[2], hi - bw);
+      b[1] = Math.min(b[1], b[2] - 2 * bw);
+      b[0] = Math.max(lo + bw, Math.min(b[0], b[1] - 2 * bw));
+    } else {
+      const n = Math.min(3, Math.floor((hi - lo) / (1.2 * vh)));
+      bw = Math.min(bw, (hi - lo) / (2 * (n + 1)));
+      b = [0, 1, 2].map((i) => (i < n ? lo + ((hi - lo) * (i + 1)) / (n + 1) : Infinity));
+    }
+    bounds = b;
+  }
+  // Scroll position (px) → movement, 0..3, linear through each hand-over (the shader shapes the dissolve).
+  function depthAt(y) {
+    const r = y + vh * 0.5;
+    let k = 0;
+    for (let i = 0; i < 3; i++) k += clamp((r - bounds[i] + bw) / (2 * bw), 0, 1);
+    return k;
   }
   function sizeBuffer(force) {
     let d = Math.min(win.devicePixelRatio || 1, vw < 700 ? 1.5 : 2);
@@ -219,6 +318,7 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     gl.uniform3fv(uni.uWarm, colours.warm);
     gl.uniform1f(uni.uA, alpha);
     gl.uniform1f(uni.uD, full ? 7 : 4.5);
+    gl.uniform1f(uni.uK, depthAt(s * unit));
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
@@ -329,12 +429,13 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
   function onRestored() { if (dead) return; setup(); sizeBuffer(true); kick(); }
   function giveUp() { destroy(); }
 
-  // The page grows as images and fonts arrive; keep maxScroll true without reading layout in the loop. A
-  // ResizeObserver callback runs right after layout, so reading scrollHeight there costs nothing extra.
+  // The page grows as images and fonts arrive; keep maxScroll and the section anchors true without reading layout
+  // in the loop. A ResizeObserver callback runs right after layout, so reading positions there costs nothing extra.
   let ro = null;
   if ('ResizeObserver' in win) {
     ro = new ResizeObserver(() => {
       maxScroll = Math.max(1, docEl.scrollHeight - vh);
+      measureBounds();
       scrolled = true;
       kick();
     });

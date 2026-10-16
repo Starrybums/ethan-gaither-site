@@ -85,9 +85,21 @@ html.motion-ok .bg { animation: fx-fade-in var(--dur-4) var(--ease-out) both; }
 .site-nav.has-ink a, .site-nav.has-ink a:hover, .site-nav.has-ink a[aria-current="page"] { text-decoration-color: transparent; }
 
 .site-cta { order: 2; display: flex; flex-wrap: wrap; gap: 8px; }
+/* Phones: two rows, so the hero starts high on the screen. Row 1 is the brand with the nav beside it, row 2 the two
+   CTAs side by side. The nav fits beside the brand from about 370 px wide (17 px brand, 14 px links); on a narrower
+   screen it wraps onto its own row, left-aligned, and nothing overflows. Every link and button stays 44 px tall. */
 @media (max-width: 559px) {
-  .site-cta { order: 4; flex: 1 1 100%; padding-bottom: 4px; }
+  .site-header__bar { gap: 4px 8px; padding-block: 6px 10px; }
+  .brand { font-size: 1.0625rem; padding-block: 12px; }
+  .site-nav { order: 1; flex: 0 1 auto; }
+  .site-nav__list { flex-wrap: nowrap; margin-inline: -6px; }
+  .site-nav a { padding: 12px 6px; font-size: .875rem; }
+  .site-cta { order: 4; flex: 1 1 100%; }
   .site-cta .btn { flex: 1 1 0; justify-content: center; padding-inline: 12px; }
+}
+/* Between 560 and 639 px: brand and CTAs on one row, the nav below, with less air above and below. */
+@media (min-width: 560px) and (max-width: 639px) {
+  .site-header__bar { padding-block: 8px 6px; }
 }
 @media (min-width: 700px) {
   .site-nav a { padding-inline: 12px; font-size: 1rem; }

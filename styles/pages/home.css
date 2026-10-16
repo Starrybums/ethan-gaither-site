@@ -164,14 +164,23 @@ img[data-src] { display: none; }
   html.build-live .build-lead { display: block; }
   html.build-live .build-step__card { pointer-events: auto; }
 
-  /* Geometry. --dw is the browser at scale 1 (the zoom). --pw is the phone at scale 1 (the zoomed-in phone). */
+  /* Geometry. --dw is the browser at scale 1, which is also its zoomed size: 93% of the stage width (BRIEF-v3 14.2 asks for
+     92 to 94%), capped at 1800px (the width of the screenshot) and, on very short windows, at the width that leaves about
+     200px of the frame below the fold (the zoomed frame bleeds off the bottom on purpose).
+     --dwo is the size the browser used to be laid out at (it fits the stage height). The resting and aside sizes are fractions
+     of --dwo, so they keep their old sizes. tan(atan2(a, b)) is a / b as a plain number: that is how two lengths become the
+     unitless scale. At 1440x900 the frame at full zoom is 1339px wide, 93% of the viewport (it was 1127px, 78%). The resting
+     frame is 9% wider than it was (.698 where it was .64), so the travel from rest to full zoom is 9% longer (1.70x, was 1.56x).
+     --pw is the phone at scale 1 (the zoomed-in phone). */
   html.build-live .build {
-    --dw: min(1180px, 96cqw, calc((100cqh - 190px) / .63));
+    --dw: min(93cqw, 1800px, calc((100cqh + 48px) / .6));
+    --dwo: min(1180px, 96cqw, calc((100cqh - 190px) / .63));
+    --fit: calc(tan(atan2(var(--dwo), var(--dw))));
     --pw: min(380px, 40cqw, 45cqh);
     --wrapR: min(50cqw, calc(var(--maxw) / 2));
     --t: 900ms;
     /* intro */
-    --d-s: .64; --d-x: 0px; --d-y: 9cqh; --d-o: 1; --d-tilt: 9deg;
+    --d-s: calc(var(--fit) * .698); --d-x: 0px; --d-y: 9cqh; --d-o: 1; --d-tilt: 9deg;
     --p-s: .5; --p-x: 0px; --p-y: 0px; --p-o: 0;
   }
   html.build-live .build[data-frame="zoom"] {
@@ -179,7 +188,7 @@ img[data-src] { display: none; }
     --p-s: .5; --p-o: 0;
   }
   html.build-live .build[data-frame="aside"] {
-    --d-s: .56; --d-x: calc(var(--wrapR) - var(--gutter) - var(--dw) * .56 / 2); --d-y: 6cqh; --d-o: 1; --d-tilt: 0deg;
+    --d-s: calc(var(--fit) * .56); --d-x: calc(var(--wrapR) - var(--gutter) - var(--dwo) * .56 / 2); --d-y: 6cqh; --d-o: 1; --d-tilt: 0deg;
     --p-s: .5; --p-o: 0;
   }
   html.build-live .build[data-frame="phone"] {
@@ -259,7 +268,7 @@ img[data-src] { display: none; }
   html.build-live .build-steps { margin-top: var(--pin-h); padding-inline: var(--gutter); }
   html.build-live .build {
     --dw: calc(100cqw - 2 * var(--gutter));
-    --d-s: .74; --d-y: 40px; --d-tilt: 8deg;
+    --d-s: .68; --d-y: 40px; --d-tilt: 8deg; /* was .74: the travel to full zoom (1) is 9% longer, and the frame still stops inside the gutters */
   }
   html.build-live .build[data-frame="zoom"] { --d-s: 1; --d-y: 22px; }
   html.build-live .build[data-frame="aside"] { --d-s: .86; --d-x: 0px; --d-y: 22px; }
@@ -318,6 +327,11 @@ img[data-src] { display: none; }
 }
 .showcase__text > :last-child { margin-bottom: 0; }
 .showcase__text h2 { margin-bottom: 16px; }
+/* "Scroll to pull the layers apart" is only true while scene3d.js is driving the stack (it adds .is-live to the section).
+   Without JavaScript, under reduced motion, with save-data, or if the module fails, the stack is still and the sentence is gone. */
+.showcase__hint { display: none; }
+.showcase.is-live .showcase__hint { display: inline; }
+@media (prefers-reduced-motion: reduce) { .showcase.is-live .showcase__hint { display: none; } }
 
 /* ============================================================================================================
    7. About teaser, closing

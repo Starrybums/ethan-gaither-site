@@ -20,10 +20,11 @@ const PHONE_RE = /^[0-9 +().\-x]*$/;
 const CTRL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
 const MULTILINE = { message: true, times: true };
 
-// Same limits and messages as the server (api/README.md, "Field messages").
+// Same limits and messages as the server (api/README.md, "Field messages"). `missing` is the client-only message for an
+// empty required field when it differs from the bad-format message (the server never sees an empty email from this form).
 const RULES = {
   name:     { max: 100, need: true, msg: 'Add your name.' },
-  email:    { max: 254, need: true, msg: "That email address doesn't look right.", test: (v) => v.length >= 3 && EMAIL_RE.test(v) },
+  email:    { max: 254, need: true, missing: 'Add your email.', msg: "That email address doesn't look right.", test: (v) => v.length >= 3 && EMAIL_RE.test(v) },
   business: { max: 120, need: true, msg: 'Add your business name.' },
   website:  { max: 200, msg: 'Keep the website under 200 characters.' },
   phone:    { max: 40, msg: 'Use digits and + ( ) - only.', test: (v) => PHONE_RE.test(v) },
@@ -38,7 +39,7 @@ function check(name, raw, type) {
   const r = RULES[name];
   if (!r || (name === 'times' && type !== 'call')) return '';
   const v = clean(raw);
-  if (!v) return r.need || (r.needCall && type === 'call') ? r.msg : '';
+  if (!v) return r.need || (r.needCall && type === 'call') ? (r.missing || r.msg) : '';
   if (CTRL_RE.test(v) || (!MULTILINE[name] && /[\n\t]/.test(v))) return r.msg;
   if (v.length > r.max) return r.longMsg || r.msg;
   if (r.test && !r.test(v)) return r.msg;
