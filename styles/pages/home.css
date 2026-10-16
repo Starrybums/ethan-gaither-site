@@ -1,1 +1,346 @@
-/* styles/pages/home.css — page styles. Owner: see WORKER-BRIEFS.md. Use the tokens in styles/tokens.css; do not redefine them. */
+/* styles/pages/home.css — the home page. Owner: home worker (WORKER-BRIEFS.md, section 3.2).
+   Uses the tokens in styles/tokens.css and the shared classes in styles/shell.css. Nothing here redefines a token.
+
+   Contents
+   1. Hero (stage 0)
+   2. What I do
+   3. The build: finished state, the frame, the captions (stages 1 to 5)
+   4. The build: live choreography (html.build-live)
+   5. What you get, proof, samples teaser
+   6. 3D showcase layout
+   7. About teaser, closing
+   8. Reduced motion */
+
+/* ============================================================================================================
+   1. Hero
+   The words are spans in the HTML. Each one comes into focus from "I" onward (hero-focus below), the sub-line and the
+   buttons follow. Animations use fill-mode "backwards", so nothing is left on the elements afterwards (the buttons
+   keep their own transform and backdrop-filter). The glass button fades on its own, never inside a fading wrapper.
+   ============================================================================================================ */
+.hero {
+  display: flex; align-items: center;
+  min-height: min(74svh, 760px);
+  padding-block: clamp(40px, 8vw, 104px) clamp(48px, 9vw, 120px);
+}
+.hero > .wrap { width: 100%; }
+.hero__title .w { display: inline-block; }
+/* No italic above the fold: Fraunces italic is an 82 KB file the first paint would have to wait behind. */
+.hero__title em { font-style: normal; color: var(--accent); }
+
+@keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hero-rise { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@keyframes hero-plain { from { opacity: 0; } to { opacity: 1; } }
+/* The headline words start soft and faint, never fully transparent, so the first frame already paints the heading and
+   the largest-contentful-paint time is the first paint, not the end of the sweep. */
+@keyframes hero-focus { from { opacity: .3; filter: blur(12px); translate: 0 .08em; } to { opacity: 1; filter: blur(0); translate: 0 0; } }
+
+html.motion-ok .hero__eyebrow { animation: hero-fade 480ms var(--ease-out) 80ms backwards; }
+html.motion-ok .hero__title .w { animation: hero-focus 500ms var(--ease-out) calc(100ms + var(--i, 0) * 65ms) backwards; }
+html.motion-ok .hero__lede { animation: hero-rise 520ms var(--ease-out) 800ms backwards; }
+html.motion-ok .hero__btn--1 { animation: hero-fade 520ms var(--ease-out) 940ms backwards; }
+html.motion-ok .hero__btn--2 { animation: hero-rise 520ms var(--ease-out) 1060ms backwards; }
+
+/* Two soft discs behind the buttons, so the glass has something to bend. Light enough that the text on top keeps
+   its contrast in both colour schemes. */
+.hero__cta { position: relative; isolation: isolate; display: inline-block; padding-block: 6px; }
+.hero__orb { position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
+.hero__orb--a {
+  width: 132px; height: 132px; left: -6px; top: -34px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--fx-accent) 34%, transparent), color-mix(in srgb, var(--fx-accent) 14%, transparent) 55%, transparent);
+}
+.hero__orb--b {
+  width: 104px; height: 104px; left: 128px; top: 24px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--fx-warm) 40%, transparent), color-mix(in srgb, var(--fx-warm) 14%, transparent) 55%, transparent);
+}
+@media (min-width: 700px) {
+  .hero__orb--a { width: 168px; height: 168px; left: -10px; top: -52px; }
+  .hero__orb--b { width: 132px; height: 132px; left: 170px; top: 22px; }
+}
+
+/* ============================================================================================================
+   2. What I do
+   ============================================================================================================ */
+.whatido .lede { margin-bottom: 1.1em; }
+
+/* ============================================================================================================
+   3. The build, finished state
+   This is what visitors get without JavaScript, with reduced motion, or without IntersectionObserver: the heading,
+   the browser and the phone side by side, then every caption as a card with the ticks already in. The live layout
+   in section 4 takes over only under html.build-live.
+   ============================================================================================================ */
+.build {
+  --pan: 0;
+  --bezel: #1B1917;
+  --bezel-edge: color-mix(in srgb, var(--ink) 34%, transparent);
+  --pw: clamp(112px, 20vw, 200px);
+  border-top: 1px solid var(--line);
+  padding-block: var(--section-y);
+}
+.build-stage__head h2 { margin-bottom: 14px; max-width: 16em; }
+.build-intro {
+  width: min(100%, var(--maxw)); margin: 16px auto 0; color: var(--ink-2);
+  padding-inline: var(--gutter) max(var(--gutter), calc(100% - 52ch - var(--gutter)));
+}
+.build-stage__cta { display: none; margin: 0; }
+html.build-live .build-stage__cta { display: flex; }
+
+/* The frame: browser and phone, in the page's flow. */
+.frame {
+  display: flex; align-items: flex-end; justify-content: center; gap: clamp(16px, 3vw, 40px);
+  width: min(100%, var(--maxw)); margin: clamp(24px, 4vw, 44px) auto 0; padding-inline: var(--gutter);
+}
+.dev--desktop {
+  flex: 1 1 auto; min-width: 0; max-width: 780px;
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 28px 50px -30px rgb(23 20 15 / .5), 0 2px 6px rgb(23 20 15 / .08);
+}
+.dev__bar {
+  display: flex; align-items: center; gap: 12px; height: 34px; padding-inline: 12px;
+  background: var(--paper-2); border-bottom: 1px solid var(--line);
+}
+.dev__dots { display: flex; gap: 6px; flex: none; }
+.dev__dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 1px var(--ink-2); }
+.dev__url {
+  display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; min-width: 0; max-width: 300px; height: 22px; margin-inline: auto;
+  border: 1px solid var(--line); border-radius: 11px; background: var(--paper);
+  font: 500 11px/1 var(--sans); color: var(--ink-2); white-space: nowrap; overflow: hidden;
+}
+.dev__url svg { width: 10px; height: 10px; flex: none; }
+.dev__view { position: relative; overflow: hidden; aspect-ratio: 1200 / 720; background: #F6EFDF; }
+img[data-src] { display: none; }
+.dev__shot { display: block; width: 100%; height: auto; max-width: none; transform: translateY(calc(var(--pan) * -1%)); transition: transform 900ms var(--ease-in-out); }
+
+.dev--phone {
+  position: relative; flex: none; width: var(--pw); padding: calc(var(--pw) * .035);
+  background: var(--bezel); border-radius: 12% / 5.6%;
+  box-shadow: 0 0 0 1px var(--bezel-edge), 0 28px 50px -28px rgb(23 20 15 / .55);
+}
+.dev__screen { position: relative; overflow: hidden; aspect-ratio: 390 / 844; border-radius: 9.6% / 4.4%; background: #F6EFDF; }
+
+/* Captions as cards. */
+.build-steps {
+  list-style: none; display: grid; gap: 16px;
+  width: min(100%, var(--maxw)); margin: clamp(32px, 5vw, 56px) auto 0; padding-inline: var(--gutter);
+}
+@media (min-width: 700px) { .build-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .build-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.build-lead { display: none; }
+.build-step__card {
+  height: 100%; padding: 20px 22px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-2);
+  transition: border-color var(--dur-4) var(--ease), box-shadow var(--dur-4) var(--ease);
+}
+.build-step__card .eyebrow { margin-bottom: .6rem; }
+.build-step__card h3 { font-size: clamp(1.35rem, 1.05rem + .9vw, 1.75rem); line-height: 1.15; margin-bottom: 10px; }
+.build-step__card p:not(.eyebrow) { margin-bottom: 0; }
+.build-step__card p + p, .build-step__card p + .checks, .build-step__card .checks + p { margin-top: 12px; }
+.build-step__card .actions { margin-top: 16px; }
+
+.checks { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-small); }
+.checks li { display: inline-flex; align-items: center; gap: 6px; }
+.checks svg { flex: none; width: 16px; height: 16px; color: var(--ok); }
+.build-step__owns { font: 300 1.125rem/1.35 var(--serif); }
+
+/* ============================================================================================================
+   4. The build, live
+   html.build-live (set in the page head: JavaScript, motion allowed, IntersectionObserver) switches this on.
+   type-morph.js writes data-stage / data-frame / data-font on #build; this file reads them.
+   Frames: intro, zoom, aside, phone, phone-in, review. The frame is two layers, a browser and a phone, in one grid cell.
+   Both are laid out at their largest size and only ever scaled down (never up, so text stays sharp), and only
+   translate, scale, rotate and opacity change, so everything runs on the compositor.
+   Three layers share one grid cell: .build-stage (the pinned frame), .build-steps (the captions, scrolling over it)
+   and .build-stage__head (the title, pinned above both so the headline stays readable all the way through).
+   ============================================================================================================ */
+@media (min-height: 480px) {
+  html.build-live .build { padding-block: 0; }
+  html.build-live .build-track { display: grid; }
+  html.build-live .build-stage {
+    grid-area: 1 / 1; align-self: start; position: sticky; top: 0; z-index: 1;
+    height: 100svh; container: build-stage / size;
+    --dock: 0;
+  }
+  html.build-live .build-steps { grid-area: 1 / 1; z-index: 2; position: relative; display: block; margin-block: 0; pointer-events: none; }
+  html.build-live .build-stage__head { grid-area: 1 / 1; align-self: start; position: sticky; top: 0; z-index: 3; pointer-events: none; }
+  html.build-live .build-lead { display: block; }
+  html.build-live .build-step__card { pointer-events: auto; }
+
+  /* Geometry. --dw is the browser at scale 1 (the zoom). --pw is the phone at scale 1 (the zoomed-in phone). */
+  html.build-live .build {
+    --dw: min(1180px, 96cqw, calc((100cqh - 190px) / .63));
+    --pw: min(380px, 40cqw, 45cqh);
+    --wrapR: min(50cqw, calc(var(--maxw) / 2));
+    --t: 900ms;
+    /* intro */
+    --d-s: .64; --d-x: 0px; --d-y: 9cqh; --d-o: 1; --d-tilt: 9deg;
+    --p-s: .5; --p-x: 0px; --p-y: 0px; --p-o: 0;
+  }
+  html.build-live .build[data-frame="zoom"] {
+    --d-s: 1; --d-x: 0px; --d-y: calc(118px + (var(--dw) * .6 + 34px) / 2 - 50cqh); --d-o: 1; --d-tilt: 0deg;
+    --p-s: .5; --p-o: 0;
+  }
+  html.build-live .build[data-frame="aside"] {
+    --d-s: .56; --d-x: calc(var(--wrapR) - var(--gutter) - var(--dw) * .56 / 2); --d-y: 6cqh; --d-o: 1; --d-tilt: 0deg;
+    --p-s: .5; --p-o: 0;
+  }
+  html.build-live .build[data-frame="phone"] {
+    --d-s: .3; --d-x: 0px; --d-y: 0px; --d-o: 0; --d-tilt: 0deg;
+    --p-s: .62; --p-x: 0px; --p-y: 0px; --p-o: 1;
+  }
+  html.build-live .build[data-frame="phone-in"] {
+    --d-s: .3; --d-o: 0;
+    --p-s: 1; --p-x: 8cqw; --p-y: 0px; --p-o: 1;
+  }
+  html.build-live .build[data-frame="review"] {
+    --d-s: .3; --d-o: 0;
+    --p-s: .8; --p-x: calc(var(--wrapR) - var(--gutter) - var(--pw) * .8 / 2); --p-y: 0px; --p-o: 1;
+  }
+  /* Which part of the sample the browser shows (percent of the tall screenshot): pages, form, tap to call, map, speed. */
+  html.build-live .build[data-stage="3"] { --pan: 69; }
+  html.build-live .build[data-stage="4"] { --pan: 42.5; }
+  html.build-live .build[data-stage="5"] { --pan: 45; }
+
+  html.build-live .frame {
+    position: absolute; inset: 0; width: auto; margin: 0; padding: 0;
+    display: grid; grid-template: 100% / 100%; place-items: center; pointer-events: none;
+  }
+  html.build-live .dev { grid-area: 1 / 1; transition: translate var(--t) var(--ease-in-out), scale var(--t) var(--ease-in-out), transform var(--t) var(--ease-in-out), opacity 560ms var(--ease); }
+  html.build-live .dev--desktop {
+    width: var(--dw); max-width: none; flex: none;
+    translate: var(--d-x) var(--d-y); scale: var(--d-s); opacity: var(--d-o);
+    transform: perspective(1800px) rotateX(var(--d-tilt));
+  }
+  html.build-live .dev--phone {
+    width: var(--pw);
+    translate: var(--p-x) var(--p-y); scale: var(--p-s); opacity: var(--p-o);
+  }
+
+  /* The head: eyebrow and title top-left on the page grid, the two CTAs top-right. It is pinned above the captions and
+     carries a scrim that fades out downward, so a caption scrolling up slides under the title instead of over it. */
+  html.build-live .build-stage__head {
+    height: 116px; padding-top: clamp(16px, 3vh, 36px);
+    background: linear-gradient(to bottom, var(--paper) 0, var(--paper) calc(100% - 34px), transparent);
+  }
+  html.build-live .build-stage__head .wrap { position: relative; }
+  html.build-live .build-stage__head h2 { font-size: clamp(1.7rem, 1rem + 1.7vw, 2.4rem); max-width: 60%; margin-bottom: 0; }
+  html.build-live .build-stage__head .eyebrow { margin-bottom: .5rem; }
+  html.build-live .build-intro {
+    position: absolute; z-index: 2; top: 120px; left: calc(50% - min(50%, var(--maxw) / 2) + var(--gutter)); width: min(40ch, 42%); margin: 0; padding: 0;
+    transition: opacity 400ms var(--ease), visibility 0s linear 0s;
+  }
+  html.build-live .build[data-frame]:not([data-frame="intro"]) .build-intro { opacity: 0; visibility: hidden; transition: opacity 300ms var(--ease), visibility 0s linear 300ms; }
+  html.build-live .build-stage__cta { position: absolute; top: -8px; right: var(--gutter); pointer-events: auto; }
+
+  /* The captions scroll over the pinned frame, in the left column. */
+  html.build-live .build-lead { height: 86svh; }
+  html.build-live .build-step {
+    display: flex; align-items: center; width: clamp(17rem, 36%, 26rem); min-height: 54svh; pointer-events: none;
+  }
+  html.build-live .build-step[data-frame="zoom"] { min-height: 80svh; align-items: flex-end; padding-bottom: 4svh; }
+  /* The first caption parks at the bottom of the screen while the browser fills the frame, then rides up and away. */
+  html.build-live .build-step[data-frame="zoom"] .build-step__card { position: sticky; bottom: 4svh; }
+  html.build-live .build-step[data-frame="phone"], html.build-live .build-step[data-frame="phone-in"] { min-height: 70svh; }
+  html.build-live .build-step--last { min-height: 100svh; }
+  html.build-live .build-step__card { width: 100%; box-shadow: 0 16px 36px -24px rgb(23 20 15 / .45); }
+  html.build-live .build-step.is-active .build-step__card { border-color: var(--ink); }
+
+  /* The checks tick in one by one when the review stage arrives. Only the tick animates, so the labels stay readable. */
+  html.build-live .checks svg { transition: opacity 160ms var(--ease), scale 160ms var(--ease); }
+  html.build-live .build:not([data-frame="review"]) .checks svg { opacity: 0; scale: .4; }
+  html.build-live .build[data-frame="review"] .checks svg {
+    transition: opacity 320ms var(--ease-out) calc(var(--j, 0) * 160ms + 500ms), scale 320ms var(--ease-spring) calc(var(--j, 0) * 160ms + 500ms);
+  }
+}
+
+/* Phones and small tablets: the frame docks at the top of the screen and the captions scroll underneath it. */
+@media (max-width: 899px) and (min-height: 480px) {
+  html.build-live .build { --pin-h: clamp(290px, 46svh, 440px); --pw: min(240px, 58cqw); --ph: calc(var(--pw) * 2.083); }
+  html.build-live .build-stage { height: var(--pin-h); z-index: 3; background: var(--paper); border-bottom: 1px solid var(--line); overflow: hidden; --dock: 1; }
+  html.build-live .build-stage__head { z-index: 4; height: 44px; padding: 0; background: none; }
+  html.build-live .build-steps { margin-top: var(--pin-h); padding-inline: var(--gutter); }
+  html.build-live .build {
+    --dw: calc(100cqw - 2 * var(--gutter));
+    --d-s: .74; --d-y: 40px; --d-tilt: 8deg;
+  }
+  html.build-live .build[data-frame="zoom"] { --d-s: 1; --d-y: 22px; }
+  html.build-live .build[data-frame="aside"] { --d-s: .86; --d-x: 0px; --d-y: 22px; }
+  html.build-live .build[data-frame="phone"] { --p-s: .7; --p-x: 0px; --p-y: 22px; }
+  html.build-live .build[data-frame="phone-in"] { --p-s: 1; --p-x: 0px; --p-y: calc(44px + var(--ph) / 2 - 50cqh); }
+  html.build-live .build[data-frame="review"] { --p-s: .7; --p-x: 0px; --p-y: 22px; }
+
+  html.build-live .build-stage__head .wrap { padding-top: 8px; }
+  html.build-live .build-stage__head h2 { max-width: none; font-size: 1.3rem; }
+  html.build-live .build-stage__head .eyebrow, html.build-live .build-stage__cta { display: none; }
+  html.build-live .build-intro { left: var(--gutter); right: var(--gutter); width: auto; top: 40px; font-size: var(--fs-small); line-height: 1.4; }
+
+  html.build-live .build-lead { height: 36svh; }
+  html.build-live .build-step, html.build-live .build-step[data-frame="zoom"], html.build-live .build-step[data-frame="phone"], html.build-live .build-step[data-frame="phone-in"] {
+    width: 100%; min-height: calc(100svh - var(--pin-h)); align-items: flex-start; padding-block: 20px 0;
+  }
+  html.build-live .build-step[data-frame="zoom"] .build-step__card { position: static; }
+  html.build-live .build-step--last { min-height: calc(100svh - var(--pin-h) + 20svh); }
+  html.build-live .build-step__card { padding: 16px 18px; }
+  html.build-live .build-step__card h3 { font-size: clamp(1.3rem, 5.6vw, 1.55rem); }
+  html.build-live .build-step__card p:not(.eyebrow) { font-size: .9375rem; line-height: 1.5; }
+}
+
+/* ============================================================================================================
+   5. What you get, proof, samples teaser
+   ============================================================================================================ */
+.offer-grid { display: grid; gap: 16px; margin-top: clamp(24px, 4vw, 40px); }
+@media (min-width: 700px) { .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.offer-card { padding: 24px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-2); }
+.offer-card__icon { width: 28px; height: 28px; margin-bottom: 14px; color: var(--accent); }
+.offer-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
+.offer-card p { margin-bottom: 0; color: var(--ink-2); max-width: 46ch; }
+.offer-foot { margin-top: clamp(28px, 4vw, 44px); }
+.offer-foot__price { margin-bottom: 18px; font: 300 var(--fs-quote)/1.35 var(--serif); }
+.offer-foot__price .label { margin: 0 14px 0 0; vertical-align: .15em; }
+.offer-foot .actions { margin-bottom: 16px; }
+.offer-foot .small { margin: 0; }
+
+.proof-grid { display: grid; gap: 0; }
+@media (min-width: 900px) { .proof-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--col-gap); } }
+.proof { padding-block: 28px; border-top: 1px solid var(--line); }
+@media (min-width: 900px) { .proof { padding-right: 16px; } }
+.proof h3 { margin-bottom: 14px; }
+.proof p:last-child { margin-bottom: 0; }
+.proof .go { margin-top: 14px; font-weight: 500; }
+
+.samples-teaser__more { margin-top: clamp(24px, 4vw, 36px); }
+
+/* ============================================================================================================
+   6. 3D showcase
+   js/scene3d.js and styles/effects.css own the stage and its layers. This is the section layout only.
+   ============================================================================================================ */
+.showcase__grid { display: grid; gap: clamp(28px, 5vw, 56px); align-items: center; }
+@media (min-width: 900px) {
+  .showcase__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+.showcase__text > :last-child { margin-bottom: 0; }
+.showcase__text h2 { margin-bottom: 16px; }
+
+/* ============================================================================================================
+   7. About teaser, closing
+   ============================================================================================================ */
+.about-teaser__row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px clamp(20px, 3vw, 40px); }
+.about-teaser__portrait { flex: none; width: 136px; }
+@media (min-width: 900px) { .about-teaser__portrait { width: 200px; } }
+.about-teaser__portrait img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-2); border: 1px solid var(--line); }
+.about-teaser__row .measure { flex: 1 1 18rem; }
+.about-teaser__row .measure > :last-child { margin-bottom: 0; }
+
+.closing__inner { max-width: 46rem; margin-inline: 0; }
+.closing h2 { font-size: clamp(2.1rem, 1.2rem + 3.4vw, 3.6rem); margin-bottom: 16px; }
+.closing .actions { margin-bottom: 18px; }
+.closing .small { margin: 0; }
+
+/* ============================================================================================================
+   8. Reduced motion
+   The build never goes live (no html.build-live), the hero words do not animate (they are gated on html.motion-ok),
+   and the whole hero gets one plain 200 ms fade. The global switch in motion.css cuts every animation to 0.01 ms with
+   !important, so this rule says !important too and wins on specificity.
+   ============================================================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .hero { animation: hero-plain 200ms linear both !important; animation-duration: 200ms !important; }
+  .dev__shot { transition: none; }
+}

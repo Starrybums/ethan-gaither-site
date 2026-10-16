@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tempo Fitness — a sample site</title>
+<meta name="description" content="A sample website for Tempo Fitness, a fictional small-group training studio in Battle Ground, Washington. Built as a demonstration by Ethan Gaither.">
+<!-- A sample for a fictional business: keep it out of search. -->
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0E0E10">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E0E10'/%3E%3Crect x='6' y='16' width='5' height='10' rx='2.5' fill='%23C6F432'/%3E%3Crect x='13.5' y='6' width='5' height='20' rx='2.5' fill='%23FF3D7F'/%3E%3Crect x='21' y='11' width='5' height='15' rx='2.5' fill='%23C6F432'/%3E%3C/svg%3E">
+<link rel="preload" href="../../fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="tempo-fitness.css">
+<script src="tempo-fitness.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-bolt" viewBox="0 0 32 32"><path d="M18.5 3 6.5 18.5h8L13 29l12.5-16h-8z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bar" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12v8M7.5 8v16M24.5 8v16M29 12v8M7.5 16h17"/></g></symbol>
+  <symbol id="i-run" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 7 9 9-9 9M17 7l9 9-9 9"/></g></symbol>
+  <symbol id="i-core" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="5"/></g></symbol>
+  <symbol id="i-flow" viewBox="0 0 32 32"><path d="M2.5 19c3.5-9 6-9 9.5 0s6 9 9.5 0c1.4-3.5 2.7-5.5 5.5-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h3l1.4 4-2 1.3a11 11 0 0 0 5.6 5.6l1.3-2 4 1.4v3a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+</svg>
+
+<aside class="banner" aria-label="About this sample site">
+  <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+</aside>
+
+<header class="head">
+  <div class="head-in">
+    <a class="logo" href="#top">
+      <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="15" width="6" height="12" rx="3" fill="#C6F432"/><rect x="13" y="5" width="6" height="22" rx="3" fill="#FF3D7F"/><rect x="23" y="11" width="6" height="16" rx="3" fill="#C6F432"/></svg>
+      <span class="logo-text">Tempo</span><span class="logo-sub">Fitness</span>
+    </a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#memberships">Memberships</a></li>
+        <li><a href="#coaches">Coaches</a></li>
+        <li><a href="#visit">Find us</a></li>
+      </ul>
+    </nav>
+    <div class="head-cta">
+      <a class="head-phone" href="tel:+13605550151"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg>(360) 555-0151</a>
+      <a class="btn btn--lime btn--sm" href="#trial">Free trial</a>
+    </div>
+    <details class="nav-narrow">
+      <summary><span class="sr-only">Open the menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg></summary>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#classes">Classes</a></li>
+          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#memberships">Memberships</a></li>
+          <li><a href="#coaches">Coaches</a></li>
+          <li><a href="#visit">Find us</a></li>
+          <li><a href="#trial">Free trial</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow">Group training in Battle Ground</p>
+        <h1 id="hero-title"><span class="l">Train on</span> <span class="l sk">the beat.</span></h1>
+        <p class="lede">Coached classes in small groups, with music that keeps you moving. We know your name by the second visit.</p>
+        <p class="actions">
+          <a class="btn btn--lime" href="#trial">Book a free trial</a>
+          <a class="btn btn--line" href="tel:+13605550151">Call (360) 555-0151</a>
+        </p>
+        <p class="hero-note">Your first class is free. Bring shoes you can move in.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="ring"></span>
+        <svg viewBox="0 0 300 360" focusable="false">
+          <rect x="40" y="316" width="220" height="30" rx="15" fill="#F5F5F0"/>
+          <polygon points="92,306 126,34 174,34 208,306" fill="#C6F432" stroke="#C6F432" stroke-width="16" stroke-linejoin="round"/>
+          <polygon points="134,66 166,66 180,272 120,272" fill="#0E0E10" stroke="#0E0E10" stroke-width="8" stroke-linejoin="round"/>
+          <g stroke="#0E0E10" stroke-width="5" stroke-linecap="round">
+            <path d="M104 118h12M108 164h12M112 210h12M116 256h12"/>
+            <path d="M196 118h-12M192 164h-12M188 210h-12M184 256h-12"/>
+          </g>
+          <line x1="150" y1="262" x2="186" y2="8" stroke="#0E0E10" stroke-width="16" stroke-linecap="round"/>
+          <line x1="150" y1="262" x2="186" y2="8" stroke="#FF3D7F" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="170.4" cy="118" r="17" fill="#FF3D7F" stroke="#0E0E10" stroke-width="5"/>
+          <circle cx="150" cy="262" r="11" fill="#F5F5F0" stroke="#0E0E10" stroke-width="4"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--paper" id="classes" aria-labelledby="classes-title">
+    <div class="sec-in">
+      <p class="eyebrow">Classes</p>
+      <h2 id="classes-title">Pick your <span class="sk">pace.</span></h2>
+      <p class="intro">Five classes, each coached from start to finish. Every move has an easier and a harder version, so a first-timer and a regular can share a room.</p>
+      <ul class="grid grid--classes">
+        <li class="card card--lime">
+          <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-bolt"/></svg>
+          <h3>Tempo Intervals</h3>
+          <p class="meta"><span>45 min</span><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span>Intensity 5 of 5</span></p>
+          <p>Hard rounds, short rests, all timed to the music. Kettlebells, dumbbells and your own weight.</p>
+        </li>
+        <li class="card card--black">
+          <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-bar"/></svg>
+          <h3>Barbell Basics</h3>
+          <p class="meta"><span>60 min</span><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span>Intensity 3 of 5</span></p>
+          <p>Squat, hinge, press and pull with a coach watching your form. Start light. Add weight when it feels smooth.</p>
+        </li>
+        <li class="card card--pink">
+          <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-run"/></svg>
+          <h3>Row + Run</h3>
+          <p class="meta"><span>45 min</span><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span>Intensity 4 of 5</span></p>
+          <p>Rowing machines and treadmills in short rounds. You choose the pace for each one.</p>
+        </li>
+        <li class="card card--black">
+          <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-core"/></svg>
+          <h3>Core 30</h3>
+          <p class="meta"><span>30 min</span><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span>Intensity 2 of 5</span></p>
+          <p>Half an hour for abs, back and balance. Good on a lunch break.</p>
+        </li>
+        <li class="card card--lime">
+          <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-flow"/></svg>
+          <h3>Mobility Flow</h3>
+          <p class="meta"><span>45 min</span><span class="meter" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span>Intensity 1 of 5</span></p>
+          <p>Slow stretches and joint work. Loosen up after a hard week or a long day at a desk.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--dark" id="schedule" aria-labelledby="schedule-title">
+    <div class="sec-in">
+      <p class="eyebrow">Schedule</p>
+      <h2 id="schedule-title">The class <span class="sk">schedule.</span></h2>
+      <p class="intro">Classes repeat every week. We're closed on Sundays. Times, coaches and classes here are made up for this sample.</p>
+      <table class="sched" role="table">
+        <caption class="sr-only">Weekly class schedule, Monday to Saturday: time, class, coach and level</caption>
+        <thead role="rowgroup">
+          <tr role="row"><th role="columnheader" scope="col">Time</th><th role="columnheader" scope="col">Class</th><th role="columnheader" scope="col">Coach</th><th role="columnheader" scope="col">Level</th></tr>
+        </thead>
+
+        <tbody role="rowgroup" data-dow="1">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Monday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:45 am</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">9:00 am</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">12:15 pm</th><td role="cell">Core 30</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:30 pm</th><td role="cell">Row + Run</td><td role="cell">Theo</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+        </tbody>
+
+        <tbody role="rowgroup" data-dow="2">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Tuesday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:45 am</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">9:00 am</th><td role="cell">Mobility Flow</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">12:15 pm</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:30 pm</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+        </tbody>
+
+        <tbody role="rowgroup" data-dow="3">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Wednesday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:45 am</th><td role="cell">Row + Run</td><td role="cell">Theo</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">9:00 am</th><td role="cell">Core 30</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">12:15 pm</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:30 pm</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+        </tbody>
+
+        <tbody role="rowgroup" data-dow="4">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Thursday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:45 am</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">9:00 am</th><td role="cell">Row + Run</td><td role="cell">Theo</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">12:15 pm</th><td role="cell">Mobility Flow</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:30 pm</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+        </tbody>
+
+        <tbody role="rowgroup" data-dow="5">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Friday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:45 am</th><td role="cell">Row + Run</td><td role="cell">Theo</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">12:15 pm</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">5:30 pm</th><td role="cell">Core 30</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+        </tbody>
+
+        <tbody role="rowgroup" data-dow="6">
+          <tr role="row" class="day"><th role="rowheader" scope="rowgroup" colspan="4">Saturday</th></tr>
+          <tr role="row"><th role="rowheader" scope="row">8:00 am</th><td role="cell">Tempo Intervals</td><td role="cell">Dani</td><td role="cell"><span class="lvl lvl--hard">Hard</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">9:15 am</th><td role="cell">Barbell Basics</td><td role="cell">Marcus</td><td role="cell"><span class="lvl lvl--med">Medium</span></td></tr>
+          <tr role="row"><th role="rowheader" scope="row">10:30 am</th><td role="cell">Mobility Flow</td><td role="cell">Priya</td><td role="cell"><span class="lvl lvl--easy">Easy</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec sec--lime" id="memberships" aria-labelledby="memberships-title">
+    <div class="sec-in">
+      <p class="eyebrow">Memberships</p>
+      <h2 id="memberships-title">Pick a <span class="sk">plan.</span></h2>
+      <p class="intro">Start with the free trial. Pick a plan if it fits. Prices are blank here on purpose, because this is a sample.</p>
+      <ul class="grid grid--plans">
+        <li class="plan">
+          <h3>Drop in</h3>
+          <p class="price"><span class="from">from</span> $—<small>per class</small></p>
+          <p class="plan-line">One class at a time. No commitment.</p>
+          <ul>
+            <li>Any class on the schedule</li>
+            <li>Pay when you come</li>
+            <li>Good right after your trial</li>
+          </ul>
+        </li>
+        <li class="plan plan--hot">
+          <h3>Eight a month</h3>
+          <p class="price"><span class="from">from</span> $—<small>per month</small></p>
+          <p class="plan-line">For people who come about twice a week.</p>
+          <ul>
+            <li>Eight classes each month</li>
+            <li>Book any class you like</li>
+            <li>Pause when you travel</li>
+          </ul>
+        </li>
+        <li class="plan">
+          <h3>Unlimited</h3>
+          <p class="price"><span class="from">from</span> $—<small>per month</small></p>
+          <p class="plan-line">For people who'd come every day if they could.</p>
+          <ul>
+            <li>Every class, every week</li>
+            <li>One guest pass a month</li>
+            <li>Pause when you travel</li>
+          </ul>
+        </li>
+      </ul>
+      <p class="fine">The dollar amounts are placeholders. A real studio would list its own.</p>
+      <p class="actions"><a class="btn btn--black" href="#trial">Start with a free trial</a></p>
+    </div>
+  </section>
+
+  <section class="sec sec--paper" id="coaches" aria-labelledby="coaches-title">
+    <div class="sec-in">
+      <p class="eyebrow">Coaches</p>
+      <h2 id="coaches-title">Meet your <span class="sk">coaches.</span></h2>
+      <p class="intro">Four coaches lead the classes. They're made up, and so are their drawings.</p>
+      <ul class="grid grid--coaches">
+        <li class="coach">
+          <svg class="avatar" viewBox="0 0 120 120" aria-hidden="true">
+            <rect width="120" height="120" rx="22" fill="#FF3D7F"/>
+            <path d="M22 120c0-26 17-38 38-38s38 12 38 38z" fill="#0E0E10"/>
+            <rect x="52" y="68" width="16" height="18" rx="6" fill="#B87B4F"/>
+            <circle cx="60" cy="54" r="23" fill="#C68B5E"/>
+            <path d="M36 52c-1-17 10-27 24-27s25 10 24 27c-6-10-14-14-24-14s-18 4-24 14z" fill="#0E0E10"/>
+            <circle cx="60" cy="22" r="11" fill="#0E0E10"/>
+            <rect x="37" y="38" width="46" height="7" rx="3.5" fill="#C6F432"/>
+          </svg>
+          <h3>Dani</h3>
+          <p class="role">Tempo Intervals</p>
+          <p>Counts out loud and keeps the last round honest.</p>
+          <p class="tag">Fictional coach</p>
+        </li>
+        <li class="coach">
+          <svg class="avatar" viewBox="0 0 120 120" aria-hidden="true">
+            <rect width="120" height="120" rx="22" fill="#C6F432"/>
+            <path d="M22 120c0-26 17-38 38-38s38 12 38 38z" fill="#0E0E10"/>
+            <rect x="52" y="68" width="16" height="18" rx="6" fill="#583626"/>
+            <circle cx="60" cy="54" r="23" fill="#6B4430"/>
+            <path d="M37 50c-1-16 9-25 23-25s24 9 23 25c-4-7-12-11-23-11s-19 4-23 11z" fill="#0E0E10"/>
+          </svg>
+          <h3>Marcus</h3>
+          <p class="role">Barbell Basics</p>
+          <p>Teaches the lifts slowly so they stay with you.</p>
+          <p class="tag">Fictional coach</p>
+        </li>
+        <li class="coach">
+          <svg class="avatar" viewBox="0 0 120 120" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="117" height="117" rx="21" fill="#F5F5F0" stroke="#0E0E10" stroke-width="3"/>
+            <path d="M31 40c0-20 12-28 29-28s29 8 29 28v50H31z" fill="#0E0E10"/>
+            <path d="M22 120c0-26 17-38 38-38s38 12 38 38z" fill="#FF3D7F"/>
+            <rect x="52" y="68" width="16" height="18" rx="6" fill="#8E5A3A"/>
+            <circle cx="60" cy="54" r="23" fill="#A9714B"/>
+            <path d="M36 52c-1-17 10-27 24-27s25 10 24 27c-7-9-15-12-24-12s-17 3-24 12z" fill="#0E0E10"/>
+          </svg>
+          <h3>Priya</h3>
+          <p class="role">Core 30 and Mobility Flow</p>
+          <p>Cues every move twice and never rushes the stretch.</p>
+          <p class="tag">Fictional coach</p>
+        </li>
+        <li class="coach">
+          <svg class="avatar" viewBox="0 0 120 120" aria-hidden="true">
+            <rect width="120" height="120" rx="22" fill="#0E0E10"/>
+            <path d="M22 120c0-26 17-38 38-38s38 12 38 38z" fill="#C6F432"/>
+            <rect x="52" y="68" width="16" height="18" rx="6" fill="#E3AB82"/>
+            <circle cx="60" cy="54" r="23" fill="#F1C7A0"/>
+            <path d="M36 53c-3-20 9-30 25-29 14 1 25 9 23 29-3-8-9-13-17-14-9 2-19 5-31 14z" fill="#B85C1E"/>
+            <rect x="37" y="38" width="46" height="7" rx="3.5" fill="#FF3D7F"/>
+          </svg>
+          <h3>Theo</h3>
+          <p class="role">Row + Run</p>
+          <p>Sets the pace with a playlist and a stopwatch.</p>
+          <p class="tag">Fictional coach</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--pink" id="trial" aria-labelledby="trial-title">
+    <div class="sec-in trial-in">
+      <div>
+        <p class="eyebrow">Free trial</p>
+        <h2 id="trial-title">Try one class <span class="sk">free.</span></h2>
+        <p class="intro">Pick a class and tell us how to reach you. Show up ten minutes early and a coach will get you set up. Decide after.</p>
+        <p class="intro">Bring shoes you can move in and a water bottle. That's it.</p>
+        <svg class="beats" viewBox="-2 -2 244 94" aria-hidden="true" focusable="false">
+          <g fill="#0E0E10">
+            <rect x="0" y="46" width="12" height="44" rx="6"/><rect x="20" y="22" width="12" height="68" rx="6"/><rect x="40" y="58" width="12" height="32" rx="6"/><rect x="60" y="8" width="12" height="82" rx="6"/>
+            <rect x="80" y="38" width="12" height="52" rx="6"/><rect x="100" y="62" width="12" height="28" rx="6"/><rect x="120" y="16" width="12" height="74" rx="6"/><rect x="140" y="44" width="12" height="46" rx="6"/>
+            <rect x="160" y="0" width="12" height="90" rx="6"/><rect x="180" y="52" width="12" height="38" rx="6"/><rect x="200" y="28" width="12" height="62" rx="6"/><rect x="220" y="60" width="12" height="30" rx="6"/>
+          </g>
+          <rect x="160" y="0" width="12" height="90" rx="6" fill="#C6F432" stroke="#0E0E10" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="formcard">
+        <form id="trial-form" action="mailto:hello@tempo-fitness.example" method="post" enctype="text/plain">
+          <div class="field"><label for="t-name">Name</label><input id="t-name" name="name" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="t-email">Email</label><input id="t-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="t-phone">Phone (optional)</label><input id="t-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field">
+            <label for="t-class">Class you want to try first</label>
+            <select id="t-class" name="class">
+              <option>Not sure yet, help me pick</option>
+              <option>Tempo Intervals</option>
+              <option>Barbell Basics</option>
+              <option>Row + Run</option>
+              <option>Core 30</option>
+              <option>Mobility Flow</option>
+            </select>
+          </div>
+          <div class="field"><label for="t-note">Anything we should know? (optional)</label><textarea id="t-note" name="note" rows="4"></textarea></div>
+          <button class="btn btn--black btn--block" type="submit">Request my free trial</button>
+        </form>
+        <p class="note">This sample form opens your email app with the message filled in, using a mailto: link addressed to a made-up address. A real build sends it through a form service instead.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--paper" id="visit" aria-labelledby="visit-title">
+    <div class="sec-in">
+      <p class="eyebrow">Visit</p>
+      <h2 id="visit-title">Find the <span class="sk">studio.</span></h2>
+      <div class="panels">
+        <div class="panel panel--hours">
+          <h3>Hours</h3>
+          <table class="hours">
+            <caption class="sr-only">Studio hours</caption>
+            <tbody>
+              <tr><th scope="row">Monday to Friday</th><td>5:30 am – 7:30 pm</td></tr>
+              <tr><th scope="row">Saturday</th><td>7:30 am – 12:00 pm</td></tr>
+              <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel panel--find">
+          <h3>Find us</h3>
+          <address>1 Downbeat Lane<br>Battle Ground, WA<br><a href="tel:+13605550151">(360) 555-0151</a></address>
+          <p class="small">A made-up street and phone number for a fictional studio.</p>
+          <p class="actions"><a class="btn btn--black btn--sm" href="https://www.google.com/maps/search/?api=1&amp;query=Battle%20Ground%2C%20WA" target="_blank" rel="noopener noreferrer">Get directions<span class="sr-only"> (opens a map search for Battle Ground, WA, in a new tab)</span></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <p class="foot-main">Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+    <p>Tempo Fitness, its classes, coaches, schedule and prices are made up. 1 Downbeat Lane and (360) 555-0151 are placeholders, not the address or phone number of a real studio.</p>
+  </div>
+</footer>
+
+<nav class="quick" aria-label="Quick actions">
+  <a class="btn btn--lime" href="tel:+13605550151">Call now<span class="sr-only"> (360) 555-0151</span></a>
+  <a class="btn btn--pink" href="#trial">Free trial</a>
+</nav>
+
+</body>
+</html>

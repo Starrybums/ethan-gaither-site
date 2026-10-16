@@ -1,1 +1,57 @@
-/* styles/pages/about.css — page styles. Owner: see WORKER-BRIEFS.md. Use the tokens in styles/tokens.css; do not redefine them. */
+/* styles/pages/about.css — About page. Tokens from styles/tokens.css only; nothing redefined. Owner: pages worker. */
+
+.section[id] { scroll-margin-top: 24px; }
+
+/* ---- Who I am: portrait + text ------------------------------------------------------------------- */
+.about-intro { display: grid; gap: 24px; align-items: start; }
+@media (min-width: 640px) { .about-intro { grid-template-columns: 220px minmax(0, 1fr); gap: 32px 40px; } }
+.portrait { width: clamp(132px, 36vw, 220px); }
+@media (min-width: 640px) { .portrait { width: 100%; } }
+.portrait img {
+  display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover;
+  border: 1px solid var(--line); border-radius: var(--radius-2); background: var(--paper-2);
+}
+.about-intro__text p { max-width: var(--maxw-text); }
+.about-intro__text > :last-child { margin-bottom: 0; }
+
+/* ---- How I work: four steps --------------------------------------------------------------------- */
+.how { list-style: none; counter-reset: how; display: grid; gap: 28px var(--col-gap); }
+@media (min-width: 640px) { .how { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.how__step { counter-increment: how; border-top: 2px solid var(--ink); padding-top: 14px; }
+.how__step::before {
+  content: counter(how, decimal-leading-zero);
+  content: counter(how, decimal-leading-zero) / "";
+  display: block; margin-bottom: 6px; font: 300 1.75rem/1 var(--serif); color: var(--ink-2);
+}
+.how__step h3 { font-size: clamp(1.25rem, 1.05rem + .8vw, 1.5rem); margin-bottom: 8px; }
+.how__step p { margin: 0; color: var(--ink-2); }
+.more { margin: 28px 0 0; }
+
+/* ---- Values --------------------------------------------------------------------------------------- */
+.values { list-style: none; display: grid; gap: 28px var(--col-gap); }
+@media (min-width: 700px) { .values { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.value { border-top: 2px solid var(--ink); padding-top: 14px; }
+.value h3 { font-size: clamp(1.25rem, 1.05rem + .8vw, 1.5rem); margin-bottom: 8px; }
+.value p { margin: 0; color: var(--ink-2); }
+
+/* ---- Chips: tools and service areas ------------------------------------------------------------------ */
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chips li {
+  padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: var(--paper); font-size: var(--fs-small); font-weight: 500;
+}
+.about-copy p { max-width: var(--maxw-text); }
+.about-copy > :first-child { margin-top: 0; }
+.about-copy > p:last-of-type { margin-bottom: 0; }
+
+/* ---- Certifications (filled by shell.js from js/config.js, absent while the list is empty) -------------------- */
+.cert-name { font: 400 1.2rem/1.3 var(--serif); }
+.cert-meta { display: block; color: var(--ink-2); font-size: var(--fs-small); }
+
+/* ---- Closing panel ---------------------------------------------------------------------------------------- */
+.cta-panel {
+  display: grid; gap: 20px; padding: clamp(26px, 5vw, 56px);
+  border: 1px solid var(--ink); border-radius: var(--radius-2); background: var(--paper);
+}
+.cta-panel h2 { max-width: 16em; }
+.cta-panel p { margin: 0; color: var(--ink-2); max-width: 52ch; }

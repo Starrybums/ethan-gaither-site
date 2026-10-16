@@ -33,7 +33,15 @@
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ethan Gaither","url":"https://ethan-gaither.vercel.app/","description":"Ethan Gaither builds fast, clear websites for small businesses in Battle Ground, Vancouver and Clark County, WA. You own the domain, hosting and code.","image":"https://ethan-gaither.vercel.app/assets/img/portrait-square-960.jpg","email":"gaitherethan@icloud.com","address":{"@type":"PostalAddress","addressLocality":"Battle Ground","addressRegion":"WA","addressCountry":"US"},"areaServed":[{"@type":"City","name":"Battle Ground"},{"@type":"City","name":"Vancouver"},{"@type":"City","name":"Ridgefield"},{"@type":"City","name":"Camas"},{"@type":"City","name":"Washougal"},{"@type":"City","name":"Woodland"},{"@type":"AdministrativeArea","name":"Clark County"}],"founder":{"@type":"Person","name":"Ethan Gaither"}}</script>
 <script type="module" src="/js/shell.js"></script>
-<!-- Home worker: page modules go here, e.g. <script type="module" src="/js/type-morph.js"></script> -->
+<link rel="stylesheet" href="/styles/effects.css">
+<!-- "build-live": the build section pins and choreographs only when JavaScript runs, motion is allowed,
+     IntersectionObserver exists and the browser has container query units (the frame is sized with them). Set here, before first paint, so the layout never jumps. type-morph.js sets data-stage
+     on #build as soon as it runs; if it never does (script blocked), the class comes off and the finished page shows. -->
+<script>(function(){try{var d=document.documentElement;if('IntersectionObserver' in window&&window.CSS&&CSS.supports&&CSS.supports('width','1cqw')&&d.classList.contains('motion-ok')){d.className+=' build-live';setTimeout(function(){var b=document.getElementById('build');if(!b||!b.hasAttribute('data-stage'))d.classList.remove('build-live')},5000)}}catch(e){}})()</script>
+<!-- The build section's two screenshots (about 230 KB) are fetched when the section is within 300 px of the screen, so they do not
+     compete with the hero for bandwidth. Without JavaScript the <noscript> copies load as normal images. -->
+<script>document.addEventListener('DOMContentLoaded',function(){var im=document.querySelectorAll('img[data-src]'),go=function(i){i.src=i.getAttribute('data-src');i.removeAttribute('data-src')};if(!('IntersectionObserver' in window)){for(var k=0;k<im.length;k++)go(im[k]);return}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.unobserve(e.target);go(e.target.querySelector('img[data-src]'))}})},{rootMargin:'300px 0px'});for(var j=0;j<im.length;j++)io.observe(im[j].parentNode)})</script>
+<script type="module" src="/js/type-morph.js"></script>
 </head>
 <body data-page="home">
 <a class="skip" href="#main">Skip to content</a>
@@ -76,15 +84,321 @@
 
 <main id="main" tabindex="-1">
 <!-- WORKER: build from here (owner: see WORKER-BRIEFS.md). Everything between this line and "WORKER: end" is yours. -->
+  <!-- Hero. Stage 0 of the choreography: the background fades up (shell.css), then the headline sweeps in word by word
+       starting at "I", then the sub-line, then the two buttons. The words are plain spans in the HTML, so the heading
+       reads the same without JavaScript and nothing moves the layout. Reduced motion: one 200 ms fade of the whole hero. -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap">
-      <p class="eyebrow" data-site="location">Battle Ground, Washington</p>
-      <h1 id="hero-title">I build websites for <em>small businesses.</em></h1>
-      <p class="lede">Fast, clear, and yours. Scroll to watch one get built.</p>
-      <p class="actions">
-        <a class="btn btn--solid" data-fx="glass" href="/start-a-project/">Start a project</a>
-        <a class="btn" data-fx="press3d" href="/book-a-call/">Book a free call</a>
+      <p class="eyebrow hero__eyebrow" data-site="location">Battle Ground, Washington</p>
+      <h1 id="hero-title" class="hero__title"><span class="w" style="--i:0">I</span> <span class="w" style="--i:1">build</span> <span class="w" style="--i:2">websites</span> <span class="w" style="--i:3">for</span> <em><span class="w" style="--i:4">small</span> <span class="w" style="--i:5">businesses.</span></em></h1>
+      <p class="lede hero__lede">Fast sites you own outright. Scroll down and watch one get built.</p>
+      <!-- The two soft colour discs sit behind the buttons so the glass one has something to refract. -->
+      <div class="hero__cta">
+        <span class="hero__orb hero__orb--a" aria-hidden="true"></span>
+        <span class="hero__orb hero__orb--b" aria-hidden="true"></span>
+        <p class="actions">
+          <a class="btn btn--solid hero__btn hero__btn--1" data-fx="glass" href="/start-a-project/">Start a project</a>
+          <a class="btn hero__btn hero__btn--2" data-fx="press3d" href="/book-a-call/">Book a free call</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I do: the short version, for a visitor who does not scroll the build. -->
+  <section class="section whatido" aria-labelledby="whatido-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">What I do</p>
+        <h2 id="whatido-title">Websites that work on a phone first.</h2>
+      </div>
+      <div class="section-body" data-reveal>
+        <p class="lede">I design and build sites for small businesses, by hand, with AI tools to go faster. You deal with me from the first call to launch.</p>
+        <ul class="ticks">
+          <li>Fixed price, agreed before I start, plus WA sales tax.</li>
+          <li>The domain, hosting account and code are in your name.</li>
+          <li>Tested on a phone, with a keyboard, and with motion off.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- The build. Stages 1 to 5 of BRIEF-v3 section 2a.
+       Static (no JavaScript, reduced motion): the heading, the browser and the phone side by side, then every caption as a card.
+       Live (html.build-live): .build-stage pins, #frame moves between states keyed on #build[data-frame], and the captions
+       scroll over it. The frame shows screenshots of the real sample, not an iframe. -->
+  <section class="build" id="build" data-morph-root aria-labelledby="build-title">
+    <div class="build-track">
+      <div class="build-stage__head">
+        <div class="wrap">
+          <p class="eyebrow">The build</p>
+          <h2 id="build-title" data-morph-title>Watch a website get built</h2>
+          <p class="build-stage__cta actions">
+            <a class="btn btn--solid btn--sm" data-fx="magnetic" href="/start-a-project/">Start a project</a>
+            <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="build-stage">
+        <p class="build-intro">The site in the frame is a sample for a fictional coffee shop. Scroll, and I'll walk you through it.</p>
+        <figure class="frame" id="frame" aria-labelledby="frame-desc">
+          <figcaption class="sr-only" id="frame-desc">Hollow Oak Coffee, a sample website for a fictional coffee shop, shown first in a browser window and then on a phone.</figcaption>
+          <div class="dev dev--desktop">
+            <div class="dev__bar" aria-hidden="true">
+              <span class="dev__dots"><i></i><i></i><i></i></span>
+              <span class="dev__url"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.5" width="8" height="5.5" rx="1.2" fill="currentColor"/><path d="M4 5.5V4a2 2 0 0 1 4 0v1.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>hollow-oak.example</span>
+            </div>
+            <div class="dev__view">
+              <img class="dev__shot" data-src="/assets/img/samples/hollow-oak-desktop-tall.webp" width="1800" height="4653" decoding="async" alt="The whole home page of Hollow Oak Coffee on a desktop screen: a dark green banner with a headline and a coffee cup, three short cards, the menu, opening hours, an about paragraph and a contact form.">
+              <noscript><img class="dev__shot" src="/assets/img/samples/hollow-oak-desktop-tall.webp" width="1800" height="4653" alt="The whole home page of Hollow Oak Coffee on a desktop screen: a dark green banner with a headline and a coffee cup, three short cards, the menu, opening hours, an about paragraph and a contact form."></noscript>
+            </div>
+          </div>
+          <div class="dev dev--phone">
+            <div class="dev__screen">
+              <img class="dev__shot" data-src="/assets/img/samples/hollow-oak-phone.webp" width="780" height="1688" decoding="async" alt="The top of the same page on a phone: the shop name and a menu button, then the green banner with the headline, two buttons and the coffee cup.">
+              <noscript><img class="dev__shot" src="/assets/img/samples/hollow-oak-phone.webp" width="780" height="1688" alt="The top of the same page on a phone: the shop name and a menu button, then the green banner with the headline, two buttons and the coffee cup."></noscript>
+            </div>
+          </div>
+        </figure>
+      </div>
+
+      <ol class="build-steps">
+        <li class="build-lead" aria-hidden="true"></li>
+
+        <li class="build-step" data-morph-step data-frame="zoom" data-font="fraunces">
+          <div class="build-step__card">
+            <p class="eyebrow">The site</p>
+            <h3>A whole site, not a template.</h3>
+            <p>I built this for a coffee shop that doesn't exist. It works the way a client's would, and the real one is a tap away. <a href="/samples/hollow-oak/">Open the sample</a>.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="aside" data-font="instrument">
+          <div class="build-step__card">
+            <p class="eyebrow">Pages</p>
+            <h3>Only the pages you need.</h3>
+            <p>Home, menu, hours, a place to find you. We agree the list before I start, so nothing shows up that you didn't ask for.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="aside" data-font="grotesk">
+          <div class="build-step__card">
+            <p class="eyebrow">Contact form</p>
+            <h3>A form people finish.</h3>
+            <p>A few short fields that go straight to your inbox. I test it before launch, and I test what happens when it can't send.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="aside" data-font="inter">
+          <div class="build-step__card">
+            <p class="eyebrow">Tap to call</p>
+            <h3>One tap to call.</h3>
+            <p>On a phone your number is a button. Nobody should have to copy and paste it to reach you.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="aside" data-font="fraunces">
+          <div class="build-step__card">
+            <p class="eyebrow">The map</p>
+            <h3>Easy to find.</h3>
+            <p>Your address, your hours and a directions link. If you go to your customers, it lists the towns you cover instead.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="aside" data-font="grotesk">
+          <div class="build-step__card">
+            <p class="eyebrow">Speed</p>
+            <h3>Quick on a bad connection.</h3>
+            <p>No heavy frameworks and no tracking scripts. Images are sized for the screen they're on. I run Lighthouse before launch.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="phone" data-font="instrument">
+          <div class="build-step__card">
+            <p class="eyebrow">Phone first</p>
+            <h3>Now the same site, on a phone.</h3>
+            <p>Most people will find you on their phone. So I design for that screen first, then scale up.</p>
+          </div>
+        </li>
+
+        <li class="build-step" data-morph-step data-frame="phone-in" data-font="grotesk">
+          <div class="build-step__card">
+            <p class="eyebrow">Up close</p>
+            <h3>Built for a thumb.</h3>
+            <p>Big tap targets, readable text and nothing to scroll sideways. This is the real mobile layout, not the desktop page squeezed down.</p>
+          </div>
+        </li>
+
+        <li class="build-step build-step--last" data-morph-step data-frame="review" data-font="inter">
+          <div class="build-step__card">
+            <p class="eyebrow">Before launch</p>
+            <h3>Then I check it.</h3>
+            <p>Before a site goes live I run the same list on it.</p>
+            <ul class="checks" aria-label="Checked before launch">
+              <li style="--j:0"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>Contrast</li>
+              <li style="--j:1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>Tap targets</li>
+              <li style="--j:2"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>Speed</li>
+              <li style="--j:3"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>Alt text</li>
+              <li style="--j:4"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-check"/></svg>The 404 page</li>
+            </ul>
+            <p class="build-step__owns">You own the domain, the hosting account and the code.</p>
+            <p class="actions">
+              <a class="btn btn--solid btn--sm" data-fx="draw" href="/start-a-project/">Start a project</a>
+              <a class="btn btn--sm" data-fx="ink" href="/book-a-call/">Book a free call</a>
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- What you get -->
+  <section class="section offer" id="offer" aria-labelledby="offer-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">What you get</p>
+        <h2 id="offer-title">A starter website, and what comes with it.</h2>
+        <p>One site with a fixed scope, so you know what you're getting before I start.</p>
+      </div>
+      <div class="offer-grid" data-reveal-stagger>
+        <article class="offer-card">
+          <svg class="offer-card__icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="3.5"/><path d="M10.5 12.5 19 4M16 7l2.5 2.5"/></g></svg>
+          <h3>You own it</h3>
+          <p>The domain is registered in your name. The hosting account is yours. You get the code, and the logins end up with you.</p>
+        </article>
+        <article class="offer-card">
+          <svg class="offer-card__icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></g></svg>
+          <h3>Set up to be found</h3>
+          <p>Page titles and descriptions, schema, a sitemap and Google Search Console. I'll help you set up your Google Business Profile. No one can promise you the top spot, so I won't.</p>
+        </article>
+        <article class="offer-card">
+          <svg class="offer-card__icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a8 8 0 1 1 16 0"/><path d="m12 16 4-5"/></g></svg>
+          <h3>Fast, and checked</h3>
+          <p>Tested on a phone, with a keyboard, and with motion turned off. Checked for speed and accessibility before it goes live.</p>
+        </article>
+        <article class="offer-card">
+          <svg class="offer-card__icon" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 8 8-4 8 4v8l-8 4-8-4z"/><path d="m4 8 8 4 8-4M12 12v8"/></g></svg>
+          <h3>Handed over properly</h3>
+          <p>Notes on how to change things, and a fix window after launch for anything I missed.</p>
+        </article>
+      </div>
+      <div class="offer-foot" data-reveal>
+        <p class="offer-foot__price"><span class="label">Price</span>Fixed price, agreed before I start, plus WA sales tax.</p>
+        <p class="actions">
+          <a class="btn btn--solid" data-fx="ink" href="/start-a-project/">Start a project</a>
+          <a class="btn" data-fx="draw" href="/book-a-call/">Book a free call</a>
+        </p>
+        <p class="small muted">Not sure what's in or out? <a href="/services/">The services page lists all of it.</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof -->
+  <section class="section" id="proof" aria-labelledby="proof-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Proof</p>
+        <h2 id="proof-title">Things you can check yourself</h2>
+      </div>
+      <div class="proof-grid" data-reveal-stagger>
+        <article class="proof">
+          <p class="label">This page · hand-built</p>
+          <h3>You're looking at one.</h3>
+          <p>No framework, no tracking, no scripts from anyone else. Open Lighthouse in Chrome, set it to mobile and test this page.</p>
+          <!-- TODO(integrator): after Fable measures the deployed preview, add this page's own Lighthouse numbers here
+               (performance, accessibility, best practices, SEO, mobile). Do not write a number that was not measured. -->
+        </article>
+        <article class="proof">
+          <p class="label">Self-initiated concept · fictional business</p>
+          <h3>Open a sample.</h3>
+          <p>Whole sites for businesses that don't exist, built the way a client's would be. Run the same test on them.</p>
+          <p class="go"><a href="/samples/">Open sample sites<span aria-hidden="true"> →</span></a></p>
+        </article>
+        <article class="proof">
+          <p class="label">Blackline work · live</p>
+          <h3>My own agency site.</h3>
+          <p>The site for Blackline Studios, the web studio I run myself.</p>
+          <p class="go"><a href="https://black-line-studios.com" data-site-link="blackline" target="_blank" rel="noopener noreferrer">Open black-line-studios.com<span class="sr-only"> (opens in a new tab)</span><span aria-hidden="true"> ↗</span></a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Samples teaser. shell.js replaces the list from js/config.js (ready samples only, first three). -->
+  <section class="section samples-teaser" id="samples" aria-labelledby="samples-title">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Samples</p>
+        <h2 id="samples-title">Sample sites</h2>
+        <p>Each one is a full site for a business that doesn't exist. They're labelled as samples, and every page works.</p>
+      </div>
+      <ul class="sample-grid" data-samples-grid data-limit="3">
+        <li class="sample-card" style="--card-accent:#1D3A2C">
+          <a class="sample-card__link" href="/samples/hollow-oak/">
+            <span class="sample-card__swatch" aria-hidden="true"></span>
+            <span class="label">Sample site · fictional business</span>
+            <span class="sample-card__name">Hollow Oak Coffee</span>
+            <span class="sample-card__kind">Coffee shop</span>
+            <span class="sample-card__blurb">Menu, hours, a map and tap-to-call for a small corner shop.</span>
+          </a>
+        </li>
+      </ul>
+      <p class="samples-teaser__more actions" data-reveal>
+        <a class="btn" data-fx="ink" href="/samples/">Open sample sites</a>
       </p>
+    </div>
+  </section>
+
+  <!-- 3D showcase. js/scene3d.js and styles/effects.css drive it (--scene-p); the text column is plain HTML. -->
+  <section class="section showcase" id="showcase-3d" data-scene3d aria-labelledby="showcase-title">
+    <div class="wrap showcase__grid">
+      <div class="showcase__text" data-reveal>
+        <p class="eyebrow">In 3D</p>
+        <h2 id="showcase-title">One site, every screen.</h2>
+        <p class="measure">The same sample on a laptop and a phone, each laid out for its own screen. Scroll to pull the layers apart.</p>
+        <p class="actions"><a class="btn" data-fx="magnetic" href="/samples/hollow-oak/">Open the sample</a></p>
+      </div>
+      <div class="scene3d" data-scene3d-stage>
+        <img data-layer="laptop" src="/assets/img/samples/hollow-oak-desktop.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The Hollow Oak Coffee sample on a laptop: a dark green banner with the headline Good coffee, no rush.">
+        <img data-layer="card" src="/assets/img/samples/hollow-oak-card.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The menu section of the same sample, with coffee and food prices.">
+        <img data-layer="card-2" src="/assets/img/samples/hollow-oak-card-2.webp" width="1800" height="1125" loading="lazy" decoding="async" alt="The opening hours and the address with a directions button, from the same sample.">
+        <img data-layer="phone" src="/assets/img/samples/hollow-oak-phone.webp" width="780" height="1688" loading="lazy" decoding="async" alt="The same sample on a phone.">
+      </div>
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="section about-teaser" id="about" aria-labelledby="about-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">About</p>
+        <h2 id="about-title">One person, start to finish</h2>
+      </div>
+      <div class="section-body" data-reveal>
+        <div class="about-teaser__row">
+          <figure class="about-teaser__portrait"><picture>
+            <source type="image/webp" srcset="/assets/img/portrait-square-480.webp 480w, /assets/img/portrait-square-960.webp 960w" sizes="(min-width: 900px) 200px, 136px">
+            <img src="/assets/img/portrait-square-480.jpg" srcset="/assets/img/portrait-square-480.jpg 480w, /assets/img/portrait-square-960.jpg 960w" sizes="(min-width: 900px) 200px, 136px" width="960" height="960" loading="lazy" decoding="async" alt="Ethan Gaither smiling, in a black T-shirt, in front of a grey and pink painted wall.">
+          </picture></figure>
+          <div class="measure">
+            <p>I'm <span data-site="name">Ethan Gaither</span>. I build websites by hand in <span data-site="location">Battle Ground, Washington</span>, and I use AI tools to deliver them faster. You talk to me, not a team.</p>
+            <p><a href="/about/">More about me</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing call to action -->
+  <section class="section closing" aria-labelledby="closing-title">
+    <div class="wrap closing__inner" data-reveal>
+      <h2 id="closing-title">Got a business that needs a site?</h2>
+      <p class="lede">Tell me what it's for. I'll tell you if I'm the right fit.</p>
+      <p class="actions">
+        <a class="btn btn--solid" data-fx="press3d" href="/start-a-project/">Start a project</a>
+        <a class="btn" data-fx="magnetic" href="/book-a-call/">Book a free call</a>
+      </p>
+      <p class="small muted">Fixed price, agreed before I start, plus WA sales tax.</p>
     </div>
   </section>
 <!-- WORKER: end -->

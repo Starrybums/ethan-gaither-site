@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>North Fork Apparel — a sample site</title>
+<meta name="description" content="A sample website for North Fork Apparel, a fictional clothing label in Battle Ground, Washington. Built as a demonstration by Ethan Gaither.">
+<!-- A sample for a fictional business: keep it out of search. -->
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F4F2EE">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231C1C1A'/%3E%3Cpath d='M16 28V18M16 18L8 5M16 18L24 5' stroke='%23F4F2EE' stroke-width='3.2' fill='none' stroke-linecap='square'/%3E%3Ccircle cx='16' cy='18' r='3.4' fill='%239C3D1A'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="preload" href="../../fonts/instrument-serif-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="north-fork-apparel.css">
+<script src="north-fork-apparel.js" defer></script>
+</head>
+<body id="top">
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
+</svg>
+
+<aside class="banner" aria-label="About this sample site">
+  <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+</aside>
+
+<header class="head">
+  <div class="wrap head-in">
+    <a class="logo" href="#top"><span class="logo-name">North Fork</span><span class="logo-sub">Apparel</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        <li><a href="#lookbook">Lookbook</a></li>
+        <li><a href="#story">Story</a></li>
+        <li><a href="#sizing">Sizing</a></li>
+        <li><a href="#stockists">Stockists</a></li>
+        <li><a href="#signup">Sign up</a></li>
+      </ul>
+    </nav>
+    <details class="nav-narrow">
+      <summary><span class="sr-only">Open the menu</span><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg></summary>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#lookbook">Lookbook</a></li>
+          <li><a href="#story">Story</a></li>
+          <li><a href="#sizing">Sizing</a></li>
+          <li><a href="#stockists">Stockists</a></li>
+          <li><a href="#signup">Sign up</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <p class="label hero-label">The fall drop</p>
+      <h1 class="hero-title" id="hero-title"><span>Clothes for</span> <span>the <em>long way</em></span> <span>home.</span></h1>
+      <p class="hero-lede">North Fork makes a short list of jackets, tees, flannels and caps. Heavy fabric and plain cuts, made in small runs.</p>
+      <p class="hero-actions"><a class="btn" href="#lookbook">See the lookbook<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="btn btn--line" href="#stockists">Find a stockist</a></p>
+      <div class="hero-art">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A poster-style drawing of two ridgelines and dark pines under a rust sun, with a pale trail that forks in two.">
+          <rect width="400" height="500" fill="#D3D9C9"/>
+          <circle cx="292" cy="128" r="58" fill="#9C3D1A"/>
+          <path d="M0 300 L52 262 L100 288 L168 214 L238 276 L300 236 L352 268 L400 246 V500 H0 Z" fill="#B7C0A9"/>
+          <path d="M0 352 C50 322 96 338 150 312 C208 284 262 318 322 322 C356 324 380 316 400 306 V500 H0 Z" fill="#5B6B4E"/>
+          <g fill="#1C1C1A">
+            <path d="M44 352 L58 306 L72 352 Z"/><path d="M68 356 L84 300 L100 356 Z"/><path d="M96 354 L108 316 L120 354 Z"/>
+            <path d="M286 330 L300 288 L314 330 Z"/><path d="M310 332 L326 284 L342 332 Z"/><path d="M338 326 L350 296 L362 326 Z"/>
+          </g>
+          <path d="M0 426 C70 404 140 416 210 402 S340 390 400 410 V500 H0 Z" fill="#1C1C1A"/>
+          <path d="M200 318 L210 318 C212 346 216 372 224 398 C238 436 268 470 308 500 L254 500 C236 476 220 452 208 430 C196 456 178 480 152 500 L96 500 C140 468 186 428 198 396 C204 370 202 344 200 318 Z" fill="#F4F2EE"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="lookbook" aria-labelledby="lookbook-title">
+    <div class="wrap">
+      <div class="sec-top"><p class="label"><span class="num">01</span> Lookbook</p></div>
+      <div class="sec-head">
+        <h2 id="lookbook-title">Four pieces for fall.</h2>
+        <p class="sec-intro">The whole drop on one page. Prices are made up for this sample.</p>
+      </div>
+
+      <div class="mosaic">
+        <figure class="look look--jacket">
+          <div class="art art--rust">
+            <svg viewBox="20 40 360 340" role="img" aria-label="Flat drawing of a charcoal chore jacket with a collar, a button front and four patch pockets.">
+              <g stroke="#F4F2EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                <path fill="#1C1C1A" d="M132 80 L94 96 C80 160 68 250 60 324 L108 334 C118 264 126 202 134 152 Z"/>
+                <path fill="#1C1C1A" d="M268 80 L306 96 C320 160 332 250 340 324 L292 334 C282 264 274 202 266 152 Z"/>
+                <path fill="#1C1C1A" d="M132 80 L168 68 L200 98 L232 68 L268 80 L274 338 L126 338 Z"/>
+                <path fill="#2B2B28" d="M168 68 L200 98 L186 134 L148 92 Z"/>
+                <path fill="#2B2B28" d="M232 68 L200 98 L214 134 L252 92 Z"/>
+                <path fill="none" d="M200 98 V338"/>
+                <path fill="none" d="M146 158 h38 v40 h-38 Z M216 158 h38 v40 h-38 Z"/>
+                <path fill="none" d="M146 168 h38 M216 168 h38"/>
+                <path fill="none" d="M138 262 h48 v54 h-48 Z M214 262 h48 v54 h-48 Z"/>
+                <path fill="none" d="M138 273 h48 M214 273 h48"/>
+                <path fill="none" d="M64 296 L110 306 M336 296 L290 306"/>
+                <path fill="none" stroke-width="2" stroke-dasharray="3 6" d="M130 326 H270"/>
+              </g>
+              <g fill="#F4F2EE"><circle cx="200" cy="140" r="4.5"/><circle cx="200" cy="178" r="4.5"/><circle cx="200" cy="216" r="4.5"/><circle cx="200" cy="254" r="4.5"/><circle cx="200" cy="292" r="4.5"/></g>
+            </svg>
+          </div>
+          <figcaption><span class="look-no">01</span><h3>Fork Chore Jacket</h3><span class="price">$148</span><p class="desc">Heavy canvas with four pockets and a button front.</p></figcaption>
+        </figure>
+
+        <figure class="look look--tee">
+          <div class="art art--moss">
+            <svg viewBox="30 44 340 310" role="img" aria-label="Flat drawing of a bone-coloured crew neck tee with short sleeves and a small rust label at the hem.">
+              <path fill="#F4F2EE" d="M150 76 C172 104 228 104 250 76 L322 102 L350 176 L304 200 L286 172 L286 334 L114 334 L114 172 L96 200 L50 176 L78 102 Z"/>
+              <path fill="#D8D3C8" d="M150 76 C172 62 228 62 250 76 C228 104 172 104 150 76 Z"/>
+              <g fill="none" stroke="#5B6B4E" stroke-linecap="round">
+                <path stroke-width="9" d="M150 78 C172 106 228 106 250 78"/>
+                <path stroke-width="2" d="M152 86 C140 124 124 152 114 172 M248 86 C260 124 276 152 286 172"/>
+                <path stroke-width="2" stroke-dasharray="3 6" d="M56 170 L100 190 M344 170 L300 190 M122 320 H278"/>
+              </g>
+              <rect x="256" y="308" width="14" height="22" fill="#9C3D1A"/>
+            </svg>
+          </div>
+          <figcaption><span class="look-no">02</span><h3>Everyday Tee</h3><span class="price">$38</span><p class="desc">Midweight cotton with a boxy cut and a ribbed collar.</p></figcaption>
+        </figure>
+
+        <figure class="look look--flannel">
+          <div class="art art--sand">
+            <svg viewBox="30 44 340 310" role="img" aria-label="Flat drawing of a rust plaid flannel shirt with a pointed collar, a button front and one chest pocket.">
+              <defs>
+                <pattern id="nf-plaid" width="44" height="44" patternUnits="userSpaceOnUse">
+                  <rect width="44" height="44" fill="#9C3D1A"/>
+                  <rect y="14" width="44" height="12" fill="#1C1C1A" fill-opacity=".5"/>
+                  <rect x="14" width="12" height="44" fill="#1C1C1A" fill-opacity=".5"/>
+                  <rect y="5" width="44" height="2" fill="#F4F2EE" fill-opacity=".75"/>
+                  <rect x="5" width="2" height="44" fill="#F4F2EE" fill-opacity=".75"/>
+                </pattern>
+              </defs>
+              <g stroke="#1C1C1A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+                <path fill="url(#nf-plaid)" d="M132 80 L94 96 C80 160 68 250 60 324 L108 334 C118 264 126 202 134 152 Z"/>
+                <path fill="url(#nf-plaid)" d="M268 80 L306 96 C320 160 332 250 340 324 L292 334 C282 264 274 202 266 152 Z"/>
+                <path fill="url(#nf-plaid)" d="M132 80 L168 68 L200 98 L232 68 L268 80 L274 338 L126 338 Z"/>
+                <path fill="#9C3D1A" d="M168 68 L200 98 L186 134 L148 92 Z"/>
+                <path fill="#9C3D1A" d="M232 68 L200 98 L214 134 L252 92 Z"/>
+                <path fill="none" d="M200 98 V338"/>
+                <path fill="url(#nf-plaid)" d="M214 160 h40 v42 l-20 10 l-20 -10 Z"/>
+                <path fill="none" d="M64 298 L110 308 M336 298 L290 308"/>
+              </g>
+              <g fill="#F4F2EE" stroke="#1C1C1A" stroke-width="1.5"><circle cx="200" cy="140" r="4.5"/><circle cx="200" cy="184" r="4.5"/><circle cx="200" cy="228" r="4.5"/><circle cx="200" cy="272" r="4.5"/><circle cx="200" cy="314" r="4.5"/></g>
+            </svg>
+          </div>
+          <figcaption><span class="look-no">03</span><h3>Cedar Flannel</h3><span class="price">$88</span><p class="desc">Brushed cotton plaid with a chest pocket.</p></figcaption>
+        </figure>
+
+        <figure class="look look--cap">
+          <div class="art art--charcoal">
+            <svg viewBox="16 70 368 260" role="img" aria-label="Flat drawing of a bone-coloured six-panel cap, seen from the side, with a moss brim and a small rust patch on the front.">
+              <path fill="#F4F2EE" d="M140 252 C136 164 196 112 254 116 C314 120 350 180 348 252 Z"/>
+              <g fill="none" stroke="#1C1C1A" stroke-width="2.5" stroke-linecap="round">
+                <path d="M240 117 C220 150 208 198 206 252"/>
+                <path d="M240 117 C270 150 292 198 298 252"/>
+              </g>
+              <circle cx="242" cy="116" r="8" fill="#F4F2EE" stroke="#1C1C1A" stroke-width="2.5"/>
+              <path fill="#E8E4DC" stroke="#1C1C1A" stroke-width="2" d="M140 246 H348 V264 H140 Z"/>
+              <path fill="#5B6B4E" stroke="#F4F2EE" stroke-width="2" stroke-linejoin="round" d="M150 238 C110 230 58 246 30 284 C28 292 36 298 46 296 C92 292 140 280 176 262 Z"/>
+              <path fill="none" stroke="#F4F2EE" stroke-width="1.5" stroke-dasharray="3 4" d="M146 246 C108 240 66 254 42 284"/>
+              <path fill="#5B6B4E" stroke="#F4F2EE" stroke-width="2" stroke-linejoin="round" d="M346 240 L376 248 L374 266 L346 262 Z"/>
+              <g transform="rotate(-8 182 204)"><rect x="162" y="188" width="42" height="32" fill="#9C3D1A"/><rect x="166" y="192" width="34" height="24" fill="none" stroke="#F4F2EE" stroke-width="1.5" stroke-dasharray="3 3"/></g>
+            </svg>
+          </div>
+          <figcaption><span class="look-no">04</span><h3>Trail Cap</h3><span class="price">$34</span><p class="desc">Six panels of moss twill with a strap back.</p></figcaption>
+        </figure>
+
+        <div class="colours">
+          <h3 class="label">Colours this fall</h3>
+          <ul class="swatches">
+            <li><span class="sw" style="--c:#F4F2EE" aria-hidden="true"></span><span class="sw-name">Bone</span></li>
+            <li><span class="sw" style="--c:#1C1C1A" aria-hidden="true"></span><span class="sw-name">Charcoal</span></li>
+            <li><span class="sw" style="--c:#9C3D1A" aria-hidden="true"></span><span class="sw-name">Rust</span></li>
+            <li><span class="sw" style="--c:#5B6B4E" aria-hidden="true"></span><span class="sw-name">Moss</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="sec-top"><p class="label"><span class="num">02</span> Story</p></div>
+      <div class="sec-head">
+        <h2 id="story-title">A short list, done right.</h2>
+      </div>
+      <div class="story-grid">
+        <div class="story-aside">
+          <p class="label">The rule at North Fork</p>
+          <p class="rule">Heavy fabric. Plain cut.</p>
+        </div>
+        <div class="story-body">
+          <p>We started with a jacket. We wanted one that took rain and a bad day without falling apart. Nothing on the shelf did, so we cut our own.</p>
+          <p>The tee, the flannel and the cap came next. Same rule for each of them: heavy fabric, a plain cut and stitching that holds.</p>
+          <p>We make in small runs. When a piece sells out, it's gone until the next run. We'd rather make less and have it last.</p>
+          <p>The name comes from a fork in a trail. Take the longer branch and you'll see more.</p>
+          <p class="made-up">This label and its story are made up for the sample.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="sizing" aria-labelledby="sizing-title">
+    <div class="wrap">
+      <div class="sec-top"><p class="label"><span class="num">03</span> Sizing</p></div>
+      <div class="sec-head">
+        <h2 id="sizing-title">Find your size.</h2>
+        <p class="sec-intro">Compare your measurements to the chart. Between sizes, go down in the jacket and up in the flannel.</p>
+      </div>
+      <div class="size-grid">
+        <div class="size-notes">
+          <h3 class="label">Fit notes</h3>
+          <dl class="fit">
+            <div><dt>Jacket</dt><dd>Cut boxy through the body. Size down for a closer fit.</dd></div>
+            <div><dt>Tee</dt><dd>True to size, with a roomy chest.</dd></div>
+            <div><dt>Flannel</dt><dd>Roomy in the shoulders, with long sleeves.</dd></div>
+            <div><dt>Cap</dt><dd>One size, with an adjustable strap.</dd></div>
+          </dl>
+        </div>
+        <div class="size-chart">
+          <div class="units" data-units hidden role="group" aria-label="Units">
+            <button type="button" class="unit" data-unit-btn="in" aria-pressed="true">Inches</button>
+            <button type="button" class="unit" data-unit-btn="cm" aria-pressed="false">Centimetres</button>
+          </div>
+          <table>
+            <caption>Body measurements in <span data-unit-label>inches</span></caption>
+            <thead>
+              <tr><th scope="col">Size</th><th scope="col">Chest</th><th scope="col">Waist</th><th scope="col">Sleeve</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">XS</th><td data-in="34-36">34–36</td><td data-in="28-30">28–30</td><td data-in="32">32</td></tr>
+              <tr><th scope="row">S</th><td data-in="36-38">36–38</td><td data-in="30-32">30–32</td><td data-in="33">33</td></tr>
+              <tr><th scope="row">M</th><td data-in="38-40">38–40</td><td data-in="32-34">32–34</td><td data-in="34">34</td></tr>
+              <tr><th scope="row">L</th><td data-in="40-43">40–43</td><td data-in="34-37">34–37</td><td data-in="35">35</td></tr>
+              <tr><th scope="row">XL</th><td data-in="43-46">43–46</td><td data-in="37-40">37–40</td><td data-in="36">36</td></tr>
+              <tr><th scope="row">XXL</th><td data-in="46-49">46–49</td><td data-in="40-43">40–43</td><td data-in="37">37</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="stockists" aria-labelledby="stockists-title">
+    <div class="wrap">
+      <div class="sec-top"><p class="label"><span class="num">04</span> Stockists</p></div>
+      <div class="sec-head">
+        <h2 id="stockists-title">Find it in person.</h2>
+        <p class="sec-intro">Five shops carry the drop. All five are made up for this sample.</p>
+      </div>
+      <ul class="shops">
+        <li class="shop"><h3>Tamarack &amp; Tin</h3><p class="where label">Camas, WA</p><p class="carries">Jackets and tees</p></li>
+        <li class="shop"><h3>Larch Row Goods</h3><p class="where label">Battle Ground, WA</p><p class="carries">Tees and caps</p></li>
+        <li class="shop"><h3>Quarry Lane Mercantile</h3><p class="where label">Vancouver, WA</p><p class="carries">The full drop</p></li>
+        <li class="shop"><h3>Wren Street Supply</h3><p class="where label">Portland, OR</p><p class="carries">Jackets and flannels</p></li>
+        <li class="shop"><h3>Bluff Road Outfitters</h3><p class="where label">Hood River, OR</p><p class="carries">Flannels and caps</p></li>
+      </ul>
+      <p class="shops-note">Want to carry North Fork in your shop? Write to <a href="mailto:hello@north-fork-apparel.example">hello@north-fork-apparel.example</a>. That address is made up.</p>
+    </div>
+  </section>
+
+  <section class="signup" id="signup" aria-labelledby="signup-title">
+    <div class="wrap">
+      <p class="label"><span class="num">05</span> Sign up</p>
+      <h2 id="signup-title">Hear about the next drop first.</h2>
+      <p class="signup-lede">One email when a new run is ready. Nothing else.</p>
+      <form class="signup-form" id="signup-form" action="#signup" method="get">
+        <div class="field">
+          <label for="signup-email">Email address</label>
+          <input id="signup-email" type="email" autocomplete="email" inputmode="email" required>
+        </div>
+        <button class="btn btn--signup" type="submit">Sign me up</button>
+      </form>
+      <p class="signup-msg" id="signup-msg" role="status"></p>
+      <p class="signup-note">Demo only. This form doesn't send or save anything. A real build would connect it to an email list.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot-mark" aria-hidden="true">North Fork</p>
+    <div class="foot-cols">
+      <div>
+        <p class="foot-banner">Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+        <p>North Fork Apparel, its pieces, prices and stockists are made up. The address, phone number and email here are placeholders, not a real label's.</p>
+      </div>
+      <address>
+        <span class="label">Studio</span>
+        214 Sample Row<br>Battle Ground, WA<br>
+        <span class="small">(a made-up address)</span><br>
+        <a href="tel:+13605550163">(360) 555-0163</a><br>
+        <a href="mailto:hello@north-fork-apparel.example">hello@north-fork-apparel.example</a>
+      </address>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

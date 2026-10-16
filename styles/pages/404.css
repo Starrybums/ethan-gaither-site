@@ -1,0 +1,13 @@
+/* styles/pages/404.css — the not-found page. Tokens from styles/tokens.css only. Owner: pages worker. */
+
+.quick { margin-top: clamp(28px, 5vw, 48px); max-width: 44rem; }
+.quick__title { margin-bottom: 12px; }
+.quick__list { list-style: none; border-top: 1px solid var(--ink); }
+.quick__list li { border-bottom: 1px solid var(--line); }
+.quick__list a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  min-height: var(--tap); padding: 12px 0; color: var(--ink); text-decoration: none;
+  font: 400 1.25rem/1.3 var(--serif); letter-spacing: -.01em;
+}
+.quick__list a:hover { color: var(--accent-ink); }
+.quick__list small { font: 400 var(--fs-small)/1.4 var(--sans); color: var(--ink-2); text-align: right; }

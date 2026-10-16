@@ -1,1 +1,17 @@
-/* styles/pages/samples.css — page styles. Owner: see WORKER-BRIEFS.md. Use the tokens in styles/tokens.css; do not redefine them. */
+/* styles/pages/samples.css — the sample gallery. The card itself is styled in styles/shell.css (.sample-card).
+   Tokens from styles/tokens.css only. Owner: pages worker. */
+
+/* The grid follows the hero directly, so drop the section's own top padding. */
+.page-hero + .section--flush { padding-top: 0; }
+
+.legend { margin: 0 0 24px; padding: 4px 0 4px 16px; border-left: 3px solid var(--accent); color: var(--ink-2); max-width: var(--maxw-text); }
+
+.samples-note { display: grid; gap: 16px; }
+.samples-note p { max-width: var(--maxw-text); margin: 0; }
+
+.cta-panel {
+  display: grid; gap: 20px; padding: clamp(26px, 5vw, 56px);
+  border: 1px solid var(--ink); border-radius: var(--radius-2); background: var(--paper);
+}
+.cta-panel h2 { max-width: 16em; }
+.cta-panel p { margin: 0; color: var(--ink-2); max-width: 52ch; }

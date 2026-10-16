@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Folding stool — Ridgeline Goods sample site</title>
+<meta name="description" content="Folding stool from Ridgeline Goods, a fictional online store. A sample product page built as a demonstration by Ethan Gaither.">
+<!-- A sample for a fictional business: keep it out of search. -->
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%232F5D50'/%3E%3Cpath%20d='M5%2025l8-14%205%208%203-5%206%2011z'%20fill='%23EFEBE3'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="preload" href="../../../../fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.className += " js";</script>
+<link rel="stylesheet" href="../../ridgeline-goods.css">
+<script src="../../ridgeline-goods.js" defer></script>
+</head>
+<body data-root="../../">
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-ridge" viewBox="0 0 24 24"><path d="M1.5 20.5 9 7l4.4 7.6L16 10.5l6.5 10z" fill="currentColor"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5h14l-1 11.5H6z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></g></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<aside class="banner" aria-label="About this sample site">
+  <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../../../">Back to samples</a></p>
+</aside>
+
+<header class="head">
+  <div class="head-in">
+    <a class="logo" href="../../"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ridge"/></svg>Ridgeline Goods</a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        <li><a href="../../#shop">Shop</a></li>
+        <li><a href="../../#about">About</a></li>
+        <li><a href="../../#help">Help</a></li>
+      </ul>
+    </nav>
+    <details class="nav-narrow">
+      <summary><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg><span class="hide-sm">Menu</span></summary>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="../../#shop">Shop</a></li>
+        <li><a href="../../#about">About</a></li>
+        <li><a href="../../#help">Help</a></li>
+        </ul>
+      </nav>
+    </details>
+    <p class="demo-note"><strong>Demo store:</strong> nothing is for sale and there is no checkout.</p>
+    <a class="cart-link" href="../../cart/" data-cart-link><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bag"/></svg><span class="hide-sm">Cart</span><span class="badge" data-cart-count hidden>0</span></a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<div id="live" class="sr-only" role="status" aria-live="polite"></div>
+  <div class="wrap">
+
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="../../#shop">Shop</a></li>
+        <li>Camp</li>
+        <li aria-current="page">Folding stool</li>
+      </ol>
+    </nav>
+
+    <article class="product" aria-labelledby="product-title">
+      <div class="product-art"><img src="../../art/stool.svg" alt="Drawing of a round dark stool on three tan wooden legs." width="480" height="480" fetchpriority="high"></div>
+      <div class="product-info">
+        <p class="eyebrow">Camp</p>
+        <h1 id="product-title">Folding stool</h1>
+        <p class="price-lg">$42</p>
+        <p class="desc">A three-legged stool that folds to the length of an umbrella. You can sit by the fire without hunting for a log.</p>
+        <div class="buy">
+          <button type="button" class="btn btn--add btn--lg" data-add="stool"><span class="lbl">Add to cart</span><span class="sr-only">: Folding stool</span></button>
+          <p class="in-cart" data-in-cart="stool" hidden><span data-in-cart-n></span> <a href="../../cart/">View cart</a></p>
+          <p class="nojs-note">The demo cart needs JavaScript. Turn it on and reload to try it.</p>
+        </div>
+        <dl class="specs">
+          <div><dt>Seat height</dt><dd>16 inches</dd></div>
+<div><dt>Folded length</dt><dd>18 inches</dd></div>
+<div><dt>Weight</dt><dd>1.6 lb</dd></div>
+        </dl>
+        <p class="small fine">Details and prices are made up.</p>
+      </div>
+    </article>
+
+    <section class="more" aria-labelledby="more-title">
+      <h2 id="more-title">More gear</h2>
+      <ul class="grid" role="list">
+          <li class="card">
+            <div class="tile"><img src="../../art/stove.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="../../product/stove/">Single-burner stove</a></h3>
+              <p class="card-cat">Cook</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$54</p>
+              <button type="button" class="btn btn--add" data-add="stove"><span class="lbl">Add to cart</span><span class="sr-only">: Single-burner stove</span></button>
+            </div>
+          </li>
+          <li class="card">
+            <div class="tile"><img src="../../art/mug.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="../../product/mug/">Enamel mug</a></h3>
+              <p class="card-cat">Drink</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$18</p>
+              <button type="button" class="btn btn--add" data-add="mug"><span class="lbl">Add to cart</span><span class="sr-only">: Enamel mug</span></button>
+            </div>
+          </li>
+          <li class="card">
+            <div class="tile"><img src="../../art/pack.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="../../product/pack/">20 L day pack</a></h3>
+              <p class="card-cat">Carry</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$68</p>
+              <button type="button" class="btn btn--add" data-add="pack"><span class="lbl">Add to cart</span><span class="sr-only">: 20 L day pack</span></button>
+            </div>
+          </li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <p class="foot-brand"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ridge"/></svg>Ridgeline Goods</p>
+    <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../../../">Back to samples</a></p>
+    <p>Ridgeline Goods, its products, prices and policies are made up. 100 Example Ridge Road, Battle Ground, WA and <a href="tel:+13605550128">(360) 555-0128</a> are placeholders, not a real address or phone number.</p>
+    <ul>
+      <li><a href="../../#shop">Shop</a></li>
+      <li><a href="../../#about">About</a></li>
+      <li><a href="../../#help">Help</a></li>
+      <li><a href="../../cart/">Cart</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

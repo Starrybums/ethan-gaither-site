@@ -33,6 +33,17 @@
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About Ethan Gaither","url":"https://ethan-gaither.vercel.app/about/","mainEntity":{"@type":"Person","name":"Ethan Gaither","url":"https://ethan-gaither.vercel.app/about/","image":"https://ethan-gaither.vercel.app/assets/img/portrait-square-960.jpg","jobTitle":"Web designer","address":{"@type":"PostalAddress","addressLocality":"Battle Ground","addressRegion":"WA","addressCountry":"US"}}}</script>
 <script type="module" src="/js/shell.js"></script>
+<script type="module">
+/* The tools and service areas come from js/config.js (the baked lists are the no-JavaScript version). */
+import SITE from '/js/config.js';
+const fill = (sel, list) => {
+  const ul = document.querySelector(sel);
+  if (!ul || !Array.isArray(list) || !list.length) return;
+  ul.replaceChildren(...list.map((t) => { const li = document.createElement('li'); li.textContent = t; return li; }));
+};
+fill('[data-tools-list]', SITE.tools);
+fill('[data-areas-list]', SITE.serviceAreas);
+</script>
 </head>
 <body data-page="about">
 <a class="skip" href="#main">Skip to content</a>
@@ -83,12 +94,133 @@
     </div>
   </section>
 
+  <section class="section" id="who" aria-labelledby="who-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Who I am</p>
+        <h2 id="who-title">Hi, I'm Ethan</h2>
+      </div>
+      <div class="section-body">
+        <div class="about-intro">
+          <figure class="portrait" data-reveal><picture>
+            <source type="image/webp" srcset="/assets/img/portrait-square-480.webp 480w, /assets/img/portrait-square-960.webp 960w" sizes="(min-width: 900px) 220px, (min-width: 640px) 200px, 136px">
+            <img src="/assets/img/portrait-square-480.jpg" srcset="/assets/img/portrait-square-480.jpg 480w, /assets/img/portrait-square-960.jpg 960w" sizes="(min-width: 900px) 220px, (min-width: 640px) 200px, 136px" width="960" height="960" loading="eager" decoding="async" alt="Ethan Gaither smiling, in a black T-shirt, in front of a grey and pink painted wall.">
+          </picture></figure>
+          <div class="about-intro__text" data-reveal>
+            <p>I'm <span data-site="name">Ethan Gaither</span>. I live in Battle Ground, Washington, and I build websites for small businesses around here.</p>
+            <p>I write the pages by hand. I use AI tools like Claude Code, Codex and Cursor to get them done faster, and I read and test what they produce before anything goes live. You deal with me from the first call to the handover. There's no sales rep and no hand-off to a team.</p>
+            <p>Before this I built an agency site, a booking system and a few spec builds for my own business, Blackline Studios. That's <a href="https://black-line-studios.com" data-site-link="blackline">Blackline work</a>, and I label it that way wherever it shows up.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">How I work</p>
+        <h2 id="how-title">Four steps</h2>
+      </div>
+      <div class="section-body">
+        <ol class="how" role="list">
+          <li class="how__step" data-reveal>
+            <h3>Listen</h3>
+            <p>We talk about the business, who needs to find you, and what a visitor should do on the site.</p>
+          </li>
+          <li class="how__step" data-reveal>
+            <h3>Agree</h3>
+            <p>You get a fixed price and a plain list of what's in and what's out, before I start.</p>
+          </li>
+          <li class="how__step" data-reveal>
+            <h3>Build and show</h3>
+            <p>I build it by hand and show you a working draft you can open on your phone.</p>
+          </li>
+          <li class="how__step" data-reveal>
+            <h3>Hand over</h3>
+            <p>The domain, hosting, code and logins go in your name. For 14 days after launch I fix anything that's off.</p>
+          </li>
+        </ol>
+        <p class="more" data-reveal>The full version, step by step, is on <a href="/services/#process">the services page</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="values" aria-labelledby="values-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">What I care about</p>
+        <h2 id="values-title">Three things</h2>
+      </div>
+      <div class="section-body">
+        <ul class="values">
+          <li class="value" data-reveal>
+            <h3>You own it</h3>
+            <p>Your domain, your hosting account, your code and your logins. If we stop working together, your site keeps running.</p>
+          </li>
+          <li class="value" data-reveal>
+            <h3>Plain language</h3>
+            <p>No jargon in the quote and none in the emails. If I use a word you don't know, ask and I'll explain it.</p>
+          </li>
+          <li class="value" data-reveal>
+            <h3>Speed</h3>
+            <p>Pages that load fast, because people leave slow sites. And a project that moves: about four weeks when your content is ready.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tools" aria-labelledby="tools-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Tools</p>
+        <h2 id="tools-title">What I use</h2>
+      </div>
+      <div class="section-body about-copy" data-reveal>
+        <p>Plain HTML, CSS and JavaScript for the site itself. Vercel and GitHub to host it and keep its history. Claude Code, Codex and Cursor to build faster. Lighthouse to test it.</p>
+        <p>There's no page builder, no framework and no plugins to keep updated. Anyone who knows the web can pick the site up later.</p>
+        <ul class="chips" data-tools-list>
+          <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Vercel</li><li>GitHub</li><li>Claude Code</li><li>Codex</li><li>Cursor</li><li>Lighthouse</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="area" aria-labelledby="area-title">
+    <div class="wrap split">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Where I work</p>
+        <h2 id="area-title">Around Clark County</h2>
+      </div>
+      <div class="section-body about-copy" data-reveal>
+        <p>I'm based in Battle Ground and work with local businesses in these places. Most of the work happens by phone and email.</p>
+        <ul class="chips" data-areas-list>
+          <li>Battle Ground</li><li>Vancouver</li><li>Ridgefield</li><li>Camas</li><li>Washougal</li><li>Woodland</li><li>Clark County</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Certifications: keep this block exactly as structured (contract in WORKER-BRIEFS.md, "Config-driven blocks").
        shell.js removes it while js/config.js → certifications is empty, and fills the list when it is not. -->
   <section class="section" data-certs hidden aria-labelledby="certs-title">
     <div class="wrap split">
       <div class="section-head"><h2 id="certs-title">Certifications</h2></div>
       <div class="section-body"><ul class="ticks" data-certs-list></ul></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-panel">
+        <h2 id="cta-title">Want to see if we fit?</h2>
+        <p>Tell me about the site, or book a free call. If I'm not the right person, I'll say so.</p>
+        <p class="actions">
+          <a class="btn btn--solid" data-fx="ink" href="/start-a-project/">Start a project</a>
+          <a class="btn" data-fx="press3d" href="/book-a-call/">Book a free call</a>
+        </p>
+      </div>
     </div>
   </section>
 <!-- WORKER: end -->

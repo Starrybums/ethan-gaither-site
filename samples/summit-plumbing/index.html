@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Switchback Plumbing — a sample site</title>
+<meta name="description" content="A sample website for Switchback Plumbing, a fictional plumber in Battle Ground, Washington. Built as a demonstration by Ethan Gaither.">
+<!-- A sample for a fictional business: keep it out of search. -->
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#12305A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2312305A'/%3E%3Cpath d='M9 12h22v8.5H9V29h22' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3Ccircle cx='31' cy='29' r='4.2' fill='%23E35205'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="summit-plumbing.css">
+<script src="summit-plumbing.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h3.2l1.6 4-2 1.3a11 11 0 0 0 6.9 6.9l1.3-2 4 1.6V19a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-drain" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3c-2.4 3.2-3.8 5.2-3.8 7a3.8 3.8 0 0 0 7.6 0c0-1.8-1.4-3.8-3.8-7z"/><circle cx="16" cy="22" r="7.5"/><path d="M16 16.5v11M10.5 22h11"/></g></symbol>
+  <symbol id="i-heater" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7.5" y="6" width="17" height="22" rx="4.5"/><path d="M12.5 6V2.5M19.5 6V2.5"/><circle cx="16" cy="14.5" r="3.2"/><path d="M12 23h8"/></g></symbol>
+  <symbol id="i-leak" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h26v7H3z"/><path d="M7.5 6v13M24.5 6v13"/><path d="M16 20.5c-2 2.8-3.3 4.5-3.3 6a3.3 3.3 0 0 0 6.6 0c0-1.5-1.3-3.2-3.3-6z"/></g></symbol>
+  <symbol id="i-pipes" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h18v8H10v8h18"/><path d="M4 4.5v7M28 20.5v7"/></g></symbol>
+  <symbol id="i-faucet" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14h14a6 6 0 0 1 6 6v2"/><path d="M11 14v-4M7 10h8"/><path d="M25 25c-1.3 1.7-2 2.6-2 3.5a2 2 0 0 0 4 0c0-.9-.7-1.8-2-3.5z"/></g></symbol>
+  <symbol id="i-help" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="12"/><path d="M12.5 12.5a3.6 3.6 0 1 1 5.2 3.2c-1.2.6-1.7 1.3-1.7 2.5"/><path d="M16 22.5v.5"/></g></symbol>
+</svg>
+
+<aside class="banner" aria-label="About this sample site">
+  <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+</aside>
+
+<header class="head">
+  <div class="wrap head-in">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect width="40" height="40" rx="9" fill="#12305A"/><path d="M9 12h22v8.5H9V29h22" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><circle cx="31" cy="29" r="4.2" fill="#E35205"/></svg>
+      <span class="logo-text"><span>Switchback</span> <span>Plumbing</span></span>
+    </a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#area">Service area</a></li>
+        <li><a href="#quote">Get a quote</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="head-tools">
+      <a class="btn btn--call btn--sm" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><span class="call-label">Call<span class="call-num"> (360) 555-0186</span></span></a>
+      <details class="nav-narrow">
+        <summary><span class="sr-only">Menu</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg></summary>
+        <nav aria-label="Main">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#area">Service area</a></li>
+            <li><a href="#quote">Get a quote</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow">Plumbers in Battle Ground, WA</p>
+        <h1 id="hero-title">Plumbing help across Clark County.</h1>
+        <p class="lede">Leaks, clogged drains, water heaters, new fixtures. Call and we'll sort it out. Or send a quote request and we'll call you back.</p>
+        <p class="actions">
+          <a class="btn btn--call btn--lg" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call (360) 555-0186</a>
+          <a class="btn btn--line btn--lg" href="#quote">Get a quote</a>
+        </p>
+        <p class="hero-fine">Water coming through the ceiling? Call. Skip the form.</p>
+      </div>
+      <svg class="hero-art" viewBox="0 0 440 320" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="mt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".85" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+        <polygon points="0,320 0,205 70,145 120,188 215,58 305,172 352,128 440,212 440,320" fill="url(#mt)"/>
+        <polygon points="0,320 0,262 92,204 160,252 252,152 332,242 402,202 440,236 440,320" fill="url(#mt)"/>
+        <polygon points="215,58 190,94 205,88 217,103 231,86 246,95" fill="#fff" fill-opacity=".6"/>
+        <path d="M70 296H318V236H134V176H350V112" fill="none" stroke="#9FB2CC" stroke-width="22" stroke-linejoin="miter"/>
+        <path d="M70 296H318V236H134V176H350V112" fill="none" stroke="#E6EDF6" stroke-width="12" stroke-linejoin="miter"/>
+        <rect x="58" y="283" width="12" height="26" rx="2" fill="#9FB2CC"/>
+        <rect x="337" y="98" width="26" height="14" rx="2" fill="#9FB2CC"/>
+        <rect x="343" y="70" width="14" height="30" fill="#9FB2CC"/>
+        <circle cx="350" cy="62" r="30" fill="none" stroke="#E35205" stroke-width="9"/>
+        <path d="M350 32v60M320 62h60" stroke="#E35205" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="350" cy="62" r="9" fill="#E35205"/>
+        <path d="M224 252c-5 7-8 11-8 15a8 8 0 0 0 16 0c0-4-3-8-8-15z" fill="#fff" fill-opacity=".85"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="trust" aria-labelledby="trust-title">
+    <div class="wrap">
+      <h2 class="sr-only" id="trust-title">Licence and insurance</h2>
+      <ul class="trust-list">
+        <li><span class="tick"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg></span>WA contractor licence # on file</li>
+        <li><span class="tick"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg></span>Licensed, bonded and insured</li>
+        <li><span class="tick"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg></span>Price in writing before work starts</li>
+      </ul>
+      <p class="note">Sample text for a fictional business. A real build shows the real licence number here, so customers can look it up.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--concrete" id="services" aria-labelledby="services-title">
+    <div class="wrap">
+      <p class="eyebrow">What we do</p>
+      <h2 id="services-title">What we fix and install</h2>
+      <p class="lede">See your problem below? Tap the button and call.</p>
+      <ul class="cards">
+        <li class="card">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-drain"/></svg></span>
+          <h3>Drain cleaning</h3>
+          <p>Slow sinks, clogged tubs, backed-up lines. We clear it and tell you what caused it.</p>
+          <a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call about drains<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+        <li class="card">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-heater"/></svg></span>
+          <h3>Water heaters</h3>
+          <p>Repair or replacement, tank or tankless. No hot water? Call.</p>
+          <a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call about water heaters<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+        <li class="card">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-leak"/></svg></span>
+          <h3>Leaks</h3>
+          <p>Dripping pipes, wet walls, a stain on the ceiling. We find the source and fix it.</p>
+          <a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call about leaks<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+        <li class="card">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-pipes"/></svg></span>
+          <h3>Repiping</h3>
+          <p>Old or leaking pipes replaced one run at a time. You get the price in writing first.</p>
+          <a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call about repiping<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+        <li class="card">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-faucet"/></svg></span>
+          <h3>Fixtures</h3>
+          <p>Faucets, toilets, sinks, disposals and shower valves. Installed or swapped out.</p>
+          <a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call about fixtures<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+        <li class="card card--navy">
+          <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="#i-help"/></svg></span>
+          <h3>Not on the list?</h3>
+          <p>Call and describe it. If it's not something we do, we'll say so.</p>
+          <a class="btn btn--call" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call and ask<span class="sr-only">, (360) 555-0186</span></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="emerg" id="emergency" aria-labelledby="emerg-title">
+    <div class="wrap emerg-in">
+      <div>
+        <h2 id="emerg-title">Emergency? Call now.</h2>
+        <p>Burst pipe, no water, or sewage backing up? Shut off the main valve if you can, then call.</p>
+        <p class="small">Smell gas? Leave the house and call 911 first.</p>
+      </div>
+      <a class="btn btn--navy btn--lg" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call (360) 555-0186</a>
+    </div>
+  </section>
+
+  <section class="sec" id="process" aria-labelledby="process-title">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h2 id="process-title">How a job goes</h2>
+      <ol class="steps">
+        <li><span class="num" aria-hidden="true">1</span><h3>You call or send a request</h3><p>Tell us what's wrong and where. The phone is fastest.</p></li>
+        <li><span class="num" aria-hidden="true">2</span><h3>We look, then quote</h3><p>We check the problem and give you the price in writing before any work starts.</p></li>
+        <li><span class="num" aria-hidden="true">3</span><h3>We fix it and clean up</h3><p>We do the work and clean up after. You get a receipt.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--concrete" id="area" aria-labelledby="area-title">
+    <div class="wrap area-in">
+      <div>
+        <p class="eyebrow">Service area</p>
+        <h2 id="area-title">Where we work</h2>
+        <p class="lede">We're based in Battle Ground and work across Clark County. Not sure we cover your street? Call and ask.</p>
+        <ul class="towns">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Battle Ground</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Brush Prairie</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Camas</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Hockinson</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>La Center</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ridgefield</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Vancouver</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Washougal</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Yacolt</li>
+        </ul>
+        <p class="actions"><a class="btn btn--ghost" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call to check your address<span class="sr-only">, (360) 555-0186</span></a></p>
+      </div>
+      <figure class="area-fig">
+        <svg class="area-art" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+          <circle cx="160" cy="160" r="150" fill="#fff" stroke="#12305A" stroke-opacity=".3" stroke-width="2"/>
+          <circle cx="160" cy="160" r="108" fill="none" stroke="#12305A" stroke-opacity=".3" stroke-width="2" stroke-dasharray="6 8"/>
+          <circle cx="160" cy="160" r="66" fill="#12305A" fill-opacity=".06" stroke="#12305A" stroke-opacity=".4" stroke-width="2"/>
+          <path d="M12 214C70 196 118 168 160 160S250 116 308 104" fill="none" stroke="#12305A" stroke-opacity=".28" stroke-width="7" stroke-linecap="round"/>
+          <path d="M96 22C112 80 136 128 160 160S196 244 214 300" fill="none" stroke="#12305A" stroke-opacity=".28" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="160" cy="160" r="17" fill="#12305A"/>
+          <circle cx="160" cy="160" r="7" fill="#E35205"/>
+          <g fill="#12305A">
+            <circle cx="236" cy="132" r="6"/><circle cx="96" cy="108" r="6"/><circle cx="118" cy="230" r="6"/><circle cx="222" cy="214" r="6"/>
+            <circle cx="72" cy="176" r="5"/><circle cx="262" cy="178" r="5"/><circle cx="186" cy="62" r="5"/><circle cx="160" cy="268" r="5"/>
+          </g>
+        </svg>
+        <figcaption class="small">A drawing for decoration. It's not a map.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec quote" id="quote" aria-labelledby="quote-title">
+    <div class="wrap">
+      <p class="eyebrow">Not an emergency?</p>
+      <h2 id="quote-title">Get a quote</h2>
+      <p class="lede">Tell us what's going on. We'll call you back to talk it through. If water's coming through the ceiling, call instead.</p>
+      <div class="quote-grid">
+        <div class="form-card">
+          <form class="form" id="quote-form" action="mailto:hello@summit-plumbing.example" method="post" enctype="text/plain">
+            <p class="form-hint">All fields are required.</p>
+            <div class="field"><label for="q-name">Your name</label><input id="q-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="q-phone">Phone number</label><input id="q-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required></div>
+            <div class="field"><label for="q-address">Address where the work is</label><input id="q-address" name="address" type="text" autocomplete="street-address" required></div>
+            <div class="field"><label for="q-what">What's wrong?</label><textarea id="q-what" name="problem" rows="4" required></textarea></div>
+            <div class="field"><label for="q-when">When do you need us?</label>
+              <select id="q-when" name="when" required>
+                <option value="">Pick one</option>
+                <option>As soon as possible</option>
+                <option>In the next few days</option>
+                <option>Within the next two weeks</option>
+                <option>No rush, I'm after a price</option>
+              </select>
+            </div>
+            <button class="btn btn--call btn--lg btn--block" type="submit">Send quote request</button>
+          </form>
+          <p class="note">This sample form opens your email app with the details filled in, using a mailto: link, and it's addressed to a made-up address. A real build sends the request through a form service instead.</p>
+        </div>
+
+        <div class="contact" id="contact">
+          <h3>Contact</h3>
+          <p class="big-phone"><a href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>(360) 555-0186</a></p>
+          <address>
+            Switchback Plumbing<br>
+            2210 Sample Road<br>
+            Battle Ground, WA<br>
+            <a href="mailto:hello@summit-plumbing.example">hello@summit-plumbing.example</a>
+          </address>
+          <h3>Hours</h3>
+          <table>
+            <caption class="sr-only">Office hours</caption>
+            <tbody>
+              <tr><th scope="row">Monday to Friday</th><td>7:00 am – 5:00 pm</td></tr>
+              <tr><th scope="row">Saturday</th><td>8:00 am – 2:00 pm</td></tr>
+              <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+              <tr><th scope="row">Emergencies</th><td>Call any time</td></tr>
+            </tbody>
+          </table>
+          <p class="small">The phone number, address, email and hours are made up for this sample.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p class="foot-licence"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>WA contractor licence # on file</p>
+    <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+    <p>Switchback Plumbing and everything on this page are made up. 2210 Sample Road and <a href="tel:+13605550186">(360) 555-0186</a> are placeholders, not a real company's address or phone number.</p>
+  </div>
+</footer>
+
+<nav class="callbar" aria-label="Quick actions">
+  <a class="btn btn--call" href="tel:+13605550186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg>Call (360) 555-0186</a>
+  <a class="btn btn--navy" href="#quote">Quote</a>
+</nav>
+</body>
+</html>

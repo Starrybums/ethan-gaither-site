@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ridgeline Goods — a sample site</title>
+<meta name="description" content="A sample online store for Ridgeline Goods, a fictional outdoor kitchen and camp goods shop. Product grid, filters and a working demo cart. Built as a demonstration by Ethan Gaither.">
+<!-- A sample for a fictional business: keep it out of search. -->
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%232F5D50'/%3E%3Cpath%20d='M5%2025l8-14%205%208%203-5%206%2011z'%20fill='%23EFEBE3'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="preload" href="../../fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.className += " js";</script>
+<link rel="stylesheet" href="ridgeline-goods.css">
+<script src="ridgeline-goods.js" defer></script>
+</head>
+<body data-root="">
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="i-ridge" viewBox="0 0 24 24"><path d="M1.5 20.5 9 7l4.4 7.6L16 10.5l6.5 10z" fill="currentColor"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5h14l-1 11.5H6z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></g></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<aside class="banner" aria-label="About this sample site">
+  <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+</aside>
+
+<header class="head">
+  <div class="head-in">
+    <a class="logo" href="./"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ridge"/></svg>Ridgeline Goods</a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul>
+        <li><a href="./#shop">Shop</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#help">Help</a></li>
+      </ul>
+    </nav>
+    <details class="nav-narrow">
+      <summary><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg><span class="hide-sm">Menu</span></summary>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="./#shop">Shop</a></li>
+        <li><a href="./#about">About</a></li>
+        <li><a href="./#help">Help</a></li>
+        </ul>
+      </nav>
+    </details>
+    <p class="demo-note"><strong>Demo store:</strong> nothing is for sale and there is no checkout.</p>
+    <a class="cart-link" href="cart/" data-cart-link><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bag"/></svg><span class="hide-sm">Cart</span><span class="badge" data-cart-count hidden>0</span></a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<div id="live" class="sr-only" role="status" aria-live="polite"></div>
+  <div class="wrap">
+
+    <section class="intro" aria-labelledby="hero-title">
+      <h1 id="hero-title">Gear for cooking and sleeping outside.</h1>
+      <p class="lede">Ten things for the camp kitchen and the campsite. Add a few to the cart and see how it works.</p>
+    </section>
+
+    <section class="shop" id="shop" aria-labelledby="shop-title">
+      <div class="shop-head">
+        <h2 id="shop-title">All gear</h2>
+        <p class="results" data-results role="status">Showing 10 of 10 products</p>
+      </div>
+
+      <form class="filters" data-filters aria-label="Filter the products">
+        <button type="button" class="filters-toggle" aria-expanded="false" aria-controls="filters-panel">Filters <span data-filter-count></span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+        <div class="filters-panel" id="filters-panel">
+          <fieldset class="group">
+            <legend>Category</legend>
+            <div class="chips">
+<label class="chip"><input type="checkbox" name="cat" value="cook"><span>Cook</span></label>
+<label class="chip"><input type="checkbox" name="cat" value="drink"><span>Drink</span></label>
+<label class="chip"><input type="checkbox" name="cat" value="carry"><span>Carry</span></label>
+<label class="chip"><input type="checkbox" name="cat" value="light"><span>Light</span></label>
+<label class="chip"><input type="checkbox" name="cat" value="camp"><span>Camp</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="group">
+            <legend>Price</legend>
+            <div class="chips">
+<label class="chip"><input type="checkbox" name="price" value="low"><span>Under $30</span></label>
+<label class="chip"><input type="checkbox" name="price" value="mid"><span>$30 to $60</span></label>
+<label class="chip"><input type="checkbox" name="price" value="high"><span>Over $60</span></label>
+            </div>
+          </fieldset>
+          <button type="button" class="link-btn clear" data-clear-filters hidden>Clear filters</button>
+        </div>
+      </form>
+
+      <ul class="grid" role="list">
+          <li class="card" data-card data-id="stove" data-cat="cook" data-price="54">
+            <div class="tile"><img src="art/stove.svg" alt="" width="240" height="240" fetchpriority="high"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/stove/">Single-burner stove</a></h3>
+              <p class="card-cat">Cook</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$54</p>
+              <button type="button" class="btn btn--add" data-add="stove"><span class="lbl">Add to cart</span><span class="sr-only">: Single-burner stove</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="mug" data-cat="drink" data-price="18">
+            <div class="tile"><img src="art/mug.svg" alt="" width="240" height="240" fetchpriority="high"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/mug/">Enamel mug</a></h3>
+              <p class="card-cat">Drink</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$18</p>
+              <button type="button" class="btn btn--add" data-add="mug"><span class="lbl">Add to cart</span><span class="sr-only">: Enamel mug</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="pack" data-cat="carry" data-price="68">
+            <div class="tile"><img src="art/pack.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/pack/">20 L day pack</a></h3>
+              <p class="card-cat">Carry</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$68</p>
+              <button type="button" class="btn btn--add" data-add="pack"><span class="lbl">Add to cart</span><span class="sr-only">: 20 L day pack</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="lantern" data-cat="light" data-price="28">
+            <div class="tile"><img src="art/lantern.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/lantern/">Camp lantern</a></h3>
+              <p class="card-cat">Light</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$28</p>
+              <button type="button" class="btn btn--add" data-add="lantern"><span class="lbl">Add to cart</span><span class="sr-only">: Camp lantern</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="skillet" data-cat="cook" data-price="64">
+            <div class="tile"><img src="art/skillet.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/skillet/">Cast iron skillet</a></h3>
+              <p class="card-cat">Cook</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$64</p>
+              <button type="button" class="btn btn--add" data-add="skillet"><span class="lbl">Add to cart</span><span class="sr-only">: Cast iron skillet</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="bottle" data-cat="drink" data-price="34">
+            <div class="tile"><img src="art/bottle.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/bottle/">Steel bottle</a></h3>
+              <p class="card-cat">Drink</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$34</p>
+              <button type="button" class="btn btn--add" data-add="bottle"><span class="lbl">Add to cart</span><span class="sr-only">: Steel bottle</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="blanket" data-cat="camp" data-price="79">
+            <div class="tile"><img src="art/blanket.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/blanket/">Wool blanket</a></h3>
+              <p class="card-cat">Camp</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$79</p>
+              <button type="button" class="btn btn--add" data-add="blanket"><span class="lbl">Add to cart</span><span class="sr-only">: Wool blanket</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="headlamp" data-cat="light" data-price="24">
+            <div class="tile"><img src="art/headlamp.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/headlamp/">Headlamp</a></h3>
+              <p class="card-cat">Light</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$24</p>
+              <button type="button" class="btn btn--add" data-add="headlamp"><span class="lbl">Add to cart</span><span class="sr-only">: Headlamp</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="coffee-pot" data-cat="drink" data-price="38">
+            <div class="tile"><img src="art/coffee-pot.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/coffee-pot/">Camp coffee pot</a></h3>
+              <p class="card-cat">Drink</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$38</p>
+              <button type="button" class="btn btn--add" data-add="coffee-pot"><span class="lbl">Add to cart</span><span class="sr-only">: Camp coffee pot</span></button>
+            </div>
+          </li>
+          <li class="card" data-card data-id="stool" data-cat="camp" data-price="42">
+            <div class="tile"><img src="art/stool.svg" alt="" width="240" height="240"></div>
+            <div class="card-body">
+              <h3 class="card-name"><a href="product/stool/">Folding stool</a></h3>
+              <p class="card-cat">Camp</p>
+            </div>
+            <div class="card-foot">
+              <p class="price">$42</p>
+              <button type="button" class="btn btn--add" data-add="stool"><span class="lbl">Add to cart</span><span class="sr-only">: Folding stool</span></button>
+            </div>
+          </li>
+      </ul>
+      <div class="empty" data-empty hidden>
+        <p>Nothing matches those filters.</p>
+        <button type="button" class="link-btn" data-clear-filters>Clear filters</button>
+      </div>
+      <p class="fine">The products and prices are made up, and so are the drawings.</p>
+    </section>
+
+    <div class="info">
+      <section id="about" aria-labelledby="about-title">
+        <h2 id="about-title">About Ridgeline Goods</h2>
+        <p>Ridgeline Goods is an online store for camp cooking and sleeping outside. The list is short on purpose, so there's less to sort through.</p>
+        <p>It's a made-up store. It was built to show how a small shop's website can work: a product grid, filters, product pages and a cart.</p>
+      </section>
+      <section id="help" aria-labelledby="help-title">
+        <h2 id="help-title">Shipping, returns and questions</h2>
+        <dl class="facts">
+          <div><dt>Shipping</dt><dd>Orders ship in two business days.</dd></div>
+          <div><dt>Returns</dt><dd>Send back anything unused within 30 days.</dd></div>
+          <div><dt>Questions</dt><dd>Call or write to us. The policies here are made up for the demonstration.</dd></div>
+        </dl>
+        <p class="call-row"><a class="btn btn--line" href="tel:+13605550128"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg>Call (360) 555-0128</a> <a href="mailto:hello@ridgeline-goods.example">hello@ridgeline-goods.example</a></p>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <p class="foot-brand"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ridge"/></svg>Ridgeline Goods</p>
+    <p>Sample site for a fictional business, built as a demonstration by Ethan Gaither. <a href="../">Back to samples</a></p>
+    <p>Ridgeline Goods, its products, prices and policies are made up. 100 Example Ridge Road, Battle Ground, WA and <a href="tel:+13605550128">(360) 555-0128</a> are placeholders, not a real address or phone number.</p>
+    <ul>
+      <li><a href="./#shop">Shop</a></li>
+      <li><a href="./#about">About</a></li>
+      <li><a href="./#help">Help</a></li>
+      <li><a href="cart/">Cart</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

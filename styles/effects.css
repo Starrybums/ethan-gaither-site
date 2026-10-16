@@ -1,2 +1,246 @@
-/* styles/effects.css — STUB from the skeleton. Owner: effects (WORKER-BRIEFS.md §3.1).
-   Type morph, 3D showcase and any background-layer styles live here. Linked by the home page only. */
+/* styles/effects.css — the type morph in the build section and the 3D showcase. Owner: effects (WORKER-BRIEFS.md §3.1).
+   Linked by the home page only, after home.css. The background canvas needs nothing here (styles/shell.css).
+
+   Rule of the file: the base rules are the finished, static state (no JavaScript, reduced motion, browsers without
+   scroll-driven animations and without the fallback). Motion is layered on top, gated on html.js, the stage
+   driver's data-stage attribute, prefers-reduced-motion: no-preference and, for the native path,
+   @supports (animation-timeline: view()). */
+
+/* =================================================================================================================
+   1. Type morph
+   ================================================================================================================= */
+
+/* 1a. Captions: each <h3> in its own family, at rest. js/type-morph.js wraps the heading's text in .morph-cap (the
+   part that moves) next to an aria-hidden copy, .morph-cap-sizer, that stays at rest and holds the box size. The scroll
+   timeline (or the fallback) moves --morph-k on .morph-cap from 0 (the caption is at the bottom or top edge of the
+   screen: light, narrow) to 1 (it is in the reading band: at rest). The same rules style the plain <h3> (no
+   JavaScript, reduced motion), where --morph-k is always 1. Every state lists the same axes in the same order, so the
+   interpolation stays continuous, and every state is narrower than rest, so the text never wraps onto more lines. */
+@property --morph-k { syntax: "<number>"; inherits: false; initial-value: 1; }
+
+[data-morph-step][data-font="fraunces"] :is(h3, .morph-cap) {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" calc(144 - 112 * var(--morph-k, 1)), "wght" calc(150 + 270 * var(--morph-k, 1));
+}
+[data-morph-step][data-font="instrument"] :is(h3, .morph-cap) { font-family: var(--serif-2); font-weight: 400; }
+[data-morph-step][data-font="instrument"] .morph-cap {
+  /* Instrument Serif has no axes: it leans upright and darkens instead (transform and opacity only, and only on the
+     moving span, so the static heading carries no transform). The lowest opacity, .66, still keeps ink on paper
+     above 4.5:1 in both schemes, over the background's densest marks too. */
+  opacity: calc(.66 + .34 * var(--morph-k, 1));
+  transform: skewX(calc((1 - var(--morph-k, 1)) * -12deg));
+  transform-origin: 0 100%;
+}
+[data-morph-step][data-font="grotesk"] :is(h3, .morph-cap) {
+  font-family: var(--grotesk);
+  font-variation-settings: "wght" calc(300 + 320 * var(--morph-k, 1));
+  letter-spacing: calc((-.035 + .015 * var(--morph-k, 1)) * 1em);
+}
+[data-morph-step][data-font="inter"] :is(h3, .morph-cap) {
+  font-family: var(--sans);
+  font-variation-settings: "wght" calc(200 + 400 * var(--morph-k, 1));
+  letter-spacing: calc((-.04 + .015 * var(--morph-k, 1)) * 1em);
+}
+
+/* The two spans share one grid cell; the sizer is invisible, inherits the heading's rest axes and sets the cell's
+   size. The moving span takes the cell's size (size containment) and is a layout boundary, so each frame of the morph
+   re-lays out only the heading's own lines, never the caption card or the page around it. */
+h3.has-cap { display: grid; }
+h3.has-cap > * { grid-area: 1 / 1; }
+h3.has-cap > .morph-cap { display: block; contain: size layout style; }
+.morph-cap-sizer { visibility: hidden; pointer-events: none; }
+.morph-cap-sizer[data-text]::before, .morph-face[data-text]::before { content: attr(data-text); }
+
+/* Stepped, 16 steps each way: the axes move in small even ticks, so the browser re-shapes the heading only when a
+   step changes (not on every scrolled pixel) and reuses the same few font instances going back and forth. */
+@keyframes morph-k {
+  0% { --morph-k: 0; animation-timing-function: steps(16, end); }
+  35% { --morph-k: 1; }
+  65% { --morph-k: 1; animation-timing-function: steps(16, start); }
+  100% { --morph-k: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Native: each caption is its own view timeline; the heading scrubs with it, forward and back. */
+  @supports (animation-timeline: view()) {
+    html.js [data-morph-root][data-stage] [data-morph-step] { view-timeline: --morph-step block; }
+    html.js [data-morph-root][data-stage] [data-morph-step] .morph-cap {
+      animation: morph-k linear both;
+      animation-timeline: --morph-step;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+
+  /* Fallback: js/type-morph.js writes --morph-p (0..1 across the viewport) on each caption. Same curve as the
+     keyframes: up over the first 35%, flat in the middle, down over the last 35%. */
+  html.js [data-morph-root][data-stage].morph-js [data-morph-step] .morph-cap {
+    --morph-k: clamp(0, min(calc(var(--morph-p, .5) / .35), calc((1 - var(--morph-p, .5)) / .35)), 1);
+  }
+  /* (js/type-morph.js rounds --morph-p to 1/46, which gives the same 16 steps on each slope.) */
+}
+
+/* 1b. Title: js/type-morph.js wraps the text in a Fraunces face and adds three aria-hidden faces. They share one grid
+   cell, so the box is as tall as the tallest face and never changes size. Only opacity moves. */
+[data-morph-title].has-faces { display: grid; }
+[data-morph-title].has-faces > .morph-face { grid-area: 1 / 1; display: block; }
+.morph-face[data-face="instrument"] { font-family: var(--serif-2); font-weight: 400; font-size: 1.1em; letter-spacing: -.01em; line-height: 1.04; }
+.morph-face[data-face="grotesk"] { font-family: var(--grotesk); font-weight: 500; font-size: .9em; letter-spacing: -.04em; line-height: 1.08; }
+.morph-face[data-face="inter"] { font-family: var(--sans); font-weight: 650; font-size: .9em; letter-spacing: -.045em; line-height: 1.08; }
+
+/* Incoming faces fade in a beat after the outgoing one starts to leave, so the two never sit at half strength together. */
+.has-faces > .morph-face { opacity: 1; transition: opacity 420ms var(--ease-out) 110ms; }
+.has-faces > .morph-face:not([data-face="fraunces"]),
+[data-morph-root]:is([data-font="instrument"], [data-font="grotesk"], [data-font="inter"]) .has-faces > .morph-face[data-face="fraunces"] {
+  opacity: 0;
+  transition: opacity 220ms var(--ease-in-out);
+}
+[data-morph-root][data-font="instrument"] .has-faces > .morph-face[data-face="instrument"],
+[data-morph-root][data-font="grotesk"] .has-faces > .morph-face[data-face="grotesk"],
+[data-morph-root][data-font="inter"] .has-faces > .morph-face[data-face="inter"] {
+  opacity: 1;
+  transition: opacity 420ms var(--ease-out) 110ms;
+}
+
+/* =================================================================================================================
+   2. 3D showcase
+   <section data-scene3d> <div class="scene3d" data-scene3d-stage> <img data-layer="laptop|phone|card|card-2" …> </div> </section>
+   js/scene3d.js writes --scene-p (0..1 as the section crosses the screen) on the section. Without it, --scene-p
+   stays at .5: a still, angled composition.
+
+   How it stays sharp and safe on iOS:
+   - No element carries preserve-3d. Each layer is projected on its own through the stage's perspective and painted
+     in z-index order, so nothing can be flattened (no overflow/opacity/filter/clip trap) and depth never sorts wrong.
+   - All layers rotate about the stage's centre (each layer's transform-origin points there), so the group turns as
+     one object.
+   - Everything sits pushed back (translateZ below zero at every point of every layer, at every scroll position), so
+     the screenshots are only ever drawn at or below their laid-out size: never scaled up from a small raster.
+   ================================================================================================================= */
+[data-scene3d] { --scene-p: .5; }
+
+.scene3d {
+  /* --u: 1px at a 640 px wide stage, smaller on phones, so depths and bezels scale with the stage. */
+  --u: min(1px, calc((100vw - 32px) / 640));
+  --ry: calc((-30 + 32 * var(--scene-p)) * 1deg);   /* turns to face you as you scroll */
+  --rx: calc((18 - 12 * var(--scene-p)) * 1deg);
+  --s: clamp(0, calc(var(--scene-p) * 2 - .2), 1);   /* separation: 0 stacked, 1 pulled apart */
+  --push: -200;   /* how far the whole stack sits behind the page plane, in --u */
+  --device: #141312;
+  --device-hi: #2a2826;
+  position: relative;
+  aspect-ratio: 16 / 11;
+  perspective: calc(1500 * var(--u));
+  perspective-origin: 50% 45%;
+  overflow: clip;
+  overflow-clip-margin: 16px;
+}
+
+/* Layer boxes, in percent of the stage (left/width of its width, top of its height), with transform origins at the
+   stage centre. Desktop stage 16:11, phone stage 1:1; recompute the origins if a box moves. */
+.scene3d > [data-layer] {
+  position: absolute;
+  display: block;
+  margin: 0;
+  max-width: none;
+  left: var(--l);
+  top: var(--t);
+  width: var(--w);
+  height: auto;
+  aspect-ratio: var(--ar);
+  object-fit: cover;
+  object-position: 50% 0;
+  transform-origin: var(--ox) var(--oy);
+  transform:
+    translateZ(calc(var(--push) * var(--u)))
+    rotateY(var(--ry)) rotateX(var(--rx))
+    translate3d(calc(var(--dx) * var(--s) * var(--u)), calc(var(--dy) * var(--s) * var(--u)), calc(var(--dz) * var(--s) * var(--u)));
+}
+.scene3d > [data-layer] img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+
+.scene3d > [data-layer="laptop"] {
+  --l: 8%; --t: 18.91%; --w: 64%; --ar: 16 / 10; --ox: 65.63%; --oy: 53.44%;
+  --dx: 0; --dy: 0; --dz: 0;
+  z-index: 2;
+  border: calc(9 * var(--u)) solid var(--device);
+  border-bottom-width: calc(13 * var(--u));
+  border-radius: calc(16 * var(--u)) calc(16 * var(--u)) calc(5 * var(--u)) calc(5 * var(--u));
+  background: var(--device);
+  box-shadow: 0 0 0 1px var(--device-hi), 0 calc(34 * var(--u)) calc(60 * var(--u)) calc(-24 * var(--u)) rgb(0 0 0 / .45);
+}
+.scene3d > [data-layer="card"] {
+  --l: 44%; --t: 0%; --w: 52%; --ar: 16 / 10; --ox: 11.54%; --oy: 105.77%;
+  --dx: 38; --dy: -28; --dz: -170;
+  z-index: 1;
+}
+.scene3d > [data-layer="card-2"] {
+  --l: 0%; --t: 4.36%; --w: 36%; --ar: 16 / 10; --ox: 138.89%; --oy: 139.44%;
+  --dx: -34; --dy: -18; --dz: -130;
+  z-index: 1;
+}
+.scene3d > :is([data-layer="card"], [data-layer="card-2"]) {
+  border: 1px solid var(--line);
+  border-top: calc(15 * var(--u)) solid var(--paper-3);
+  border-radius: calc(10 * var(--u));
+  background: var(--paper);
+  box-shadow: 0 calc(24 * var(--u)) calc(50 * var(--u)) calc(-22 * var(--u)) rgb(0 0 0 / .35);
+}
+.scene3d > [data-layer="phone"] {
+  --l: 68%; --t: 43.64%; --w: 17%; --ar: 9 / 19.5; --ox: -105.88%; --oy: 11.89%;
+  --dx: 28; --dy: 20; --dz: 90;
+  z-index: 4;
+  border: calc(7 * var(--u)) solid var(--device);
+  border-radius: calc(28 * var(--u));
+  background: var(--device);
+  box-shadow: 0 0 0 1px var(--device-hi), 0 calc(30 * var(--u)) calc(50 * var(--u)) calc(-18 * var(--u)) rgb(0 0 0 / .5);
+}
+
+/* The laptop's base: a brushed lip under the screen, moved with the same transform as the screen. */
+.scene3d:has(> [data-layer="laptop"])::after {
+  content: "";
+  position: absolute;
+  --l: 4%; --t: 77.09%; --w: 72%; --ox: 63.89%; --oy: -846.6%;
+  --dx: 0; --dy: 0; --dz: 0;
+  left: var(--l); top: var(--t); width: var(--w); height: 3.2%;
+  z-index: 3;
+  border-radius: 2px 2px 40% 40% / 2px 2px 100% 100%;
+  background:
+    radial-gradient(18% 70% at 50% 0, rgb(0 0 0 / .28), transparent 75%),
+    linear-gradient(#e4e1db, #b3afa7 70%, #8f8b84);
+  box-shadow: 0 calc(16 * var(--u)) calc(26 * var(--u)) calc(-10 * var(--u)) rgb(0 0 0 / .4);
+  transform-origin: var(--ox) var(--oy);
+  transform:
+    translateZ(calc(var(--push) * var(--u)))
+    rotateY(var(--ry)) rotateX(var(--rx))
+    translate3d(calc(var(--dx) * var(--s) * var(--u)), calc(var(--dy) * var(--s) * var(--u)), calc(var(--dz) * var(--s) * var(--u)));
+}
+/* A soft floor shadow; it does not move. */
+.scene3d::before {
+  content: "";
+  position: absolute;
+  left: 8%; right: 8%; bottom: 3%; height: 12%;
+  z-index: 0;
+  background: radial-gradient(closest-side, rgb(23 20 15 / .16), transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 699px) {
+  .scene3d { aspect-ratio: 1 / 1; perspective-origin: 50% 50%; --push: -240; }
+  .scene3d > [data-layer="laptop"] { --l: 4%; --t: 22%; --w: 78%; --ox: 58.97%; --oy: 57.44%; }
+  .scene3d > [data-layer="card"] { --l: 46%; --t: 0%; --w: 50%; --ox: 8%; --oy: 160%; }
+  .scene3d > [data-layer="card-2"] { --l: 0%; --t: 4%; --w: 46%; --ox: 108.7%; --oy: 160%; }
+  .scene3d > [data-layer="phone"] { --l: 66%; --t: 42%; --w: 26%; --ox: -61.54%; --oy: 14.2%; }
+  .scene3d:has(> [data-layer="laptop"])::after { --l: 0%; --t: 70.75%; --w: 86%; --ox: 58.14%; --oy: -798.1%; height: 2.6%; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .scene3d { --device-hi: #3a3734; }
+  :root:not([data-theme="light"]) .scene3d::before { background: radial-gradient(closest-side, rgb(0 0 0 / .5), transparent); }
+}
+:root[data-theme="dark"] .scene3d { --device-hi: #3a3734; }
+:root[data-theme="dark"] .scene3d::before { background: radial-gradient(closest-side, rgb(0 0 0 / .5), transparent); }
+
+/* Live: will-change only while the section is on screen; one short ease from the still composition to the real
+   scroll position when the module starts, then the layers follow the scroll exactly. */
+[data-scene3d].is-live.is-active .scene3d > [data-layer],
+[data-scene3d].is-live.is-active .scene3d::after { will-change: transform; }
+[data-scene3d].is-settling .scene3d > [data-layer],
+[data-scene3d].is-settling .scene3d::after { transition: transform var(--dur-4) var(--ease-out); }

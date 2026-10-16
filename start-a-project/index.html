@@ -33,7 +33,7 @@
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Start a project","url":"https://ethan-gaither.vercel.app/start-a-project/"}</script>
 <script type="module" src="/js/shell.js"></script>
-<!-- Pages worker: <script type="module" src="/js/form.js"></script> -->
+<script type="module" src="/js/form.js"></script>
 </head>
 <body data-page="start">
 <a class="skip" href="#main">Skip to content</a>
@@ -76,11 +76,102 @@
 
 <main id="main" tabindex="-1">
 <!-- WORKER: build from here (owner: see WORKER-BRIEFS.md). Everything between this line and "WORKER: end" is yours. -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <symbol id="i-alert" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6v4.2M8 10.9v.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  </svg>
+
   <section class="page-hero" aria-labelledby="page-title">
     <div class="wrap">
       <p class="eyebrow">Start a project</p>
       <h1 id="page-title">Tell me about the site</h1>
       <p class="lede">What it's for and when you need it. I'll tell you if I'm the right fit.</p>
+    </div>
+  </section>
+
+  <section class="section section--flush" aria-labelledby="form-title">
+    <div class="wrap contact">
+      <div class="form-col" data-form-col>
+        <div class="form-card" data-form-card>
+          <h2 id="form-title">Send me the details</h2>
+          <p class="form-lede">What the site is for and when you need it. Rough is fine. Everything goes straight to my email, and I read it myself.</p>
+          <!-- No JavaScript: a mailto form (the browser checks the required fields). With JavaScript, js/form.js posts to /api/contact. -->
+          <form class="form" data-contact-form method="post" action="mailto:gaitherethan@icloud.com?subject=%5BWebsite%5D%20Project%20request" enctype="text/plain" aria-labelledby="form-title">
+            <input type="hidden" name="type" value="project">
+            <div class="form-row">
+        <div class="field" data-field="name">
+          <label class="field__label" for="f-name">Your name</label>
+          <input class="input" id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err">
+          <p class="field__error" id="f-name-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+        <div class="field" data-field="email">
+          <label class="field__label" for="f-email">Email</label>
+          <input class="input" id="f-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" required aria-describedby="f-email-err">
+          <p class="field__error" id="f-email-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+            </div>
+            <div class="form-row">
+        <div class="field" data-field="business">
+          <label class="field__label" for="f-business">Business or project name</label>
+          <input class="input" id="f-business" name="business" type="text" autocomplete="organization" required aria-describedby="f-business-err">
+          <p class="field__error" id="f-business-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+        <div class="field" data-field="phone">
+          <label class="field__label" for="f-phone">Phone <span class="field__opt">(optional)</span></label>
+          <input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-phone-err">
+          <p class="field__error" id="f-phone-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+            </div>
+        <div class="field" data-field="website">
+          <label class="field__label" for="f-website">Your current website <span class="field__opt">(optional)</span></label>
+          <p class="field__hint" id="f-website-hint">If you have one. If you don't, leave it empty.</p>
+          <input class="input" id="f-website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" aria-describedby="f-website-hint f-website-err">
+          <p class="field__error" id="f-website-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+        <div class="field" data-field="message">
+          <label class="field__label" for="f-message">What's the site for, and when do you need it?</label>
+          <p class="field__hint" id="f-message-hint">Say what the business does, what you want visitors to do, and any date that matters. Rough is fine.</p>
+          <textarea class="textarea" id="f-message" name="message" rows="6" required aria-describedby="f-message-hint f-message-err"></textarea>
+          <p class="field__error" id="f-message-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+            <div class="hp" aria-hidden="true">
+              <label for="f-company">Company (leave this empty)</label>
+              <input class="input" id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="notice" data-form-status role="status" aria-live="polite"></div>
+            <div class="form__actions">
+              <button class="btn btn--solid" data-fx="press3d" type="submit">Send the details</button>
+              <p class="form-note no-js-only">Without JavaScript, this opens your email app with your answers filled in.</p>
+            </div>
+            <p class="form-note">This goes to my email and nowhere else. I don't add you to a mailing list.</p>
+          </form>
+        </div>
+        <section class="form-success" data-form-success hidden tabindex="-1" aria-labelledby="success-title">
+          <svg class="form-success__tick" viewBox="0 0 56 56" aria-hidden="true" focusable="false"><circle cx="28" cy="28" r="26" pathLength="1"/><path d="M17 29.5l7.5 7.5L39.5 20" pathLength="1"/></svg>
+          <h2 id="success-title">Sent.</h2>
+          <p>I read these myself and reply from my own email.</p>
+          <p class="actions">
+            <a class="btn btn--solid" data-fx="ink" href="/">Back to the home page</a>
+            <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
+          </p>
+        </section>
+        <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-form-live></div>
+      </div>
+
+      <aside class="aside" aria-labelledby="next-title">
+        <div>
+          <h2 id="next-title">What happens next</h2>
+          <ol class="next" role="list">
+        <li>I read it myself.</li>
+        <li>If I'm the right fit, I write back with questions, or a time to talk.</li>
+        <li>If I'm not, I say so, and point you somewhere better if I can.</li>
+        <li>You get a fixed price, agreed before I start, plus WA sales tax. There is nothing to pay to ask.</li>
+          </ol>
+        </div>
+        <div>
+    <p>Not ready to write? <a href="/samples/">Look at the sample sites</a> or <a href="/book-a-call/">book a free call</a> first.</p>
+          <p>Prefer email? <a class="aside__mail" href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a></p>
+        </div>
+      </aside>
     </div>
   </section>
 <!-- WORKER: end -->

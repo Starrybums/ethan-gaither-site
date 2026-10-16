@@ -1,1 +1,116 @@
-/* styles/pages/services.css — page styles. Owner: see WORKER-BRIEFS.md. Use the tokens in styles/tokens.css; do not redefine them. */
+/* styles/pages/services.css — the long page. Tokens from styles/tokens.css only; nothing redefined.
+   Owner: pages worker. Surfaces (cards, tables) use --paper so text keeps its contrast over the fixed background. */
+
+.section[id] { scroll-margin-top: 24px; }
+
+/* ---- In-page contents -------------------------------------------------------------- */
+.toc { margin-top: 8px; }
+.toc__label { margin-bottom: 12px; }
+.toc__list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.toc__list a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px;
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: var(--paper); color: var(--ink);
+  font-size: var(--fs-small); font-weight: 500; text-decoration: none;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+.toc__list a:hover { border-color: var(--ink); background: var(--paper-2); color: var(--ink); }
+
+/* On wide screens the heading column stays in view while the long body scrolls past. */
+@media (min-width: 900px) {
+  .split > .section-head--sticky { align-self: start; position: sticky; top: 24px; }
+}
+
+.lead { font-size: var(--fs-lede); line-height: 1.5; max-width: 52ch; margin-bottom: 1.4em; }
+.note { margin: 28px 0 0; padding: 4px 0 4px 16px; border-left: 3px solid var(--accent); color: var(--ink-2); max-width: var(--maxw-text); }
+.note > :last-child { margin-bottom: 0; }
+
+/* ---- Features: what the starter site includes ------------------------------------------ */
+.features { list-style: none; display: grid; gap: 30px var(--col-gap); }
+@media (min-width: 640px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.feature { border-top: 2px solid var(--ink); padding-top: 16px; }
+.feature h3 { font-size: clamp(1.25rem, 1.05rem + .8vw, 1.5rem); margin-bottom: 8px; }
+.feature p { margin: 0; color: var(--ink-2); }
+
+/* ---- Process: numbered steps with a "You" and a "Me" line ---------------------------------- */
+.steps { list-style: none; counter-reset: step; }
+.step { counter-increment: step; display: grid; gap: 8px 24px; padding-block: 28px; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; padding-top: 0; }
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  content: counter(step, decimal-leading-zero) / "";
+  font: 300 2.25rem/1 var(--serif); color: var(--ink-2);
+}
+@media (min-width: 700px) { .step { grid-template-columns: 72px minmax(0, 1fr); } }
+.step h3 { margin-bottom: 8px; }
+.step p { margin: 0; max-width: var(--maxw-text); }
+.step__who { display: grid; gap: 10px; margin-top: 14px; max-width: var(--maxw-text); }
+@media (min-width: 700px) { .step__who { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.step__who p {
+  padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius-2);
+  background: var(--paper); font-size: var(--fs-small);
+}
+.step__who b {
+  display: block; margin-bottom: 2px; font: 500 .75rem/1.3 var(--sans);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2);
+}
+
+/* ---- Tables ------------------------------------------------------------------------------- */
+.table-wrap { border: 1px solid var(--line); border-radius: var(--radius-2); background: var(--paper); overflow: hidden; }
+.table { width: 100%; }
+.table th, .table td { text-align: left; vertical-align: top; padding: 14px 18px; border-top: 1px solid var(--line); }
+.table thead th {
+  border-top: 0; background: var(--paper-2); color: var(--ink-2);
+  font: 500 .75rem/1.3 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+}
+.table tbody th { font-weight: 500; white-space: nowrap; width: 1%; }
+.table td { color: var(--ink); }
+
+/* ---- Two panels side by side (SEO: what I do / what I can't) ----------------------------------- */
+.panels { display: grid; gap: var(--col-gap); }
+@media (min-width: 700px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.panel { padding: clamp(20px, 3vw, 30px); border: 1px solid var(--line); border-radius: var(--radius-2); background: var(--paper); }
+.panel h3 { font-size: 1.35rem; margin-bottom: 12px; }
+.panel .ticks { max-width: none; }
+.ticks--off li::before { height: 0; background: none; border-top: 1px dashed var(--ink-2); }
+
+/* ---- Ownership rows ------------------------------------------------------------------------- */
+.own { list-style: none; border-top: 1px solid var(--ink); }
+.own__row { display: grid; gap: 4px 24px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+@media (min-width: 700px) { .own__row { grid-template-columns: 190px minmax(0, 1fr); } }
+.own__what { font: 400 1.25rem/1.25 var(--serif); letter-spacing: -.01em; }
+.own__row p { margin: 0; max-width: var(--maxw-text); }
+.own__row strong { font-weight: 500; }
+
+/* ---- After launch ------------------------------------------------------------------------------ */
+.after { list-style: none; display: grid; gap: 22px; max-width: var(--maxw-text); }
+.after h3 { font-size: 1.35rem; margin-bottom: 6px; }
+.after p { margin: 0; color: var(--ink-2); }
+
+/* ---- FAQ: plain <details> ------------------------------------------------------------------------ */
+.faq { border-top: 1px solid var(--ink); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 56px; padding: 14px 0; cursor: pointer; list-style: none;
+  font: 400 clamp(1.1rem, 1rem + .4vw, 1.3rem)/1.3 var(--serif); letter-spacing: -.005em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; flex: none; width: 10px; height: 10px; margin-right: 4px;
+  border-right: 2px solid var(--ink-2); border-bottom: 2px solid var(--ink-2);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.faq details[open] summary::after { transform: rotate(-135deg) translate(-2px, 0); }
+.faq summary:hover { color: var(--accent-ink); }
+.faq__a { padding: 0 0 22px; max-width: var(--maxw-text); color: var(--ink-2); }
+.faq__a p:last-child { margin-bottom: 0; }
+
+/* ---- Closing panel ---------------------------------------------------------------------------------- */
+.cta-panel {
+  display: grid; gap: 20px; padding: clamp(26px, 5vw, 56px);
+  border: 1px solid var(--ink); border-radius: var(--radius-2); background: var(--paper);
+}
+.cta-panel h2 { max-width: 16em; }
+.cta-panel p { margin: 0; color: var(--ink-2); max-width: 52ch; }

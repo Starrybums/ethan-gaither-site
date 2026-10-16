@@ -159,3 +159,96 @@ Lighthouse 13.4.1, mobile, navigation mode, local server, via the chrome-devtool
 ## Rules this site follows
 
 Nothing on it is invented: no quotes, logos, numbers, years or results. The sample site is labelled as fictional on every view. The proof shown is this page, the sample site, and Ethan's own agency site.
+
+## Contact form and Resend
+
+`POST /api/contact` takes the JSON from the two request forms and emails it to Ethan through Resend. The visitor's email is the `reply_to`, so one tap on Reply answers them. The full contract (fields, statuses, messages, email body) is in `api/README.md`. This section is the setup and the tests.
+
+Files: `api/contact.mjs` (the function, plain ESM, no dependencies, no `package.json`). The test script is `audit/v3/api/test-contact.mjs` (gitignored with the rest of `audit/`). It is not in `api/` on purpose: Vercel deploys every file in `api/` as a function.
+
+### Environment variables
+
+Set these in the Vercel project. Never in the repo, in chat or in a note.
+
+| Name | Required | Type in Vercel | Value |
+|---|---|---|---|
+| `RESEND_API_KEY` | yes | **Secret** | The `re_...` key from step 2 below |
+| `CONTACT_TO` | yes | Config | The inbox that gets the requests. Until a domain is verified it must be the email you signed up to Resend with. Comma-separated list allowed. |
+| `RESEND_FROM` | no | Config | Leave unset for now. The default sender is `Website form <onboarding@resend.dev>`. After a domain is verified: `Ethan Gaither <hello@yourdomain.com>`. |
+| `SITE_ORIGIN` | no | Config | `https://ethan-gaither.vercel.app` (no trailing slash). More than one allowed, comma-separated, for example after a custom domain is added. Set it for **Production only**. Unset, the function accepts requests from its own host, so preview deployments work. |
+
+`RESEND_API_URL` also exists. It points the function at a local mock in tests. Do not set it in Vercel.
+
+Missing `RESEND_API_KEY` or `CONTACT_TO` makes the function answer `503 {"error":"not configured"}` and the pages fall back to the visitor's mail app. Vercel applies env var changes to new deployments only, so redeploy after changing any of them.
+
+### The test-sender rule (read this before the first test)
+
+Without a verified domain, the sender is `onboarding@resend.dev`. Resend says that address "can only send emails to the email address associated with your Resend account". So `CONTACT_TO` has to be the email you sign up to Resend with. Any other address gets a 403 from Resend, which the function turns into a 502 `send_failed`, and the visitor sees the mailto fallback.
+
+One oddity in Resend's docs: step 3 of the troubleshooting list on that page says "not trying to send to your own email address", which contradicts the page's own rule and the API's error text. Read it as a typo. The first real test will settle it.
+
+`ethan-gaither.vercel.app` can't be verified in Resend (verifying needs DNS access). A domain Ethan owns can.
+
+### Set it up (Ethan, about 15 minutes, once)
+
+1. **Resend account.** Sign up at resend.com with the inbox you want the requests in. Use the same address for `CONTACT_TO`.
+2. **API key.** Dashboard, **API keys**, **Create API Key**. Name it `ethan-gaither-site`. Permission: **Sending access**. Leave the domain empty (no domain yet). Copy the key when it shows. Resend shows it once. Paste it straight into Vercel, nowhere else.
+3. **Vercel variables.** Dashboard, the project, **Settings**, **Environment Variables**. Add `RESEND_API_KEY` (Secret), `CONTACT_TO`, and `SITE_ORIGIN`. Pick the environments: Production for all three, plus Preview for the first two if you want to test a preview. **Save** each one.
+4. **Redeploy.** Changes reach new deployments only. Ask Fable to deploy again, or redeploy the latest deployment in the Vercel dashboard.
+5. **Test.** Open the live site on your phone, send a test through Start a project, and watch the inbox. Check spam too. Mail from `onboarding@resend.dev` can land there the first few times.
+6. **Spam limit that survives restarts.** The function counts requests in memory (5 per IP per 10 minutes). That resets on a cold start and isn't shared between instances. Resend's free plan allows 100 emails a day, and a spam burst could use all of them. Add one Vercel firewall rule: project, **Firewall**, **Configure**, **Add New...**, **Rule**. In the text box at the top, type `Rate limit POST /api/contact to 5 requests per 10 minutes per IP` and choose **Generate Rule**. Check the result: path `/api/contact`, method POST, fixed window, 10 minutes, limit 5, key IP, action Deny or the default 429. Then **Save Rule**, **Review Changes**, **Publish**. On the Hobby plan that is the one rate-limit rule you get, and 10 minutes is the longest window. Vercel counts per region. I haven't clicked through this in a dashboard, so match the labels to what you see.
+
+### Test it
+
+Local, no Vercel CLI, no network, no real key:
+
+```
+node --test audit/v3/api/test-contact.mjs
+```
+
+37 tests. They mock `fetch` for the Resend call, and three of them send a real HTTP request to a local mock server through `RESEND_API_URL`. They cover 405, 403, 503, 400 (bad JSON and per-field messages), the honeypot, a valid project and call, Resend failures and the 8 second timeout, the sixth request in 10 minutes (429 and `Retry-After`), and that nothing the visitor typed is logged.
+
+One-line smoke test from `api/README.md`:
+
+```
+node --input-type=module -e "import h from './api/contact.mjs'; const r = await h.fetch(new Request('http://localhost/api/contact', {method:'GET'})); console.log(r.status, await r.text())"
+```
+
+On a preview deployment (the integrator runs this before launch):
+
+```
+curl -i -X POST https://<preview>/api/contact -H 'Content-Type: application/json' -H 'Origin: https://<preview>' -d '{}'
+```
+
+It has to come from the function: `503` with the variables unset, `400 {"error":"invalid",...}` with them set. A `308` or `404` means the route is wrong. `vercel.json` has `trailingSlash: true`, and whether that redirects `/api/contact` is unverified (BRIEF-v3 §13.2). If it redirects, add an exception or a rewrite in `vercel.json` and update the path in `api/README.md` and `js/form.js` together.
+
+When something fails on the live site, open the function's logs in Vercel. The function logs one short line per outcome and never the visitor's data:
+
+| Log line | Meaning |
+|---|---|
+| `contact: not configured, missing RESEND_API_KEY,CONTACT_TO` | A variable is missing, or the deployment predates it. Redeploy. |
+| `contact: resend answered 403 validation_error` | `CONTACT_TO` isn't the Resend account's email (test sender), or `RESEND_FROM` isn't on a verified domain. |
+| `contact: resend answered 401 ...` | The key is wrong or deleted. Make a new one and update `RESEND_API_KEY`. |
+| `contact: resend answered 429 daily_quota_exceeded` | The 100 a day on the free plan is used up. It resets at 00:00 UTC. |
+| `contact: sent <id>` | Resend accepted it. If it didn't arrive, look in spam, then in Resend's dashboard under the id. |
+
+### Limits to know
+
+Free plan: 3,000 emails a month, 100 a day (UTC day), 10 API requests a second per team. Each recipient counts as one email, so a `CONTACT_TO` list of two uses two.
+
+### Later: a domain Ethan owns
+
+Add and verify the domain in Resend, set `RESEND_FROM` to an address on it, and `CONTACT_TO` can then be any inbox. The key can also be pinned to that domain when you edit it in the Resend dashboard.
+
+### Sources (read 2026-10-15)
+
+- Request fields, success body, `reply_to`, `from` format: https://resend.com/docs/api-reference/emails/send-email
+- `User-Agent` required, 403 code 1010 without it: https://resend.com/docs/knowledge-base/403-error-1010
+- Test sender only delivers to the account's own email: https://resend.com/docs/knowledge-base/403-error-resend-dev-domain, and the 403 `validation_error` text on https://resend.com/docs/api-reference/errors
+- Create a key, **Sending access**: https://resend.com/docs/create-an-api-key and https://resend.com/docs/api-reference/api-keys/create-api-key
+- Free plan 3,000 a month, 100 a day: https://resend.com/pricing. Rate limit 10 requests a second per team: https://resend.com/docs/api-reference/rate-limit
+- Function shape (`export default { fetch(request) }`, `.mjs` without a `package.json`): https://vercel.com/docs/functions/functions-api-reference
+- Env vars and redeploying: https://vercel.com/docs/environment-variables/managing-environment-variables
+- Firewall rate limit steps and Hobby limits: https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting and https://vercel.com/docs/vercel-firewall/vercel-waf/custom-rules
+
+Not confirmed from the docs: the Resend test-sender step-3 wording above, the exact Vercel dashboard labels beyond what those pages print, and whether `/api/contact` survives `trailingSlash: true` (needs the preview test).
