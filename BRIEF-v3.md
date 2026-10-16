@@ -24,6 +24,19 @@ The site is the portfolio. Every interaction is a demonstration a small-business
 
 Nav (all pages): Home, Services, Samples, About, and the two CTAs. Footer: name, Battle Ground WA, links, "Built by hand. No tracking."
 
+## 2a. Home page choreography (Ethan, 19:08, in his order)
+This is the spine of the home page. Build it as discrete scroll stages (scrubbable forward and back), not a video.
+0. **Load.** Nothing "bangs" onto the screen. The background fades up first. The headline *I build websites for small businesses.* appears starting with the "I" and sweeps across the line (per-word or per-letter reveal with a soft blur-to-sharp, about 0.9 s total, the architect tunes the pace), then the sub-line, then the two buttons, staggered. Reduced motion: a plain 200 ms opacity fade of the whole hero.
+1. **Zoom in.** As the visitor scrolls into "The build", the desktop browser frame (showing the coffee sample) scales up from the page toward the viewer until it fills most of the width.
+2. **Slide aside and explain.** The frame slides to one side (right on desktop; it docks to the top on phones) and a text column walks through the site: pages, the contact form, tap-to-call, the map, speed. The **type morph** (§3.3) runs across these captions as they change.
+3. **Pull back to a phone.** The frame zooms out and becomes a bare phone: only the device outline, centred, no hand, no desk, nothing else.
+4. **Into the phone.** The view zooms into the phone screen showing the sample's mobile layout. Caption: built for the phone first.
+5. **Review it.** Scrolling on, the checks tick in one by one (contrast, tap targets, speed, alt text, the 404). This is the existing end of v2's build section; keep its substance.
+6. **Then the rest of the page:** What you get (deeper, see §5; no prices yet, "fixed price, agreed before I start, plus WA sales tax"), Proof ("things you can check yourself" stays), Samples teaser ("Open sample sites" → the gallery), the 3D showcase, a short About teaser → `/about/`, and the two CTAs.
+Every stage: a reduced-motion static state, no scroll-jacking, a real DOM (the captions are text, not canvas), and the frame content is the real sample page rendered in an `<iframe>` only if it stays under the performance budget; otherwise a static screenshot set (desktop and phone) with the real sample one tap away.
+
+**Contact ("ding me").** The request forms (§6) email Ethan the moment someone submits, like the Blackline booking form did; the email arrives with the visitor's details and a reply-to so one tap answers it. No auto-replies to the visitor beyond the on-page confirmation.
+
 ## 3. Interaction inventory (each one is a demonstration; each has a reduced-motion fallback)
 1. **Scroll-reactive background** (home, and lightly on inner pages): dependency-free canvas or WebGL (written in-house, ≤ 25 KB), ink-and-paper palette from the tokens, driven by scroll position and pointer, paused when off-screen or the tab is hidden, capped to the device pixel ratio of 2. Reduced motion or no WebGL: a static layered gradient. Must never cost more than ~4 ms per frame on a mid phone (measure with the trace in §11).
 2. **Reveals**: everything fades and rises in on entry (IntersectionObserver, staggered children, once). Content is never hidden without JavaScript. Smooth scrolling via CSS `scroll-behavior`; no scroll-jacking, no hijacked wheel.
