@@ -3,53 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found — Ethan Gaither</title>
-<meta name="description" content="That page is not here. Go back to the portfolio.">
+<title>Page not found | Ethan Gaither</title>
+<meta name="description" content="That page isn't here. Go back to the home page or open the sample sites.">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F5F1EA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
-<!-- Root-relative paths on purpose: a host serves this file at whatever URL was missing.
-     If the site lives in a sub-folder, prefix the three paths below with that folder. -->
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Inter+Tight:wght@400..500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Inter+Tight:wght@400..500&display=swap"></noscript>
-<link rel="stylesheet" href="/styles.css">
-<script src="/site.config.js" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var S = window.SITE || {};
-  Array.prototype.forEach.call(document.querySelectorAll('[data-site]'), function (el) {
-    var v = S[el.getAttribute('data-site')];
-    if (typeof v === 'string' && v) el.textContent = v;
-  });
-  if (S.name) document.title = 'Page not found — ' + S.name;
-});
-</script>
+<!-- The two above-the-fold faces. The other families load on first use. -->
+<link rel="preload" href="/fonts/fraunces-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/shell.css">
+<link rel="stylesheet" href="/styles/buttons.css">
+<link rel="stylesheet" href="/styles/motion.css">
+<!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
+     reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
+<script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
+<script type="module" src="/js/shell.js"></script>
 </head>
-<body>
+<body data-page="404">
 <a class="skip" href="#main">Skip to content</a>
+
+<!-- Shared SVG sprite. #fx-glass is the refraction filter for data-fx="glass" buttons (Chromium only; see styles/buttons.css).
+     Its displacement map is a static image (/assets/fx/glass-map.png): red shifts x, green shifts y, 128 is no shift.
+     Page workers may add their own <symbol>s in their own region, never here. -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="fx-glass" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feImage href="/assets/fx/glass-map.png" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="0.12" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="bg" aria-hidden="true"><canvas class="bg-canvas" id="bg-canvas" data-intensity="low"></canvas></div>
+
 <header class="site-header">
-  <div class="wrap bar">
+  <div class="wrap site-header__bar">
     <a class="brand" href="/" data-site="name">Ethan Gaither</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/samples/">Samples</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+      <span class="site-nav__ink" aria-hidden="true"></span>
+    </nav>
+    <div class="site-cta">
+      <a class="btn btn--solid btn--sm" data-fx="ink" href="/start-a-project/">Start a project</a>
+      <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+    </div>
   </div>
 </header>
-<main id="main">
-  <section class="hero" aria-labelledby="nf-title">
+
+<main id="main" tabindex="-1">
+<!-- WORKER: build from here (owner: see WORKER-BRIEFS.md). Everything between this line and "WORKER: end" is yours. -->
+  <section class="page-hero" aria-labelledby="page-title">
     <div class="wrap">
       <p class="eyebrow">Error 404</p>
-      <h1 id="nf-title">That page is not <em>here.</em></h1>
-      <p class="lede">The link may be old or mistyped. The portfolio is one page, and everything on it is a tap away.</p>
-      <p class="actions"><a class="btn btn--solid" href="/">Back to the portfolio</a></p>
+      <h1 id="page-title">That page isn't <em>here.</em></h1>
+      <p class="lede">The link may be old or mistyped.</p>
+      <p class="actions">
+        <a class="btn btn--solid" data-fx="ink" href="/">Go to the home page</a>
+        <a class="btn" data-fx="draw" href="/samples/">Open the sample sites</a>
+      </p>
     </div>
   </section>
+<!-- WORKER: end -->
 </main>
+
 <footer class="site-footer">
-  <div class="wrap">
-    <p><span data-site="name">Ethan Gaither</span> · <span data-site="location">Battle Ground, Washington</span></p>
-    <p>Built by hand. No tracking.</p>
+  <div class="wrap site-footer__grid">
+    <div class="site-footer__who">
+      <p class="site-footer__name" data-site="name">Ethan Gaither</p>
+      <p data-site="location">Battle Ground, Washington</p>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul class="site-footer__links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/samples/">Samples</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/start-a-project/">Start a project</a></li>
+        <li><a href="/book-a-call/">Book a free call</a></li>
+      </ul>
+    </nav>
+    <div class="site-footer__contact" data-copy-scope>
+      <a href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a>
+      <button type="button" class="btn btn--sm" data-fx="magnetic" data-copy-email hidden>Copy email</button>
+      <span class="copy-note" data-copy-note role="status" aria-live="polite"></span>
+    </div>
+    <p class="site-footer__note">Built by hand. No tracking.</p>
   </div>
 </footer>
 </body>

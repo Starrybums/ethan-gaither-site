@@ -1,0 +1,159 @@
+/* buttons.css — the button catalogue (brief §3.4). Owned by the architect; js/buttons.js drives the pointer parts.
+
+   Every button is a real <a> or <button> with class "btn". Pick one look and, optionally, one technique:
+     looks:       .btn (outline)   .btn--solid (ink fill)   .btn--sm (smaller, for the header)
+     techniques:  data-fx="glass"    liquid glass: blur + refraction + a highlight that follows the pointer, wobble on press
+                  data-fx="press3d"  tilts toward the pointer over a layered depth edge, pushes down on press
+                  data-fx="magnetic" drifts toward the pointer when it comes near, springs back
+                  data-fx="ink"      a fill floods in from the edge the pointer entered, drains out the way it left
+                  data-fx="draw"     a line draws itself around the button on hover and focus
+   Rules (all built in, do not undo them):
+     - Pointer effects only run under @media (hover: hover) and (pointer: fine). Touch gets a press state.
+     - Keyboard focus shows the ring (and runs the hover look for ink and draw).
+     - Reduced motion: colour change only. Nothing moves.
+     - Without JavaScript every button is a plain working outline or solid button.
+   The glass refraction needs the #fx-glass filter from the page's SVG sprite (see WORKER-BRIEFS.md, "Shell markup"). */
+
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-bd: var(--ink);
+  --btn-hover-bg: var(--ink);
+  --btn-hover-fg: var(--paper);
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: var(--tap); padding: 0 22px;
+  border: 1px solid var(--btn-bd); border-radius: var(--radius-1);
+  background: var(--btn-bg); color: var(--btn-fg);
+  font: 500 1rem/1 var(--sans); letter-spacing: .01em; text-decoration: none; white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
+              transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out);
+}
+.btn:hover, .btn:focus-visible { background: var(--btn-hover-bg); color: var(--btn-hover-fg); text-decoration: none; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.btn:active, .btn.is-pressed { transform: translateY(1px); }
+.btn--solid { --btn-bg: var(--ink); --btn-fg: var(--paper); --btn-hover-bg: transparent; --btn-hover-fg: var(--ink); }
+.btn--sm { min-height: 44px; padding-inline: 16px; font-size: .9375rem; }
+.btn--block { display: flex; width: 100%; }
+.btn > svg:not(.fx-draw) { flex: none; width: 1.1em; height: 1.1em; }
+/* Effect layers sit at z-index -1 inside the button's own stacking context (isolation), so text stays on top
+   with or without this span. buttons.js wraps loose text in it for the magnetic label drift. */
+.btn__label { position: relative; z-index: 1; }
+
+/* ---- 1. Liquid glass ---------------------------------------------------------------- */
+.btn[data-fx="glass"] {
+  --btn-bg: var(--glass-bg); --btn-fg: var(--ink); --btn-bd: var(--glass-border);
+  --btn-hover-bg: var(--glass-bg); --btn-hover-fg: var(--ink);
+  --mx: 50%; --my: 0%;
+  border-radius: var(--radius-pill); padding-inline: 26px;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 -1px 0 var(--glass-edge), var(--glass-shadow);
+}
+/* Chromium can refract the backdrop through an SVG filter; buttons.js sets data-refract only there. */
+.btn[data-fx="glass"][data-refract] {
+  backdrop-filter: url(#fx-glass) blur(calc(var(--glass-blur) * .5)) saturate(var(--glass-sat));
+}
+.btn[data-fx="glass"]::before { /* specular highlight */
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(80px 60px at var(--mx) var(--my), var(--glass-hi), transparent 70%);
+  opacity: .55; transition: opacity var(--dur-2) var(--ease);
+}
+.btn[data-fx="glass"]::after { /* rim light */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(180deg, rgb(255 255 255 / .35), transparent 40%, transparent 70%, rgb(255 255 255 / .12));
+  mix-blend-mode: soft-light;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn[data-fx="glass"]:hover::before { opacity: 1; }
+}
+html.motion-ok .btn[data-fx="glass"].is-pressed,
+html.motion-ok .btn[data-fx="glass"]:active { animation: fx-wobble 520ms var(--ease-out); transform: none; }
+
+/* ---- 2. 3D press ------------------------------------------------------------------- */
+.btn[data-fx="press3d"] {
+  --rx: 0deg; --ry: 0deg; --lift: 4px;
+  --btn-bg: var(--paper); --btn-hover-bg: var(--paper); --btn-hover-fg: var(--ink);
+  border-radius: 8px;
+  box-shadow: 0 1px 0 var(--ink), 0 2px 0 var(--ink), 0 3px 0 var(--ink), 0 var(--lift) 0 var(--ink),
+              0 calc(var(--lift) + 10px) 18px -8px rgb(23 20 15 / .35);
+  transform: perspective(500px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(calc(var(--lift) * -.25));
+  transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease);
+  will-change: transform;
+}
+.btn--solid[data-fx="press3d"] { --btn-bg: var(--ink); --btn-hover-bg: var(--ink); --btn-hover-fg: var(--paper); box-shadow: 0 1px 0 var(--ink-2), 0 2px 0 var(--ink-2), 0 3px 0 var(--ink-2), 0 var(--lift) 0 var(--ink-2), 0 calc(var(--lift) + 10px) 18px -8px rgb(23 20 15 / .45); }
+@media (hover: hover) and (pointer: fine) {
+  .btn[data-fx="press3d"]:hover { background: var(--paper-2); }
+  .btn--solid[data-fx="press3d"]:hover { background: var(--ink); }
+}
+.btn[data-fx="press3d"]:active, .btn[data-fx="press3d"].is-pressed {
+  --lift: 1px;
+  transform: perspective(500px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(3px);
+}
+
+/* ---- 3. Magnetic ------------------------------------------------------------------- */
+.btn[data-fx="magnetic"] {
+  --tx: 0px; --ty: 0px;
+  border-radius: var(--radius-pill);
+  transform: translate3d(var(--tx), var(--ty), 0);
+  transition: transform 520ms var(--ease-spring), background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+.btn[data-fx="magnetic"].is-near { transition: transform 140ms linear, background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease); }
+.btn[data-fx="magnetic"] .btn__label { transform: translate3d(calc(var(--tx) * .35), calc(var(--ty) * .35), 0); transition: inherit; }
+
+/* ---- 4. Ink fill ------------------------------------------------------------------- */
+.btn[data-fx="ink"] {
+  --ix: 0%; --iy: 50%;
+  --btn-hover-bg: var(--btn-bg);
+  overflow: hidden;
+}
+.btn[data-fx="ink"]::before {
+  content: ""; position: absolute; inset: -1px; z-index: -1; pointer-events: none;
+  background: var(--ink);
+  clip-path: circle(0% at var(--ix) var(--iy));
+  transition: clip-path 480ms var(--ease-out);
+}
+.btn--solid[data-fx="ink"]::before { background: var(--accent); }
+.btn[data-fx="ink"]:hover, .btn[data-fx="ink"]:focus-visible, .btn[data-fx="ink"].is-inked { color: var(--paper); background: var(--btn-bg); }
+.btn--solid[data-fx="ink"]:hover, .btn--solid[data-fx="ink"]:focus-visible, .btn--solid[data-fx="ink"].is-inked { color: var(--on-accent); }
+.btn[data-fx="ink"]:hover::before, .btn[data-fx="ink"]:focus-visible::before, .btn[data-fx="ink"].is-inked::before {
+  clip-path: circle(150% at var(--ix) var(--iy));
+}
+
+/* ---- 5. Border draw ------------------------------------------------------------------ */
+.btn[data-fx="draw"] { --btn-bd: var(--line); --btn-hover-bg: transparent; --btn-hover-fg: var(--ink); }
+.btn--solid[data-fx="draw"] { --btn-bd: var(--ink); --btn-hover-bg: var(--ink); --btn-hover-fg: var(--paper); }
+.fx-draw { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); max-width: none; overflow: visible; pointer-events: none; }
+.fx-draw rect {
+  x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px);
+  fill: none; stroke: var(--accent); stroke-width: 2px;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0;
+  /* opacity hides the one-pixel dash start that some engines paint at offset 1; it waits for the line to retract */
+  transition: stroke-dashoffset 640ms var(--ease-in-out), opacity 0s linear 640ms;
+}
+.btn[data-fx="draw"]:hover .fx-draw rect, .btn[data-fx="draw"]:focus-visible .fx-draw rect { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 640ms var(--ease-in-out), opacity 0s; }
+.btn[data-fx="draw"]:focus-visible { outline-color: transparent; }
+.btn[data-fx="draw"]:focus-visible .fx-draw rect { stroke: var(--accent); }
+/* Without JS there is no SVG: the focus ring stays. */
+.btn[data-fx="draw"]:not(:has(.fx-draw)):focus-visible { outline-color: var(--accent); }
+
+/* ---- Gates --------------------------------------------------------------------------- */
+/* No fine pointer: no tilt, no drift (buttons.js does not run them either). */
+@media not ((hover: hover) and (pointer: fine)) {
+  .btn[data-fx="press3d"] { --rx: 0deg; --ry: 0deg; }
+  .btn[data-fx="magnetic"] { --tx: 0px; --ty: 0px; }
+}
+/* Reduced motion: colour only. */
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn[data-fx] { transform: none !important; animation: none !important; }
+  .btn[data-fx="press3d"] { box-shadow: 0 2px 0 var(--ink); }
+  .btn[data-fx="magnetic"] .btn__label { transform: none !important; }
+  .btn[data-fx="ink"]::before { transition: none; clip-path: circle(0% at 0 50%); }
+  .btn[data-fx="ink"]:is(:hover, :focus-visible, .is-inked)::before { clip-path: circle(150% at 0 50%); }
+  .fx-draw rect { transition: none; }
+}
+@media (forced-colors: active) {
+  .btn { border: 1px solid ButtonText; }
+  .btn::before, .btn::after, .fx-draw { display: none; }
+}

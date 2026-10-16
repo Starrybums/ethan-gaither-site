@@ -1,0 +1,129 @@
+/* tokens.css — the design tokens for every portfolio page (not the samples: each sample has its own).
+   Owned by the architect. Workers read these; they do not redefine them. Need a new token? Ask in your report.
+   Palette, dark scheme and type scale carry over from v2 unchanged. */
+
+:root {
+  /* ---- Colour: ink on warm paper, one cobalt accent ---------------------- */
+  --paper: #F5F1EA;
+  --paper-2: #ECE6DC;        /* raised surfaces, frames */
+  --paper-3: #E3DBCD;        /* pressed / deeper surfaces */
+  --ink: #17140F;            /* text, solid buttons */
+  --ink-2: #5B554B;          /* secondary text (AA on paper and paper-2) */
+  --line: #D9D2C5;           /* hairlines */
+  --accent: #1E4FD6;         /* cobalt: links, the one rule, focus ring */
+  --accent-ink: #0B2A7A;     /* link hover */
+  --on-ink: var(--paper);    /* text on an --ink fill */
+  --on-accent: #FFFFFF;      /* text on an --accent fill (5.9:1) */
+  --ok: #236640;             /* ticks, success (AA on paper, paper-2, paper-3) */
+  --warn: #844C0D;           /* staging tag, form warnings (AA on all three papers) */
+  --danger: #B3261E;         /* form errors (AA on all three papers) */
+
+  /* Effect colours for js/background.js and js/scene3d.js (decorative only, never behind text at full strength). */
+  --fx-ink: #17140F;
+  --fx-paper: #F5F1EA;
+  --fx-accent: #1E4FD6;
+  --fx-warm: #C98B4E;
+  --fx-alpha: .10;           /* the most any background mark may cover the paper */
+
+  /* Liquid glass */
+  --glass-bg: rgb(245 241 234 / .42);
+  --glass-border: rgb(255 255 255 / .55);
+  --glass-edge: rgb(23 20 15 / .14);
+  --glass-hi: rgb(255 255 255 / .75);   /* specular highlight */
+  --glass-blur: 14px;
+  --glass-sat: 170%;
+  --glass-shadow: 0 1px 1px rgb(23 20 15 / .06), 0 8px 24px -8px rgb(23 20 15 / .22);
+
+  /* ---- Type ---------------------------------------------------------------- */
+  --serif: "Fraunces", "Fraunces Fallback", Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight", "Inter Tight Fallback", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  /* The two extra families exist for the type morph in the home build section. Use them nowhere else. */
+  --serif-2: "Instrument Serif", "Instrument Serif Fallback", Georgia, "Times New Roman", serif;
+  --grotesk: "Space Grotesk", "Space Grotesk Fallback", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --fs-eyebrow: .8125rem;
+  --fs-small: .9375rem;
+  --fs-body: clamp(1rem, .96rem + .2vw, 1.125rem);
+  --fs-lede: clamp(1.125rem, 1rem + .5vw, 1.375rem);
+  --fs-h3: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  --fs-h2: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  --fs-h1: clamp(2.6rem, 1.2rem + 6.2vw, 5.5rem);
+  --fs-quote: clamp(1.25rem, 1rem + .9vw, 1.6rem);
+  --lh-tight: 1.02;
+  --lh-head: 1.1;
+  --lh-body: 1.6;
+
+  /* ---- Space and layout ----------------------------------------------------- */
+  --gutter: 16px;
+  --maxw: 1180px;
+  --maxw-text: 62ch;
+  --col-gap: 24px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --section-y: clamp(56px, 9vw, 112px);
+  --radius-1: 2px;           /* v2 buttons and labels */
+  --radius-2: 10px;          /* cards, frames */
+  --radius-pill: 999px;
+  --tap: 48px;               /* minimum control height */
+  --header-h: 72px;          /* approximate header height on desktop; for sticky offsets */
+
+  /* ---- Motion --------------------------------------------------------------- */
+  --ease: cubic-bezier(.2, .7, .2, 1);          /* v2 default */
+  --ease-out: cubic-bezier(.22, .8, .3, 1);     /* entrances */
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);  /* moves between two states */
+  /* A soft spring for snap-backs (magnetic, press). linear() is ignored where unsupported, so --ease-out stays. */
+  --ease-spring: var(--ease-out);
+  --dur-1: 120ms;   /* colour, small state changes */
+  --dur-2: 200ms;   /* hovers, presses */
+  --dur-3: 360ms;   /* small moves */
+  --dur-4: 600ms;   /* reveals, frame changes */
+  --dur-5: 900ms;   /* the hero headline sweep */
+  --stagger: 70ms;  /* delay between siblings in a staggered reveal */
+  --rise: 14px;     /* how far a reveal travels */
+  --motion: 1;      /* 1 when motion is allowed, 0 under reduced motion. Multiply distances by it. */
+
+  /* ---- Layers ---------------------------------------------------------------- */
+  --z-bg: -1;        /* the background canvas and its static fallback */
+  --z-base: 0;
+  --z-raised: 1;     /* cards lifted on hover */
+  --z-sticky: 5;     /* sticky frames inside a section */
+  --z-header: 10;
+  --z-overlay: 50;   /* menus, dialogs */
+  --z-skip: 100;     /* the skip link */
+
+  color-scheme: light dark;
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root { --ease-spring: linear(0, .25 7%, .62 15%, .92 24%, 1.06 33%, 1.08 40%, 1.03 52%, .99 66%, 1); }
+}
+@media (min-width: 900px) { :root { --gutter: clamp(24px, 4vw, 56px); } }
+@media (prefers-reduced-motion: reduce) { :root { --motion: 0; --rise: 0px; } }
+
+/* ---- Dark scheme: follows the OS unless data-theme forces one (same values as v2) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121110; --paper-2: #1B1917; --paper-3: #24211E; --ink: #F1ECE3; --ink-2: #A89F91;
+    --line: #2C2825; --accent: #7FA4FF; --accent-ink: #B7CBFF; --on-accent: #121110;
+    --ok: #6CC891; --warn: #E0A458; --danger: #FF8A80;
+    --fx-ink: #F1ECE3; --fx-paper: #121110; --fx-accent: #7FA4FF; --fx-warm: #D9A066; --fx-alpha: .08;
+    --glass-bg: rgb(27 25 23 / .45); --glass-border: rgb(255 255 255 / .14); --glass-edge: rgb(0 0 0 / .5);
+    --glass-hi: rgb(255 255 255 / .28); --glass-shadow: 0 1px 1px rgb(0 0 0 / .3), 0 10px 28px -8px rgb(0 0 0 / .6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121110; --paper-2: #1B1917; --paper-3: #24211E; --ink: #F1ECE3; --ink-2: #A89F91;
+  --line: #2C2825; --accent: #7FA4FF; --accent-ink: #B7CBFF; --on-accent: #121110;
+  --ok: #6CC891; --warn: #E0A458; --danger: #FF8A80;
+  --fx-ink: #F1ECE3; --fx-paper: #121110; --fx-accent: #7FA4FF; --fx-warm: #D9A066; --fx-alpha: .08;
+  --glass-bg: rgb(27 25 23 / .45); --glass-border: rgb(255 255 255 / .14); --glass-edge: rgb(0 0 0 / .5);
+  --glass-hi: rgb(255 255 255 / .28); --glass-shadow: 0 1px 1px rgb(0 0 0 / .3), 0 10px 28px -8px rgb(0 0 0 / .6);
+  color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }

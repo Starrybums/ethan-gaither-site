@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start a website project | Ethan Gaither</title>
+<meta name="description" content="Tell Ethan Gaither what your website is for and when you need it. Fixed price, agreed before he starts. Battle Ground, Vancouver and Clark County, WA.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F5F1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://ethan-gaither.vercel.app/start-a-project/">
+<meta property="og:url" content="https://ethan-gaither.vercel.app/start-a-project/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ethan Gaither">
+<meta property="og:title" content="Start a website project | Ethan Gaither">
+<meta property="og:description" content="Tell Ethan Gaither what your website is for and when you need it. Fixed price, agreed before he starts. Battle Ground, Vancouver and Clark County, WA.">
+<meta property="og:image" content="https://ethan-gaither.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- The two above-the-fold faces. The other families load on first use. -->
+<link rel="preload" href="/fonts/fraunces-roman-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/shell.css">
+<link rel="stylesheet" href="/styles/buttons.css">
+<link rel="stylesheet" href="/styles/motion.css">
+<link rel="stylesheet" href="/styles/pages/contact.css">
+<!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
+     reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
+<script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Start a project","url":"https://ethan-gaither.vercel.app/start-a-project/"}</script>
+<script type="module" src="/js/shell.js"></script>
+<!-- Pages worker: <script type="module" src="/js/form.js"></script> -->
+</head>
+<body data-page="start">
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Shared SVG sprite. #fx-glass is the refraction filter for data-fx="glass" buttons (Chromium only; see styles/buttons.css).
+     Its displacement map is a static image (/assets/fx/glass-map.png): red shifts x, green shifts y, 128 is no shift.
+     Page workers may add their own <symbol>s in their own region, never here. -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="fx-glass" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+      <feImage href="/assets/fx/glass-map.png" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="0.12" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="bg" aria-hidden="true"><canvas class="bg-canvas" id="bg-canvas" data-intensity="low"></canvas></div>
+
+<header class="site-header">
+  <div class="wrap site-header__bar">
+    <a class="brand" href="/" data-site="name">Ethan Gaither</a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/samples/">Samples</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+      <span class="site-nav__ink" aria-hidden="true"></span>
+    </nav>
+    <div class="site-cta">
+      <a class="btn btn--solid btn--sm" data-fx="ink" href="/start-a-project/">Start a project</a>
+      <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<!-- WORKER: build from here (owner: see WORKER-BRIEFS.md). Everything between this line and "WORKER: end" is yours. -->
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="wrap">
+      <p class="eyebrow">Start a project</p>
+      <h1 id="page-title">Tell me about the site</h1>
+      <p class="lede">What it's for and when you need it. I'll tell you if I'm the right fit.</p>
+    </div>
+  </section>
+<!-- WORKER: end -->
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__grid">
+    <div class="site-footer__who">
+      <p class="site-footer__name" data-site="name">Ethan Gaither</p>
+      <p data-site="location">Battle Ground, Washington</p>
+    </div>
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul class="site-footer__links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/samples/">Samples</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/start-a-project/">Start a project</a></li>
+        <li><a href="/book-a-call/">Book a free call</a></li>
+      </ul>
+    </nav>
+    <div class="site-footer__contact" data-copy-scope>
+      <a href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a>
+      <button type="button" class="btn btn--sm" data-fx="magnetic" data-copy-email hidden>Copy email</button>
+      <span class="copy-note" data-copy-note role="status" aria-live="polite"></span>
+    </div>
+    <p class="site-footer__note">Built by hand. No tracking.</p>
+  </div>
+</footer>
+</body>
+</html>

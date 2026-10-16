@@ -1,0 +1,184 @@
+/* shell.css — the parts every portfolio page shares: background layer, header, footer,
+   layout primitives, section head/body, reveal states, the sample card. Owned by the architect.
+   Page-specific styles go in styles/pages/<page>.css (owned by that page's worker). */
+
+/* ---- Background layer --------------------------------------------------------
+   <div class="bg" aria-hidden="true"><canvas class="bg-canvas" id="bg-canvas" data-intensity="full|low"></canvas></div>
+   The static layered gradient is the fallback (reduced motion, save-data, no WebGL, no JS).
+   js/background.js adds .is-live to .bg once its first frame is drawn; the canvas then fades in over it. */
+.bg {
+  position: fixed; inset: 0; z-index: var(--z-bg); pointer-events: none; overflow: hidden;
+  background:
+    radial-gradient(60vmax 40vmax at 85% -10%, color-mix(in srgb, var(--fx-accent) 9%, transparent), transparent 70%),
+    radial-gradient(50vmax 36vmax at -10% 30%, color-mix(in srgb, var(--fx-warm) 10%, transparent), transparent 70%),
+    radial-gradient(70vmax 50vmax at 60% 110%, color-mix(in srgb, var(--fx-ink) 5%, transparent), transparent 70%);
+}
+.bg[data-intensity="low"], .bg:has(> [data-intensity="low"]) { opacity: .7; }
+.bg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity var(--dur-5) var(--ease-out); }
+.bg.is-live .bg-canvas { opacity: 1; }
+/* The background fades up first on load (brief §2a, stage 0). */
+html.motion-ok .bg { animation: fx-fade-in var(--dur-4) var(--ease-out) both; }
+
+/* ---- Layout primitives --------------------------------------------------------- */
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap--text { max-width: calc(var(--maxw-text) + 2 * var(--gutter)); }
+.stack > * + * { margin-top: var(--stack, var(--space-5)); }
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cluster, var(--space-3)); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+.grid { display: grid; gap: var(--col-gap); }
+@media (min-width: 700px) { .grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Sections: a hairline on top, generous vertical rhythm. */
+.section { border-top: 1px solid var(--line); padding-block: var(--section-y); }
+.section--flush { border-top: 0; }
+.section--tight { padding-block: calc(var(--section-y) * .6); }
+
+/* Section head and body: stacked on phones; 4/8 of a 12-column grid from 900 px (v2 .split). */
+.split { display: grid; gap: clamp(24px, 4vw, 40px); }
+@media (min-width: 900px) {
+  .split { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); }
+  .split > .section-head { grid-column: 1 / 5; }
+  .split > .section-body { grid-column: 5 / 13; }
+}
+.section-head { margin-bottom: clamp(24px, 4vw, 44px); }
+.split > .section-head { margin-bottom: 0; }
+.section-head > :last-child, .section-body > :last-child { margin-bottom: 0; }
+.section-head h2 + p { margin-top: 16px; color: var(--ink-2); max-width: var(--maxw-text); }
+
+/* Top of an inner page (About, Services, Samples, the two forms, 404). */
+.page-hero { padding-block: clamp(40px, 7vw, 96px) clamp(40px, 6vw, 80px); }
+.page-hero h1 { max-width: 14em; }
+
+/* ---- Header -------------------------------------------------------------------- */
+.site-header { position: relative; z-index: var(--z-header); border-top: 1px solid var(--ink); view-transition-name: site-header; }
+.site-header__bar {
+  position: relative;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 4px 24px; padding-block: 14px 12px;
+}
+.site-header__bar::before { /* the one cobalt rule */
+  content: ""; position: absolute; left: var(--gutter); top: -1px; width: 56px; height: 3px; background: var(--accent);
+}
+.brand {
+  font: 400 1.25rem/1.2 var(--serif); letter-spacing: -.01em;
+  color: var(--ink); text-decoration: none; padding-block: 10px;
+}
+.brand:hover { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; }
+
+.site-nav { position: relative; order: 3; flex: 1 1 100%; }
+.site-nav__list { list-style: none; display: flex; flex-wrap: wrap; margin-inline: -10px; }
+.site-nav a {
+  display: block; padding: 12px 10px; font-size: var(--fs-small); font-weight: 500; color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--line); text-underline-offset: .35em;
+}
+.site-nav a:hover { color: var(--ink); text-decoration-thickness: 2px; text-decoration-color: var(--ink); }
+.site-nav a[aria-current="page"] { text-decoration-thickness: 2px; text-decoration-color: var(--ink); }
+/* The sliding underline. shell.js positions it under the current link and slides it to a hovered one.
+   While it is active (.has-ink on the nav) the links drop their own underline. */
+.site-nav__ink {
+  position: absolute; left: 0; bottom: 8px; height: 2px; width: var(--ink-w, 0); background: var(--ink);
+  transform: translateX(var(--ink-x, 0)); opacity: 0; pointer-events: none;
+  transition: transform var(--dur-3) var(--ease-out), width var(--dur-3) var(--ease-out), opacity var(--dur-2) var(--ease);
+}
+.site-nav.has-ink .site-nav__ink { opacity: 1; }
+.site-nav.has-ink a, .site-nav.has-ink a:hover, .site-nav.has-ink a[aria-current="page"] { text-decoration-color: transparent; }
+
+.site-cta { order: 2; display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 559px) {
+  .site-cta { order: 4; flex: 1 1 100%; padding-bottom: 4px; }
+  .site-cta .btn { flex: 1 1 0; justify-content: center; padding-inline: 12px; }
+}
+@media (min-width: 700px) {
+  .site-nav a { padding-inline: 12px; font-size: 1rem; }
+  .site-nav__list { margin-inline: -12px; }
+}
+@media (min-width: 1040px) {
+  .site-header__bar { flex-wrap: nowrap; padding-block: 18px 14px; }
+  .site-nav { order: 2; flex: 0 1 auto; margin-inline: auto 8px; }
+  .site-cta { order: 3; }
+}
+
+/* ---- Footer -------------------------------------------------------------------- */
+.site-footer { border-top: 1px solid var(--line); padding-block: 40px 48px; font-size: var(--fs-small); color: var(--ink-2); }
+.site-footer__grid { display: grid; gap: 24px; }
+.site-footer p { margin: 0; }
+.site-footer__name { font: 400 1.25rem/1.2 var(--serif); color: var(--ink); margin-bottom: 4px !important; }
+.site-footer__links { list-style: none; display: flex; flex-wrap: wrap; gap: 0 4px; margin-inline: -8px; }
+.site-footer__links a { display: block; padding: 10px 8px; color: var(--ink-2); }
+.site-footer__links a:hover { color: var(--ink); }
+.site-footer__contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.site-footer__contact a { color: var(--ink); font-weight: 500; overflow-wrap: anywhere; }
+.copy-note { min-height: 1.5em; color: var(--ink-2); }
+@media (min-width: 900px) {
+  .site-footer__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--col-gap); align-items: start; }
+  .site-footer__who { grid-column: 1 / 4; }
+  .site-footer__nav { grid-column: 4 / 9; }
+  .site-footer__contact { grid-column: 9 / 13; justify-content: flex-end; }
+  .site-footer__note { grid-column: 1 / -1; }
+}
+
+/* ---- Sample card (rendered by shell.js from js/config.js → samples, same markup as the no-JS list) ----
+   <li class="sample-card" style="--card-accent: #hex">
+     <a class="sample-card__link" href="/samples/<slug>/">
+       <span class="sample-card__swatch" aria-hidden="true"></span>
+       <span class="label">Sample site · fictional business</span>
+       <span class="sample-card__name">Name</span>
+       <span class="sample-card__kind">Kind</span>
+       <span class="sample-card__blurb">Blurb</span>
+     </a>
+   </li> */
+.sample-grid { list-style: none; display: grid; gap: var(--col-gap); }
+@media (min-width: 640px) { .sample-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .sample-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.sample-card { --card-accent: var(--accent); }
+.sample-card__link {
+  position: relative; display: flex; flex-direction: column; height: 100%;
+  padding: 0 0 22px; border: 1px solid var(--line); border-radius: var(--radius-2); overflow: hidden;
+  background: var(--paper); color: var(--ink); text-decoration: none;
+  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease);
+}
+.sample-card__link > :not(.sample-card__swatch) { margin-inline: 22px; }
+.sample-card__swatch {
+  display: block; aspect-ratio: 16 / 7; margin-bottom: 18px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--card-accent) 55%, transparent), transparent 60%),
+    linear-gradient(135deg, var(--card-accent), color-mix(in srgb, var(--card-accent) 40%, var(--ink)));
+}
+.sample-card .label { align-self: flex-start; }
+.sample-card__name { font: 400 var(--fs-h3)/1.15 var(--serif); letter-spacing: -.01em; margin-bottom: 4px; }
+.sample-card__kind { font-size: var(--fs-small); font-weight: 500; color: var(--ink-2); margin-bottom: 10px; }
+.sample-card__blurb { color: var(--ink-2); }
+.sample-card__link:hover { color: var(--ink); border-color: var(--ink); }
+@media (hover: hover) and (pointer: fine) {
+  .sample-card__link:hover { transform: translateY(calc(-4px * var(--motion))); box-shadow: 0 14px 30px -18px rgb(23 20 15 / .45); }
+}
+
+/* ---- Reveals ------------------------------------------------------------------------
+   Mark an element with data-reveal; it fades and rises in once, the first time it enters the viewport.
+   Mark a parent with data-reveal-stagger and its direct children reveal one after another
+   (shell.js sets --i on each child). Variants: data-reveal="fade" (no rise), data-reveal="blur" (soft blur to sharp).
+   Hidden only when html has both .js and .motion-ok, so content is never hidden without JavaScript or under
+   reduced motion. A CSS failsafe (fx-failsafe in motion.css) shows everything after 4 s unless shell.js has
+   started (it adds .shell-ready to html), so a script that fails to load never costs the visitor the content. */
+html.js.motion-ok [data-reveal]:not(.is-in),
+html.js.motion-ok [data-reveal-stagger]:not(.is-in) > * {
+  opacity: 0;
+  transform: translateY(var(--rise));
+}
+html.js.motion-ok:not(.shell-ready) [data-reveal]:not(.is-in),
+html.js.motion-ok:not(.shell-ready) [data-reveal-stagger]:not(.is-in) > * {
+  animation: fx-failsafe 0s linear 4s forwards;
+}
+html.js.motion-ok [data-reveal="fade"]:not(.is-in) { transform: none; }
+html.js.motion-ok [data-reveal="blur"]:not(.is-in) { filter: blur(6px); }
+html.js.motion-ok [data-reveal],
+html.js.motion-ok [data-reveal-stagger] > * {
+  transition:
+    opacity var(--dur-4) var(--ease-out) calc(var(--i, 0) * var(--stagger)),
+    transform var(--dur-4) var(--ease-out) calc(var(--i, 0) * var(--stagger)),
+    filter var(--dur-4) var(--ease-out) calc(var(--i, 0) * var(--stagger));
+}
+@media print {
+  html.js [data-reveal], html.js [data-reveal-stagger] > * { opacity: 1 !important; transform: none !important; filter: none !important; }
+}

@@ -1,0 +1,51 @@
+/* motion.css — keyframes, stagger utilities, page transitions and the reduced-motion switch.
+   Owned by the architect. Every effect on the site must still read correctly with all of this turned off. */
+
+/* ---- Keyframes ------------------------------------------------------------------ */
+@keyframes fx-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fx-rise-in { from { opacity: 0; transform: translateY(var(--rise)); } to { opacity: 1; transform: none; } }
+/* Soft blur to sharp: the hero headline's per-word sweep (apply to each word span with --i). */
+@keyframes fx-blur-in { from { opacity: 0; filter: blur(8px); transform: translateY(.12em); } to { opacity: 1; filter: blur(0); transform: none; } }
+@keyframes fx-failsafe { to { opacity: 1; transform: none; filter: none; } }
+/* Liquid-glass button: a quick squash and settle on press. */
+@keyframes fx-wobble {
+  0% { transform: scale(1, 1); }
+  30% { transform: scale(1.06, .92); }
+  55% { transform: scale(.97, 1.04); }
+  75% { transform: scale(1.015, .99); }
+  100% { transform: scale(1, 1); }
+}
+/* Form success tick: the stroke draws in (use on an SVG path with pathLength="1"). */
+@keyframes fx-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fx-pop { 0% { transform: scale(.85); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); } }
+
+/* ---- Utilities -------------------------------------------------------------------
+   .fx-in       one-shot rise-in on load (above-the-fold content that is not observed)
+   .fx-in-blur  one-shot blur-in on load
+   style="--i: n" on any element delays it by n × --stagger. */
+html.motion-ok .fx-in { animation: fx-rise-in var(--dur-4) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms)); }
+html.motion-ok .fx-in-blur { animation: fx-blur-in var(--dur-4) var(--ease-out) both; animation-delay: calc(var(--i, 0) * var(--stagger) + var(--delay, 0ms)); }
+.u-delay-1 { --delay: 100ms; } .u-delay-2 { --delay: 200ms; } .u-delay-3 { --delay: 300ms; }
+.u-delay-4 { --delay: 450ms; } .u-delay-5 { --delay: 600ms; } .u-delay-6 { --delay: 800ms; }
+
+/* ---- Page transitions: cross-document View Transitions (Chrome 126+, Safari 18.2+; others just navigate) ----
+   The header keeps its own name so it holds still while the page under it cross-fades. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 260ms; animation-timing-function: var(--ease-in-out); }
+  ::view-transition-group(site-header) { animation-duration: 0s; }
+}
+.site-footer { view-transition-name: site-footer; }
+
+/* ---- Reduced motion: everything settles in its final state ---------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
