@@ -157,3 +157,6 @@ Fable leads and audits. Opus manages: architecture, worker briefs, integration, 
 2. **Book a call and Start a project look very similar.** Make them two clearly different pages (layout, hero, colour emphasis, copy, what sits beside the form), while keeping the same form contract and the no-JavaScript path.
 3. **Background:** he likes the opening (letter sweep) and the design, but the way the background forms around the mouse is distracting. Remove the pointer response. He feels the hero is "missing something": add one 3D object that fits the site ("maybe a sphere … like a 3D effect, like a slime effect … or something that would look good"), scroll-driven, not mouse-driven. Effects owner designs it: a liquid-surfaced sphere (or another single 3D form) in the site's palette, with a static fallback under reduced motion or without WebGL, inside the §7 budgets.
 4. Everything else: "good job". Prices, name, Blackline card unchanged.
+
+## 16. Ethan, 2026-10-16 14:44: remove the hero sphere
+"Get rid of that bubble idea because it doesn't work on iPhone." The hero object from §15.3 is removed entirely (files deleted, hook and loader gone). The hero is the letter sweep over the scroll-driven background. The background and the 3D showcase stay unless he reports them failing on his iPhone too.

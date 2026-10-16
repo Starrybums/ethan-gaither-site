@@ -34,7 +34,6 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Ethan Gaither","url":"https://ethan-gaither.vercel.app/","description":"Ethan Gaither builds fast, clear websites for small businesses in Battle Ground, Vancouver and Clark County, WA. You own the domain, hosting and code.","image":"https://ethan-gaither.vercel.app/assets/img/portrait-square-960.jpg","email":"gaitherethan@icloud.com","address":{"@type":"PostalAddress","addressLocality":"Battle Ground","addressRegion":"WA","addressCountry":"US"},"areaServed":[{"@type":"City","name":"Battle Ground"},{"@type":"City","name":"Vancouver"},{"@type":"City","name":"Ridgefield"},{"@type":"City","name":"Camas"},{"@type":"City","name":"Washougal"},{"@type":"City","name":"Woodland"},{"@type":"AdministrativeArea","name":"Clark County"}],"founder":{"@type":"Person","name":"Ethan Gaither"}}</script>
 <script type="module" src="/js/shell.js"></script>
 <link rel="stylesheet" href="/styles/effects.css">
-<link rel="stylesheet" href="/styles/orb.css">
 <!-- "build-live": the build section pins and choreographs only when JavaScript runs, motion is allowed,
      IntersectionObserver exists and the browser has container query units and tan(atan2()) (the frame is sized with them). Set here, before first paint, so the layout never jumps. type-morph.js sets data-stage
      on #build as soon as it runs; if it never does (script blocked), the class comes off and the finished page shows. -->
@@ -90,8 +89,6 @@
        reads the same without JavaScript and nothing moves the layout. Reduced motion: one 200 ms fade of the whole hero. -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap">
-      <!-- The hero object (styles/orb.css, js/orb.js): a still CSS sphere that becomes a liquid WebGL one, turned by scroll. -->
-      <div class="orb" data-orb aria-hidden="true"><span class="orb__still"></span></div>
       <p class="eyebrow hero__eyebrow" data-site="location">Battle Ground, Washington</p>
       <h1 id="hero-title" class="hero__title"><span class="w" style="--i:0">I</span> <span class="w" style="--i:1">build</span> <span class="w" style="--i:2">websites</span> <span class="w" style="--i:3">for</span> <em><span class="w" style="--i:4">small</span> <span class="w" style="--i:5">businesses.</span></em></h1>
       <p class="lede hero__lede">Fast sites you own outright. Scroll down and watch one get built.</p>

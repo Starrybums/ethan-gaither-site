@@ -103,7 +103,6 @@ Each CTA on a page should use a different technique where two sit side by side. 
 ### 2.1 Lazy loading (shell.js, already built)
 After `load` and the first contentful paint (a `PerformanceObserver` on `paint`, with a 3 s fallback timer; added 2026-10-16 so the effects modules never sit on the critical path of FCP/LCP), on `requestIdleCallback` (timeout 2.5 s; a 1.2 s timer where it does not exist, i.e. iOS Safari), or at once on the first `scroll`/`pointermove`, whichever comes first, shell.js does:
 ```js
-const o = await import('/js/orb.js');       document.querySelectorAll('[data-orb]').forEach(el => o.init(el, opts));   // first, the hero object (§2.2b)
 const m = await import('/js/background.js'); const bg = m.init(document.getElementById('bg-canvas'), opts);
 const s = await import('/js/scene3d.js');   document.querySelectorAll('[data-scene3d]').forEach(el => s.init(el, opts));
 // opts = { tokens: { ink, paper, accent, warm, alpha, dark }, reducedMotion: false, intensity: 'full' | 'low' }
@@ -120,7 +119,10 @@ export function init(canvasEl, { tokens, reducedMotion, intensity }) → { pause
 - `intensity: 'full'` on the home page, `'low'` on inner pages (fewer marks, lower alpha, half the scroll-speed response).
 - Four movements tied to scroll depth with a colour drift (BRIEF-v3 §14.1), unchanged.
 
-### 2.2b `js/orb.js` + `styles/orb.css` (the hero object, BRIEF-v3 §15.3; owner: effects)
+### 2.2b (removed 2026-10-16 14:44) the hero object
+Ethan removed it: "get rid of that bubble idea, it doesn't work on iPhone." `js/orb.js` and `styles/orb.css` are deleted, the hook and head link are out of `index.html`, and `shell.js` no longer loads it. Kept here as history only; nothing below is live.
+
+#### Former contract: `js/orb.js` + `styles/orb.css`
 ```js
 export function init(el, { tokens, reducedMotion }) → { pause(), resume(), destroy(), update({ tokens }) }
 ```
@@ -150,7 +152,6 @@ export function init(sectionEl, { tokens, reducedMotion }) → { pause(), resume
 |---|---|
 | Background | already in the shell: `#bg-canvas` with `data-intensity="full"` |
 | Effects stylesheet | `<link rel="stylesheet" href="/styles/effects.css">` in the head slot, after `home.css` |
-| Hero object | `<div class="orb" data-orb aria-hidden="true"><span class="orb__still"></span></div>` as the first child of `.hero > .wrap`, plus `<link rel="stylesheet" href="/styles/orb.css">` right after `effects.css` (render-blocking on purpose: the box size must apply before first paint, or the phone layout shifts). See §2.2b |
 | Type morph script | `<script type="module" src="/js/type-morph.js"></script>` in the head slot (it auto-inits) |
 | The build | `<section id="build" data-morph-root aria-labelledby="build-title">` containing: one `<h2 id="build-title" data-morph-title>` (plain text, no child elements; the effects module clones it into aria-hidden face layers); a list of captions, each `<li data-morph-step data-frame="…" data-font="…">` with an `<h3>` and a `<p>`; the frame `<figure id="frame">` |
 | 3D showcase | `<section id="showcase-3d" data-scene3d aria-labelledby="…">` containing `<div class="scene3d" data-scene3d-stage>` with 2 to 4 `<img data-layer="laptop|phone|card|…" width height alt>` (sample screenshots in `assets/img/samples/`), plus a short text column outside the stage |

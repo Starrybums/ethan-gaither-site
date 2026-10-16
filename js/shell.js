@@ -10,7 +10,7 @@
       the booking button ([data-booking]), the reply promise ([data-promise])
    6. the button catalogue (js/buttons.js)
    7. lazy effects: after load, on idle (or a 1.2 s timer where requestIdleCallback is missing) or the first scroll/pointer
-      move, imports js/orb.js for each [data-orb] (the hero object), js/background.js for #bg-canvas and js/scene3d.js
+      move, imports js/background.js for #bg-canvas and js/scene3d.js
       for each [data-scene3d], unless the visitor asks for reduced motion or save-data. See WORKER-BRIEFS.md, "Effects contract".
    Page transitions are CSS only (@view-transition in styles/motion.css); nothing to do here. */
 
@@ -178,8 +178,7 @@ function lazyEffects() {
   if (reduceMq.matches || saveData) return;
   const canvas = document.getElementById('bg-canvas');
   const scenes = $$('[data-scene3d]');
-  const orbs = $$('[data-orb]');
-  if (!canvas && !scenes.length && !orbs.length) return;
+  if (!canvas && !scenes.length) return;
   // requestIdleCallback does not exist on iOS Safari: fall back to a timer, and start early on the first scroll or
   // pointer move (whichever comes first). saveData is Chromium-only, so it is a bonus guard, not the main one.
   const idle = window.requestIdleCallback ? (cb) => window.requestIdleCallback(cb, { timeout: 2500 }) : (cb) => setTimeout(cb, 1200);
@@ -189,12 +188,6 @@ function lazyEffects() {
     started = true;
     ['scroll', 'pointermove'].forEach((t) => window.removeEventListener(t, early));
     const opts = () => ({ tokens: readTokens(), reducedMotion: false, intensity: (canvas && canvas.dataset.intensity) || 'low' });
-    if (orbs.length) {
-      try {
-        const m = await import('./orb.js');
-        orbs.forEach((el) => { const ctl = m.init(el, opts()); if (ctl) effects.push(ctl); });
-      } catch (e) { /* the still CSS sphere stays */ }
-    }
     if (canvas) {
       try {
         const m = await import('./background.js');
