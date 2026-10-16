@@ -2,7 +2,7 @@
 
 Fixed by the architect on 2026-10-15 so the api worker (`api/contact.mjs`) and the pages worker (`js/form.js`, the two form pages) can build at the same time. Neither side changes this file alone: ask the architect (or Fable) and both sides update together.
 
-The function is `api/contact.mjs` (ESM, no `package.json`, no dependencies; Node 24 `fetch`). With `cleanUrls: true` it is served at `/api/contact`. Whether `trailingSlash: true` 308-redirects that path is **unverified** (BRIEF-v3 §13.2): the front end posts to the exact path below and the integrator tests a real POST on the preview deployment before launch.
+The function is `api/contact.mjs` (ESM, no `package.json`, no dependencies; Node 24 `fetch`). It takes **two kinds of POST** with the same field names and the same checks: **JSON** (from `js/form.js`, answered with JSON, documented first) and **plain form posts** (`application/x-www-form-urlencoded`, from the HTML form with no JavaScript, answered with a 303 redirect; see "Plain form posts" below). Why: a form whose `action` is a `mailto:` URL, on an HTTPS page, is logged by Chrome as a mixed-content issue and costs Lighthouse best practices (79 on `/start-a-project/` and `/book-a-call/`, measured on the deployed preview, 2026-10-15), so the forms post to `/api/contact/` instead and `mailto:` stays only as a plain link. With `cleanUrls: true` it is served at `/api/contact`. Whether `trailingSlash: true` 308-redirects that path is **unverified** (BRIEF-v3 §13.2): the front end posts to the exact path below and the integrator tests a real POST on the preview deployment before launch.
 
 ## Request
 
@@ -40,7 +40,7 @@ Unknown fields are ignored. Any field with control characters other than newline
 8. Send through Resend (below). Resend non-2xx, network error or timeout (8 s) → `502 {"error":"send_failed"}`. Never forward Resend's own message to the visitor.
 9. Success → `200 {"ok":true}`.
 
-Every response is JSON with `Content-Type: application/json; charset=utf-8` and `Cache-Control: no-store`. The function never logs the request body or the email address (log only the status and Resend's `id` or error `name`).
+Every response to a JSON post (and every 405) is JSON with `Content-Type: application/json; charset=utf-8` and `Cache-Control: no-store`. Form posts get redirects instead (next section). The function never logs the request body or the email address (log only the status and Resend's `id` or error `name`).
 
 ## Responses
 
@@ -70,6 +70,38 @@ Field messages for 400 `invalid` (the api worker uses these exact strings; the f
 | `times` | "Give me two times that work for you." |
 
 The front end runs the same checks before posting (same limits, same messages) so most errors never reach the server.
+
+## Plain form posts (the no-JavaScript path)
+
+```
+POST /api/contact/
+Content-Type: application/x-www-form-urlencoded     (what a <form method="post"> with no enctype sends; a charset suffix is fine)
+```
+
+Body: the same field names as the JSON table above (`type`, `name`, `email`, `business`, `website`, `phone`, `message`, `times`, `company`), URL-encoded. Unknown fields are ignored; when a key repeats, the first value wins; a textarea's CRLF line breaks are turned into `\n`. The same limits apply (16 KB body, same field rules, same messages internally). The same checks run in the same order: method, origin, configuration, body, honeypot, rate limit, validation, send. One rate-limit bucket per IP is shared by JSON and form posts. Any other content type is treated as JSON (so `text/plain` and `multipart/form-data` get `400 {"error":"bad_request"}` as JSON); a non-POST is a JSON 405 whatever the content type.
+
+The answer is always `303 See Other` with an empty body, `Cache-Control: no-store`, and a relative `Location` built only from fixed paths and a fixed reason (nothing the visitor typed ever goes into a URL):
+
+| Outcome | `Location` |
+|---|---|
+| Sent (200 in JSON) | `/start-a-project/sent/` or `/book-a-call/sent/` (by `type`) |
+| Honeypot filled (200 in JSON) | the same "sent" page: a bot sees what a person sees; nothing is sent or counted |
+| Anything else | the form's own page, `/start-a-project/` or `/book-a-call/` (by `type`), plus `?error=<reason>` |
+
+If `type` is missing or not `project`/`call`, "by `type`" falls back to the `Referer` path (`/book-a-call...` means the call form) and otherwise to `/start-a-project/`.
+
+`?error=` reasons:
+
+| Reason | Meaning | JSON equivalent |
+|---|---|---|
+| `forbidden` | Origin or Referer missing or not this site | 403 |
+| `not_configured` | `RESEND_API_KEY` or `CONTACT_TO` missing | 503 `not configured` |
+| `bad_request` | empty body, over 16 KB, or not UTF-8 | 400 `bad_request` |
+| `rate_limited` | sixth accepted request in 10 minutes | 429 |
+| `type`, `name`, `email`, `business`, `website`, `phone`, `message`, `times` | the **first** bad field, in that order | 400 `invalid` |
+| `send_failed` | Resend refused, failed or timed out | 502 |
+
+What the pages do: `/start-a-project/sent/` and `/book-a-call/sent/` are static, `noindex`, left out of the sitemap, and say "Sent. I read these myself and reply from my own email." with links home and to the samples. A form page reached with `?error=<reason>` is the empty form again (the redirect is a GET, so the answers are gone); with JavaScript, `js/form.js` shows the matching message in the form's status area (for a field reason: the field's message plus "The page reloaded, so please fill it in again", and focus moves to that field; for `rate_limited`, `bad_request` and the rest: a short message with the mailto link), then removes `?error=` from the address bar. Without JavaScript the browser just shows the empty form again, which is acceptable: the browser's own `required` checks catch most mistakes before the post.
 
 ## The email it sends
 
@@ -124,8 +156,28 @@ node --input-type=module -e "import h from './api/contact.mjs'; const r = await 
 ```
 Cover: 405 on GET, 403 on a foreign Origin, 503 with no env, 400 on bad JSON, 400 `invalid` with field messages, 200 on a filled honeypot (and nothing sent), 429 on the sixth request inside 10 minutes. Mock `fetch` for the Resend call; never call the real API with a real key from a worker session.
 
+The full suite (JSON and form-encoded cases, mock Resend, a local mock server for the real-HTTP round trip):
+
+```
+node --test audit/v3/api/test-contact.mjs      # 55 tests
+```
+
+One form-encoded call by hand (local, no Vercel CLI; `fetch` is mocked so nothing reaches Resend, and the `Origin` must equal the request host):
+
+```
+RESEND_API_KEY=dummy CONTACT_TO=owner@example.test node --input-type=module -e "
+import h from './api/contact.mjs';
+globalThis.fetch = async () => new Response('{\"id\":\"mock\"}');
+const body = new URLSearchParams({type:'project',name:'Jane',email:'jane@x.example',business:'X',message:'Hi',company:''}).toString();
+const r = await h.fetch(new Request('https://site.example/api/contact/', {method:'POST', headers:{'content-type':'application/x-www-form-urlencoded', origin:'https://site.example'}, body}));
+console.log(r.status, r.headers.get('location'));"
+# 303 /start-a-project/sent/
+```
+
 On the preview deployment: `curl -i -X POST https://<preview>/api/contact -H 'Content-Type: application/json' -H 'Origin: https://<preview>' -d '{}'` must answer from the function (503 or 400), not 308 or 404. If it answers 308, the integrator adds an exception and updates the path here and in `js/form.js`.
+
+The form-encoded path on the preview (never with a real message): `curl -i -X POST https://<preview>/api/contact/ -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: https://<preview>' -d 'type=project'` must answer `303` with `Location: /start-a-project/?error=name` (or `?error=not_configured` before the env vars are set), not 308, 404 or a JSON body. In a browser: submit the form on `/start-a-project/` with JavaScript off (DevTools, Settings, Debugger, Disable JavaScript) and expect the "Sent." page. Lighthouse best practices on `/start-a-project/`, `/book-a-call/` and the samples is the real check that the mixed-content issue is gone.
 
 ## Front end (pages worker) in one paragraph
 
-Both form pages use the same `<form>`: `method="post" action="mailto:<email>?subject=..." enctype="text/plain"` as the no-JavaScript fallback, a hidden `type` input (`project` or `call`), the honeypot `company` input inside a visually hidden, `aria-hidden` wrapper with `tabindex="-1"` and `autocomplete="off"`, and `novalidate` added by `js/form.js` once it takes over. `js/form.js` validates with the rules above, posts JSON to `/api/contact` with `fetch` (`credentials: "same-origin"`, 10 s timeout through `AbortController`), and handles each response as in the table. The mailto fallback builds `subject` and a body with the same lines as the email above, prefilled from the fields.
+Both form pages use the same `<form>`: `method="post" action="/api/contact/"` (no `enctype`, no `mailto:` action; the plain form post above) as the no-JavaScript path, a hidden `type` input (`project` or `call`), the honeypot `company` input inside a visually hidden, `aria-hidden` wrapper with `tabindex="-1"` and `autocomplete="off"`, and `novalidate` added by `js/form.js` once it takes over. `js/form.js` validates with the rules above, posts JSON to `/api/contact` with `fetch` (`credentials: "same-origin"`, 10 s timeout through `AbortController`), and handles each response as in the table. The mailto fallback (JavaScript only, after a 403/502/503/network failure) builds `subject` and a body with the same lines as the email above, prefilled from the fields, and the plain `or email me` mailto link stays a link. On load, `js/form.js` also reads `?error=<reason>` (see "Plain form posts").

@@ -2,12 +2,15 @@
    The contract is api/README.md. Read it before changing anything here; both sides change together.
    Owner: pages worker. Plain module, no dependencies.
 
-   Without JavaScript the form is a mailto form (action="mailto:…", enctype="text/plain") and the browser checks the
-   `required` fields itself. With JavaScript this file takes over:
+   Without JavaScript the form is a plain post to /api/contact/ (method="post", no enctype): the browser checks the
+   `required` fields itself and the server answers with a redirect, to /<form>/sent/ or back to the form with
+   ?error=<reason> (api/README.md, "Plain form posts"). With JavaScript this file takes over:
      - checks every field with the server's rules and messages, inline, with aria-describedby and aria-invalid;
-     - posts JSON to /api/contact/ (10 s timeout) and handles each status in the contract's table;
+     - posts JSON to /api/contact/ (ENDPOINT below, never read from the form; 10 s timeout) and handles each status in
+       the contract's table;
      - 200 shows the success panel; 400 shows the server's field messages; 429 asks the visitor to wait;
-       403, 502, 503, any other status and network errors open a prefilled mailto, so no message is lost. */
+       403, 502, 503, any other status and network errors open a prefilled mailto, so no message is lost;
+     - if the page was reached as ?error=<reason> (a plain post the server turned down), says what went wrong. */
 
 import SITE from './config.js';
 
@@ -33,6 +36,12 @@ const RULES = {
 };
 
 const clean = (s) => String(s == null ? '' : s).replace(/\r\n?/g, '\n').trim();
+
+/* The reason on a page reached as /<form>/?error=<reason>, or ''. Reasons are api/README.md's: a field name,
+   forbidden, not_configured, bad_request, rate_limited, send_failed. Only ever read, never written into the page. */
+function queryError() {
+  try { return new URLSearchParams(window.location.search).get('error') || ''; } catch (e) { return ''; }
+}
 
 /* Returns the message for a bad value, or '' when it is fine. */
 function check(name, raw, type) {
@@ -170,6 +179,26 @@ function init(form) {
       link('mailto:' + SITE.email, SITE.email || 'my email'), '.']);
     if (open) { try { window.location.href = href; } catch (e) { /* the link above still works */ } }
   };
+
+  // A plain post (no JavaScript, or this file loaded late) that the server turned down comes back as ?error=<reason>,
+  // with the form empty. Say what happened; the visitor fills it in again. No data is in the URL, only the reason.
+  const reason = queryError();
+  if (reason) {
+    const mail = link('mailto:' + (SITE.email || ''), SITE.email || 'my email');
+    if (byName[reason]) {
+      const why = reason === 'message' ? 'Add a few words about what you need, in under 4,000 characters.' : RULES[reason].msg;
+      notice('error', ["That didn't send. " + why + ' The page reloaded, so please fill it in again.']);
+      byName[reason].input.focus();
+    } else if (reason === 'rate_limited') {
+      notice('warn', ["That's a lot of messages in a short time. Try again in a few minutes, or ", link('mailto:' + (SITE.email || ''), 'email me'), '.']);
+    } else if (reason === 'bad_request') {
+      notice('error', ["That didn't send. Something was off with the message. Please try again, or write to ", mail, '.']);
+    } else {
+      notice('warn', ["I couldn't send that from here. Please write to ", mail, ' instead.']);
+    }
+    if (!byName[reason] && status) status.scrollIntoView({ block: 'center' });
+    try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) { /* the notice is already up */ }
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

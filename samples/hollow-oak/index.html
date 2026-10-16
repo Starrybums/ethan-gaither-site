@@ -140,13 +140,14 @@
   <section class="sec" id="contact" aria-labelledby="contact-title">
     <p class="eyebrow">Contact</p>
     <h2 id="contact-title">Say hello</h2>
-    <form class="form" id="hello" action="mailto:hello@hollowoak.example" method="post" enctype="text/plain">
+    <form class="form" id="hello" method="get" action="#sent">
       <div><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
       <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
       <div><label for="f-msg">Message</label><textarea id="f-msg" name="message" required></textarea></div>
       <button class="btn btn--solid" type="submit">Send message</button>
     </form>
-    <p class="note">This sample form opens your email app with the message filled in, using a mailto: link, and it is addressed to a made-up address. A real build sends the message through a form service instead.</p>
+    <p id="sent" class="demo-note" tabindex="-1" hidden>This is a demo form. In a real build it sends to the owner's inbox.</p>
+    <p class="note">This sample form is a demo. Nothing is emailed or saved. A real build sends the message through a form service instead.</p>
   </section>
 
 </main>
@@ -159,16 +160,11 @@
 </footer>
 
 <script>
-/* Fallback so the mailto: form fills in a readable message. Without JavaScript the form still works as a plain mailto: form. */
+/* Demo form: show the note instead of sending. Without JavaScript the form's GET lands on #sent and the CSS shows the note. */
 (function () {
-  var f = document.getElementById('hello');
-  if (!f) return;
-  f.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var d = new FormData(f);
-    var body = 'Name: ' + d.get('name') + '\nEmail: ' + d.get('email') + '\n\n' + d.get('message');
-    window.location.href = 'mailto:hello@hollowoak.example?subject=' + encodeURIComponent('A note from the sample site') + '&body=' + encodeURIComponent(body);
-  });
+  var f = document.getElementById('hello'), n = document.getElementById('sent');
+  if (!f || !n) return;
+  f.addEventListener('submit', function (e) { e.preventDefault(); n.hidden = false; n.focus(); });
 })();
 </script>
 </body>

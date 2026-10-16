@@ -324,7 +324,7 @@
         </svg>
       </div>
       <div class="formcard">
-        <form id="trial-form" action="mailto:hello@tempo-fitness.example" method="post" enctype="text/plain">
+        <form id="trial-form" method="get" action="#sent">
           <div class="field"><label for="t-name">Name</label><input id="t-name" name="name" type="text" autocomplete="name" required></div>
           <div class="field"><label for="t-email">Email</label><input id="t-email" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="t-phone">Phone (optional)</label><input id="t-phone" name="phone" type="tel" autocomplete="tel"></div>
@@ -342,7 +342,8 @@
           <div class="field"><label for="t-note">Anything we should know? (optional)</label><textarea id="t-note" name="note" rows="4"></textarea></div>
           <button class="btn btn--black btn--block" type="submit">Request my free trial</button>
         </form>
-        <p class="note">This sample form opens your email app with the message filled in, using a mailto: link addressed to a made-up address. A real build sends it through a form service instead.</p>
+        <p id="sent" class="demo-note" tabindex="-1" hidden>This is a demo form. In a real build it sends to the owner's inbox.</p>
+        <p class="note">This sample form is a demo. Nothing is emailed or saved. A real build sends it through a form service instead.</p>
       </div>
     </div>
   </section>

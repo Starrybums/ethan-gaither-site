@@ -305,8 +305,9 @@
           <p class="label">This page · hand-built</p>
           <h3>You're looking at one.</h3>
           <p>No framework, no tracking, no scripts from anyone else. Open Lighthouse in Chrome, set it to mobile and test this page.</p>
-          <!-- TODO(integrator): after Fable measures the deployed preview, add this page's own Lighthouse numbers here
-               (performance, accessibility, best practices, SEO, mobile). Do not write a number that was not measured. -->
+          <p class="small">Measured 2026-10-15 with Lighthouse 12 on its phone profile: performance 95, accessibility 100, best practices 100, SEO 100. Run it again yourself; the numbers move a little with the network.</p>
+          <!-- Numbers: performance, accessibility and best practices from the deployed preview (audit/v3/preview/lh-home-mobile.json);
+               SEO from the same page measured without the preview-only noindex header (audit/v3/verify/lh-home.json). Re-measure on production after each deploy. -->
         </article>
         <article class="proof">
           <p class="label">Self-initiated concept · fictional business</p>

@@ -221,7 +221,7 @@
       <p class="lede">Tell us what's going on. We'll call you back to talk it through. If water's coming through the ceiling, call instead.</p>
       <div class="quote-grid">
         <div class="form-card">
-          <form class="form" id="quote-form" action="mailto:hello@summit-plumbing.example" method="post" enctype="text/plain">
+          <form class="form" id="quote-form" method="get" action="#sent">
             <p class="form-hint">All fields are required.</p>
             <div class="field"><label for="q-name">Your name</label><input id="q-name" name="name" type="text" autocomplete="name" required></div>
             <div class="field"><label for="q-phone">Phone number</label><input id="q-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required></div>
@@ -238,7 +238,8 @@
             </div>
             <button class="btn btn--call btn--lg btn--block" type="submit">Send quote request</button>
           </form>
-          <p class="note">This sample form opens your email app with the details filled in, using a mailto: link, and it's addressed to a made-up address. A real build sends the request through a form service instead.</p>
+          <p id="sent" class="demo-note" tabindex="-1" hidden>This is a demo form. In a real build it sends to the owner's inbox.</p>
+          <p class="note">This sample form is a demo. Nothing is emailed or saved. A real build sends the request through a form service instead.</p>
         </div>
 
         <div class="contact" id="contact">

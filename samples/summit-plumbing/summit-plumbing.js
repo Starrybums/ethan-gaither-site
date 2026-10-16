@@ -1,5 +1,5 @@
 /* Switchback Plumbing sample: two small helpers.
-   Without JavaScript the menu is a plain <details> and the form still works as a plain mailto: form. */
+   Without JavaScript the menu is a plain <details> and the demo form still shows its note (its GET lands on #sent). */
 (function () {
   'use strict';
 
@@ -18,18 +18,7 @@
     });
   }
 
-  /* Fill in the mailto: message so it reads well in the email app. */
-  var f = document.getElementById('quote-form');
-  if (f) {
-    f.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var d = new FormData(f);
-      var body = 'Name: ' + d.get('name') +
-        '\nPhone: ' + d.get('phone') +
-        '\nAddress: ' + d.get('address') +
-        '\nWhen: ' + d.get('when') +
-        '\n\nWhat\'s wrong:\n' + d.get('problem');
-      window.location.href = 'mailto:hello@summit-plumbing.example?subject=' + encodeURIComponent('Quote request from the sample site') + '&body=' + encodeURIComponent(body);
-    });
-  }
+  /* Demo form: show the note instead of sending. */
+  var f = document.getElementById('quote-form'), n = document.getElementById('sent');
+  if (f && n) f.addEventListener('submit', function (e) { e.preventDefault(); n.hidden = false; n.focus(); });
 })();

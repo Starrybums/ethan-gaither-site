@@ -216,7 +216,7 @@
         <p>Tell us the date, the headcount and what you have in mind. We'll call to go over it.</p>
       </div>
       <div>
-        <form class="form" id="catering-form" action="mailto:hello@casa-ortega.example" method="post" enctype="text/plain">
+        <form class="form" id="catering-form" method="get" action="#sent">
           <div><label for="c-name">Name</label><input id="c-name" name="name" type="text" autocomplete="name" required></div>
           <div class="two-up">
             <div><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" autocomplete="tel" required></div>
@@ -237,7 +237,8 @@
           <div><label for="c-msg">Anything else</label><textarea id="c-msg" name="details"></textarea></div>
           <button class="btn btn--red" type="submit">Send catering request</button>
         </form>
-        <p class="note">This sample form opens your email app with the message filled in, using a mailto: link, and it is addressed to a made-up address. A real build sends the message through a form service instead.</p>
+        <p id="sent" class="demo-note" tabindex="-1" hidden>This is a demo form. In a real build it sends to the owner's inbox.</p>
+        <p class="note">This sample form is a demo. Nothing is emailed or saved. A real build sends the message through a form service instead.</p>
       </div>
     </div>
   </section>

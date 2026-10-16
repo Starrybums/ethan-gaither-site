@@ -1,4 +1,4 @@
-/* Casa Ortega sample: two small helpers. Without JavaScript the menu stays in English and the form still works as a plain mailto: form. */
+/* Casa Ortega sample: two small helpers. Without JavaScript the menu stays in English and the demo form still shows its note (its GET lands on #sent). */
 (function () {
   'use strict';
 
@@ -27,20 +27,7 @@
     group.hidden = false;
   }
 
-  /* Fill in the mailto: message so it reads well in the email app. */
-  var f = document.getElementById('catering-form');
-  if (f) {
-    f.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var d = new FormData(f);
-      var body = 'Name: ' + d.get('name') +
-        '\nPhone: ' + d.get('phone') +
-        '\nEmail: ' + d.get('email') +
-        '\nEvent date: ' + d.get('date') +
-        '\nPeople: ' + d.get('headcount') +
-        '\nThinking about: ' + d.get('what') +
-        '\n\n' + (d.get('details') || '');
-      window.location.href = 'mailto:hello@casa-ortega.example?subject=' + encodeURIComponent('Catering request from the sample site') + '&body=' + encodeURIComponent(body);
-    });
-  }
+  /* Demo form: show the note instead of sending. */
+  var f = document.getElementById('catering-form'), n = document.getElementById('sent');
+  if (f && n) f.addEventListener('submit', function (e) { e.preventDefault(); n.hidden = false; n.focus(); });
 })();

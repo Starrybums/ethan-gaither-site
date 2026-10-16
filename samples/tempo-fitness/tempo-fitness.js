@@ -1,7 +1,7 @@
 /* Tempo Fitness sample: three small helpers. The page reads fully without this file.
    1. Marks today's day in the class schedule.
    2. Closes the phone menu after you pick a link.
-   3. Fills in a readable message when the mailto: trial form is sent. Without JavaScript the form still works as a plain mailto: form. */
+   3. Demo trial form: shows its note instead of sending. Without JavaScript the form's GET lands on #sent and the CSS shows the note. */
 (function () {
   'use strict';
 
@@ -24,21 +24,6 @@
     });
   }
 
-  var form = document.getElementById('trial-form');
-  if (!form) return;
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var d = new FormData(form);
-    var lines = [
-      'Name: ' + d.get('name'),
-      'Email: ' + d.get('email'),
-      'Phone: ' + (d.get('phone') || 'not given'),
-      'First class to try: ' + d.get('class'),
-      '',
-      String(d.get('note') || '')
-    ];
-    window.location.href = 'mailto:hello@tempo-fitness.example?subject=' +
-      encodeURIComponent('Free trial request from the sample site') +
-      '&body=' + encodeURIComponent(lines.join('\n'));
-  });
+  var form = document.getElementById('trial-form'), note = document.getElementById('sent');
+  if (form && note) form.addEventListener('submit', function (e) { e.preventDefault(); note.hidden = false; note.focus(); });
 })();

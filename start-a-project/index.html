@@ -94,8 +94,8 @@
         <div class="form-card" data-form-card>
           <h2 id="form-title">Send me the details</h2>
           <p class="form-lede">What the site is for and when you need it. Rough is fine. Everything goes straight to my email, and I read it myself.</p>
-          <!-- No JavaScript: a mailto form (the browser checks the required fields). With JavaScript, js/form.js posts to /api/contact. -->
-          <form class="form" data-contact-form method="post" action="mailto:gaitherethan@icloud.com?subject=%5BWebsite%5D%20Project%20request" enctype="text/plain" aria-labelledby="form-title">
+          <!-- A plain form post to /api/contact/ (the browser checks the required fields; the server answers with a redirect to the sent page or back here with ?error=). With JavaScript, js/form.js posts JSON to the same endpoint instead. -->
+          <form class="form" data-contact-form method="post" action="/api/contact/" aria-labelledby="form-title">
             <input type="hidden" name="type" value="project">
             <div class="form-row">
         <div class="field" data-field="name">
@@ -140,7 +140,7 @@
             <div class="notice" data-form-status role="status" aria-live="polite"></div>
             <div class="form__actions">
               <button class="btn btn--solid" data-fx="press3d" type="submit">Send the details</button>
-              <p class="form-note no-js-only">Without JavaScript, this opens your email app with your answers filled in.</p>
+              <p class="form-note no-js-only">Without JavaScript, the form still sends and takes you to a confirmation page.</p>
             </div>
             <p class="form-note">This goes to my email and nowhere else. I don't add you to a mailing list.</p>
           </form>

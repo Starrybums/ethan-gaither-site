@@ -1,5 +1,9 @@
 /* api/contact.mjs
-   POST /api/contact: validates the request-form JSON and emails it to Ethan through Resend.
+   POST /api/contact: validates the request form and emails it to Ethan through Resend.
+   Two kinds of POST, same checks, same field names:
+     - JSON (js/form.js, fetch): answered with JSON and the status codes in api/README.md.
+     - application/x-www-form-urlencoded (the plain HTML form, no JavaScript): answered with a 303 redirect,
+       to the "sent" page on success or back to the form with ?error=<reason> on any failure.
    Contract: api/README.md. Setup and tests: README.md, section "Contact form and Resend".
    ESM, no dependencies, no package.json. Web Request/Response handler (Vercel Functions, Node runtime).
    Never logs the request body or the visitor's email address. */
@@ -12,6 +16,11 @@ const SEND_TIMEOUT_MS = 8000;
 const RATE_LIMIT = 5; // accepted requests per IP ...
 const RATE_WINDOW_MS = 10 * 60 * 1000; // ... per 10 minutes
 const MAX_TRACKED_IPS = 2000;
+
+/* Where a plain form post is sent afterwards. Fixed paths only: nothing the visitor typed ever goes into a Location header. */
+const FORM_PAGES = { project: '/start-a-project/', call: '/book-a-call/' };
+const SENT_PAGES = { project: '/start-a-project/sent/', call: '/book-a-call/sent/' };
+const FORM_FIELDS = ['type', 'name', 'email', 'business', 'website', 'phone', 'message', 'times', 'company'];
 
 const MSG = {
   type: 'Pick a project or a call.',
@@ -48,6 +57,11 @@ function json(status, body, extra) {
       ...extra
     }
   });
+}
+
+/* 303 See Other: the browser follows with a GET, so a reload never re-posts the form. */
+function redirect(path) {
+  return new Response(null, { status: 303, headers: { Location: path, 'Cache-Control': 'no-store' } });
 }
 
 const len = (s) => Array.from(s).length;
@@ -116,6 +130,66 @@ async function readBody(request) {
     chunks.push(value);
   }
   return new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks));
+}
+
+/* The plain HTML form posts application/x-www-form-urlencoded (a form with no enctype). */
+function isFormPost(request) {
+  const type = (request.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  return type === 'application/x-www-form-urlencoded';
+}
+
+/* Form body -> the same plain object the JSON path produces: known fields only, first value of a repeated key wins.
+   null when the body is empty, over the size limit or not UTF-8. */
+async function readFormBody(request) {
+  try {
+    const raw = await readBody(request);
+    if (!raw) return null;
+    const params = new URLSearchParams(raw);
+    const data = {};
+    for (const key of FORM_FIELDS) if (params.has(key)) data[key] = params.get(key);
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+/* ---------- replies ---------- */
+
+/* Every outcome has one name; a JSON post gets JSON for it, a form post gets a redirect for it. */
+const JSON_REPLIES = {
+  forbidden: () => json(403, { error: 'forbidden' }),
+  notConfigured: () => json(503, { error: 'not configured' }),
+  badRequest: () => json(400, { error: 'bad_request' }),
+  honeypot: () => json(200, { ok: true }),
+  rateLimited: (wait) => json(429, { error: 'rate_limited' }, { 'Retry-After': String(wait) }),
+  invalid: (errors) => json(400, { error: 'invalid', fields: errors }),
+  sendFailed: () => json(502, { error: 'send_failed' }),
+  ok: () => json(200, { ok: true })
+};
+
+/* Which form a post came from: its own `type` when that is valid, else the Referer's path, else the project form. */
+function formKind(request, type) {
+  if (type === 'project' || type === 'call') return type;
+  try {
+    return new URL(request.headers.get('referer') || '').pathname.startsWith('/book-a-call') ? 'call' : 'project';
+  } catch {
+    return 'project';
+  }
+}
+
+function formReplies(request, type) {
+  const kind = formKind(request, type);
+  const back = (reason) => redirect(`${FORM_PAGES[kind]}?error=${reason}`);
+  return {
+    forbidden: () => back('forbidden'),
+    notConfigured: () => back('not_configured'),
+    badRequest: () => back('bad_request'),
+    honeypot: () => redirect(SENT_PAGES[kind]), // a bot sees the same "sent" page a person does
+    rateLimited: () => back('rate_limited'),
+    invalid: (errors) => back(Object.keys(errors)[0]), // first bad field, in form order
+    sendFailed: () => back('send_failed'),
+    ok: () => redirect(SENT_PAGES[kind])
+  };
 }
 
 /* ---------- rate limit ---------- */
@@ -268,45 +342,57 @@ async function handle(request) {
     return json(405, { error: 'method_not_allowed' }, { Allow: 'POST' });
   }
 
+  // A plain form post is answered with redirects, a JSON post with JSON. The body is read first for a form post so that
+  // even a 403 or 503 can send the visitor back to the right form. The checks below still run in the contract's order,
+  // and nothing is sent until they pass.
+  const asForm = isFormPost(request);
+  let data = null;
+  let reply = JSON_REPLIES;
+  if (asForm) {
+    data = await readFormBody(request);
+    reply = formReplies(request, data && data.type);
+  }
+
   // 2. Origin
   const origin = checkOrigin(request);
-  if (!origin.ok) return json(403, { error: 'forbidden' });
+  if (!origin.ok) return reply.forbidden();
 
   // 3. Configuration
   const missing = ['RESEND_API_KEY', 'CONTACT_TO'].filter((n) => !envValue(n));
   if (missing.length) {
     console.error('contact: not configured, missing', missing.join(','));
-    return json(503, { error: 'not configured' });
+    return reply.notConfigured();
   }
 
   // 4. Body
-  let data;
-  try {
-    const raw = await readBody(request);
-    if (raw === null || raw === '') return json(400, { error: 'bad_request' });
-    data = JSON.parse(raw);
-  } catch {
-    return json(400, { error: 'bad_request' });
+  if (!asForm) {
+    try {
+      const raw = await readBody(request);
+      if (raw === null || raw === '') return reply.badRequest();
+      data = JSON.parse(raw);
+    } catch {
+      return reply.badRequest();
+    }
   }
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    return json(400, { error: 'bad_request' });
+    return reply.badRequest();
   }
 
   // 5. Honeypot: a person never fills it. Say OK, send nothing, count nothing.
   const trap = data.company;
   if (!(trap === undefined || trap === null || (typeof trap === 'string' && trap.trim() === ''))) {
-    return json(200, { ok: true });
+    return reply.honeypot();
   }
 
   // 6. Rate limit. Checked here, counted once the request is valid and about to send,
   //    so a visitor fixing typos is not locked out.
   const ip = clientIp(request);
   const wait = retryAfter(ip, Date.now());
-  if (wait) return json(429, { error: 'rate_limited' }, { 'Retry-After': String(wait) });
+  if (wait) return reply.rateLimited(wait);
 
   // 7. Validation
   const { errors, out } = validate(data);
-  if (Object.keys(errors).length) return json(400, { error: 'invalid', fields: errors });
+  if (Object.keys(errors).length) return reply.invalid(errors);
   recordHit(ip, Date.now());
 
   // 8. Send
@@ -318,16 +404,16 @@ async function handle(request) {
     result = await sendWithResend({ from, to, reply_to: out.email, subject: mail.subject, text: mail.text });
   } catch (err) {
     console.error('contact: resend request failed', err && err.name ? err.name : 'error');
-    return json(502, { error: 'send_failed' });
+    return reply.sendFailed();
   }
   if (!result.ok) {
     console.error('contact: resend answered', result.status, result.name || '');
-    return json(502, { error: 'send_failed' });
+    return reply.sendFailed();
   }
 
   // 9. Done
   console.log('contact: sent', result.id || '');
-  return json(200, { ok: true });
+  return reply.ok();
 }
 
 export default {
@@ -336,7 +422,9 @@ export default {
       return await handle(request);
     } catch (err) {
       console.error('contact: unexpected', err && err.name ? err.name : 'error');
-      return json(502, { error: 'send_failed' });
+      return request.method === 'POST' && isFormPost(request)
+        ? formReplies(request).sendFailed()
+        : JSON_REPLIES.sendFailed();
     }
   }
 };
