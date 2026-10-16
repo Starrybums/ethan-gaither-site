@@ -5,13 +5,13 @@
    Without JavaScript the form is a mailto form (action="mailto:…", enctype="text/plain") and the browser checks the
    `required` fields itself. With JavaScript this file takes over:
      - checks every field with the server's rules and messages, inline, with aria-describedby and aria-invalid;
-     - posts JSON to /api/contact (10 s timeout) and handles each status in the contract's table;
+     - posts JSON to /api/contact/ (10 s timeout) and handles each status in the contract's table;
      - 200 shows the success panel; 400 shows the server's field messages; 429 asks the visitor to wait;
        403, 502, 503, any other status and network errors open a prefilled mailto, so no message is lost. */
 
 import SITE from './config.js';
 
-const ENDPOINT = '/api/contact';   // the exact path: no trailing slash (see api/README.md)
+const ENDPOINT = '/api/contact/';  // with trailingSlash:true Vercel 308s '/api/contact' to this; a rewrite in vercel.json maps it to the function
 const TIMEOUT_MS = 10000;
 const SENT = 'Sent. I read these myself and reply from my own email.';
 

@@ -7,7 +7,7 @@ The function is `api/contact.mjs` (ESM, no `package.json`, no dependencies; Node
 ## Request
 
 ```
-POST /api/contact
+POST /api/contact/   (the browser posts to the slash form; `/api/contact` answers 308 to it because of `trailingSlash: true`, and a rewrite maps `/api/contact/` to the function. Verified on the preview deployment 2026-10-15.)
 Content-Type: application/json
 Accept: application/json
 ```

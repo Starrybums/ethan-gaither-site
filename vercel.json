@@ -9,7 +9,12 @@
       "permanent": true
     },
     {
-      "source": "/sample/:path*",
+      "source": "/sample/",
+      "destination": "/samples/hollow-oak/",
+      "permanent": true
+    },
+    {
+      "source": "/sample/:path+",
       "destination": "/samples/hollow-oak/",
       "permanent": true
     }
