@@ -62,7 +62,7 @@ const SITE = {
   ],
 
   // Tools Ethan uses, for the About page. True list only. [ETHAN] Figma is left off until he confirms it.
-  tools: ["HTML", "CSS", "JavaScript", "Vercel", "GitHub", "Claude Code", "Codex", "Cursor", "Lighthouse"]
+  tools: ["HTML", "CSS", "JavaScript", "Python", "Java", "Node.js", "Git", "GitHub", "Vercel", "Lighthouse", "Chrome DevTools"]
 };
 
 if (typeof window !== "undefined") window.SITE = SITE;

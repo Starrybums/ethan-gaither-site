@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="/styles/buttons.css">
 <link rel="stylesheet" href="/styles/motion.css">
 <link rel="stylesheet" href="/styles/pages/contact.css">
+<link rel="stylesheet" href="/styles/pages/call.css">
 <!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
      reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
@@ -80,22 +81,48 @@
     <symbol id="i-alert" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6v4.2M8 10.9v.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
   </svg>
 
-  <section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap">
-      <p class="eyebrow">Book a call</p>
-      <h1 id="page-title">Book a free call</h1>
-      <p class="lede">Give me two times that work and I'll confirm one.</p>
-      <!-- Booking link: shell.js shows this and sets its href when js/config.js → bookingUrl is set. -->
-      <p class="actions" data-booking hidden><a class="btn btn--solid" data-fx="magnetic" href="#">Pick a time</a></p>
+  <div class="call">
+  <section class="page-hero call-hero" aria-labelledby="page-title">
+    <div class="wrap call-hero__grid">
+      <div class="call-hero__text">
+        <p class="eyebrow">Book a call</p>
+        <h1 id="page-title">Fifteen minutes. <span class="hl">No pitch.</span></h1>
+        <p class="lede">It's free, and there's nothing to sign. Give me two times that work and I'll confirm one.</p>
+      </div>
+      <div class="clock" aria-hidden="true">
+          <span class="clock__wedge"></span>
+          <span class="clock__ticks"></span>
+          <span class="clock__hand"></span>
+          <span class="clock__hand clock__hand--end"></span>
+          <span class="clock__pin"></span>
+          <span class="clock__label"><b>15</b><small>min</small></span>
+        </div>
     </div>
   </section>
 
-  <section class="section section--flush" aria-labelledby="form-title">
-    <div class="wrap contact">
+  <section class="section call-for" aria-labelledby="for-title">
+    <div class="wrap">
+      <h2 id="for-title">What the call is for</h2>
+      <ul class="for-list" role="list" data-reveal-stagger>
+        <li><h3>Your site</h3><p>What it's for, who needs to find you, and what you have now.</p></li>
+        <li><h3>The fit</h3><p>Whether I'm the right person for it. If I'm not, I'll say so.</p></li>
+        <li><h3>Your next step</h3><p>You'll leave knowing what to do next, even if it isn't hiring me.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section call-form">
+    <div class="wrap wrap--call">
+      <!-- Booking link: shell.js shows this and sets the button's href when js/config.js → bookingUrl is set. -->
+      <div class="pick" data-booking hidden>
+        <p>Pick a time that suits you, or send two times below.</p>
+        <a class="btn btn--solid" data-fx="magnetic" href="#">Pick a time</a>
+      </div>
+
       <div class="form-col" data-form-col>
         <div class="form-card" data-form-card>
-          <h2 id="form-title">Send two times that work</h2>
-          <p class="form-lede">A few lines is plenty. Everything goes straight to my email, and I read it myself.</p>
+          <h2 id="form-title">Pick two times</h2>
+          <p class="form-lede">Two is enough. I'll confirm one by email, or suggest another.</p>
           <!-- A plain form post to /api/contact/ (the browser checks the required fields; the server answers with a redirect to the sent page or back here with ?error=). With JavaScript, js/form.js posts JSON to the same endpoint instead. -->
           <form class="form" data-contact-form method="post" action="/api/contact/" aria-labelledby="form-title">
             <input type="hidden" name="type" value="call">
@@ -111,16 +138,22 @@
           <p class="field__error" id="f-email-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
             </div>
-            <div class="form-row">
-        <div class="field" data-field="business">
-          <label class="field__label" for="f-business">Business or project name</label>
-          <input class="input" id="f-business" name="business" type="text" autocomplete="organization" required aria-describedby="f-business-err">
-          <p class="field__error" id="f-business-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        <div class="field field--times" data-field="times">
+          <label class="field__label" for="f-times">Two times that work</label>
+          <p class="field__hint" id="f-times-hint">In Pacific time. For example, Tuesday after 4 pm, or Thursday before noon.</p>
+          <textarea class="textarea textarea--short" id="f-times" name="times" rows="3" required aria-describedby="f-times-hint f-times-err"></textarea>
+          <p class="field__error" id="f-times-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
+            <div class="form-row">
         <div class="field" data-field="phone">
           <label class="field__label" for="f-phone">Phone <span class="field__opt">(optional)</span></label>
           <input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-phone-err">
           <p class="field__error" id="f-phone-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
+        </div>
+        <div class="field" data-field="business">
+          <label class="field__label" for="f-business">Business or project name</label>
+          <input class="input" id="f-business" name="business" type="text" autocomplete="organization" required aria-describedby="f-business-err">
+          <p class="field__error" id="f-business-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
             </div>
         <div class="field" data-field="website">
@@ -129,16 +162,10 @@
           <input class="input" id="f-website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" aria-describedby="f-website-hint f-website-err">
           <p class="field__error" id="f-website-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
-        <div class="field" data-field="times">
-          <label class="field__label" for="f-times">Two times that work</label>
-          <p class="field__hint" id="f-times-hint">In Pacific time. For example, Tuesday after 4 pm, or Thursday before noon.</p>
-          <textarea class="textarea textarea--short" id="f-times" name="times" rows="3" required aria-describedby="f-times-hint f-times-err"></textarea>
-          <p class="field__error" id="f-times-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
-        </div>
         <div class="field" data-field="message">
-          <label class="field__label" for="f-message">What would you like to talk about?</label>
-          <p class="field__hint" id="f-message-hint">What the business does, and what you want the site to do. A line or two is enough.</p>
-          <textarea class="textarea" id="f-message" name="message" rows="6" required aria-describedby="f-message-hint f-message-err"></textarea>
+          <label class="field__label" for="f-message">What's the site for?</label>
+          <p class="field__hint" id="f-message-hint">A line or two is plenty. It gives me something to read before we talk.</p>
+          <textarea class="textarea" id="f-message" name="message" rows="5" required aria-describedby="f-message-hint f-message-err"></textarea>
           <p class="field__error" id="f-message-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
             <div class="hp" aria-hidden="true">
@@ -147,41 +174,37 @@
             </div>
             <div class="notice" data-form-status role="status" aria-live="polite"></div>
             <div class="form__actions">
-              <button class="btn btn--solid" data-fx="press3d" type="submit">Request the call</button>
+              <button class="btn btn--solid" data-fx="ink" type="submit">Request the call</button>
               <p class="form-note no-js-only">Without JavaScript, the form still sends and takes you to a confirmation page.</p>
             </div>
             <p class="form-note">This goes to my email and nowhere else. I don't add you to a mailing list.</p>
           </form>
         </div>
-        <section class="form-success" data-form-success hidden tabindex="-1" aria-labelledby="success-title">
+        <section class="form-success form-success--call" data-form-success hidden tabindex="-1" aria-labelledby="success-title">
           <svg class="form-success__tick" viewBox="0 0 56 56" aria-hidden="true" focusable="false"><circle cx="28" cy="28" r="26" pathLength="1"/><path d="M17 29.5l7.5 7.5L39.5 20" pathLength="1"/></svg>
-          <h2 id="success-title">Sent.</h2>
-          <p>I read these myself and reply from my own email.</p>
+          <h2 id="success-title">Got your times.</h2>
+          <p>I'll confirm one by email, or suggest another. I read these myself and reply from my own email.</p>
           <p class="actions">
-            <a class="btn btn--solid" data-fx="ink" href="/">Back to the home page</a>
+            <a class="btn btn--solid" data-fx="magnetic" href="/">Back to the home page</a>
             <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
           </p>
         </section>
         <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-form-live></div>
       </div>
 
-      <aside class="aside" aria-labelledby="next-title">
-        <div>
-          <h2 id="next-title">How the call works</h2>
-          <ol class="next" role="list">
-        <li>You send two times that work, in Pacific time.</li>
-        <li>I confirm one by email, or suggest another.</li>
-        <li>We talk. It's free, and there's nothing to sign.</li>
-          </ol>
-        </div>
-        <div>
-    <p>We'll cover what the site is for, who needs to find you, and what you have now. If I'm not the right fit, I'll say so. You'll leave with an idea of what to do next, even if it isn't hiring me.</p>
-    <p>Rather write it all down? <a href="/start-a-project/">Start a project</a> instead.</p>
-          <p>Prefer email? <a class="aside__mail" href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a></p>
-        </div>
-      </aside>
+      <div class="call-after" data-reveal>
+        <h2 id="how-title">How it goes</h2>
+        <ol class="call-how" role="list">
+          <li>You send two times, in Pacific time.</li>
+          <li>I confirm one by email, or suggest another.</li>
+          <li>We talk for about 15 minutes. It's free, and there's nothing to sign.</li>
+        </ol>
+        <p>Rather write it all down? <a href="/start-a-project/">Start a project</a> instead.</p>
+        <p>Prefer email? <a class="aside__mail" href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a></p>
+      </div>
     </div>
   </section>
+  </div>
 <!-- WORKER: end -->
 </main>
 

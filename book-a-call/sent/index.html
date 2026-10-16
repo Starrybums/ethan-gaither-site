@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/styles/shell.css">
 <link rel="stylesheet" href="/styles/buttons.css">
 <link rel="stylesheet" href="/styles/motion.css">
+<link rel="stylesheet" href="/styles/pages/call.css">
 <!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
      reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
@@ -63,17 +64,40 @@
 </header>
 
 <main id="main" tabindex="-1">
-  <section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap">
-      <p class="eyebrow">Book a call</p>
-      <h1 id="page-title">Sent.</h1>
-      <p class="lede">I read these myself and reply from my own email.</p>
-      <p class="actions">
-        <a class="btn btn--solid" data-fx="ink" href="/">Back to the home page</a>
-        <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
-      </p>
+  <div class="call call-sent">
+  <section class="page-hero call-hero" aria-labelledby="page-title">
+    <div class="wrap call-hero__grid">
+      <div class="call-hero__text">
+        <p class="eyebrow">Book a call</p>
+        <h1 id="page-title">Got your times.</h1>
+        <p class="lede">I'll confirm one by email, or suggest another. I read these myself and reply from my own email.</p>
+        <p class="actions">
+          <a class="btn btn--solid" data-fx="magnetic" href="/">Back to the home page</a>
+          <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
+        </p>
+      </div>
+      <div class="clock" aria-hidden="true">
+          <span class="clock__wedge"></span>
+          <span class="clock__ticks"></span>
+          <span class="clock__hand"></span>
+          <span class="clock__hand clock__hand--end"></span>
+          <span class="clock__pin"></span>
+          <span class="clock__label"><b>15</b><small>min</small></span>
+        </div>
     </div>
   </section>
+
+  <section class="section call-for" aria-labelledby="think-title">
+    <div class="wrap">
+      <h2 id="think-title">Worth thinking about before we talk</h2>
+      <ul class="for-list" role="list">
+        <li><h3>Your site</h3><p>What it's for, and who needs to find you.</p></li>
+        <li><h3>What you have now</h3><p>A site, a social page, or nothing yet. All fine.</p></li>
+        <li><h3>Your questions</h3><p>Anything about the process, ownership or timing.</p></li>
+      </ul>
+    </div>
+  </section>
+  </div>
 </main>
 
 <footer class="site-footer">

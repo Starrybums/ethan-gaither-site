@@ -1,0 +1,94 @@
+/* styles/pages/call.css — /book-a-call/ and its sent page: the "15 minutes, no pitch" page.
+   A warm amber (--warn for text, --fx-warm for fills) is this page's colour, where the other form page uses cobalt.
+   A CSS-drawn clock with a 15-minute wedge, three "what it's for" points up top, then a narrow centred form.
+   Airy rhythm, one column. Tokens from styles/tokens.css only. Shared field styles live in contact.css.
+   Warm text is --warn (AA on all three papers in both schemes); --fx-warm is only ever a fill behind no text. */
+
+.call { --warm: var(--fx-warm); --warm-text: var(--warn); }
+
+/* ---- Hero: text left, clock right (the clock sits above the text on phones) -------------------------- */
+.call-hero { padding-block: clamp(44px, 8vw, 112px) clamp(36px, 6vw, 80px); }
+.call-hero__grid { display: grid; gap: 28px; align-items: center; grid-template-areas: "clock" "text"; }
+.call-hero__text { grid-area: text; }
+.call-hero .clock { grid-area: clock; width: clamp(80px, 22vw, 96px); }
+.call-hero h1 { max-width: 11em; }
+@media (min-width: 760px) {
+  .call-hero__grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); grid-template-areas: "text clock"; gap: clamp(32px, 6vw, 72px); }
+  .call-hero .clock { width: min(100%, 320px); justify-self: end; }
+}
+.hl {
+  color: var(--warm-text);
+  padding-bottom: .1em;
+  background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 7px) 0 100% / 100% .07em no-repeat;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.call .eyebrow { color: var(--warm-text); }
+
+/* ---- The clock: a 60-minute dial with the first quarter shaded, so 15 minutes is a quarter of the face ---- */
+.clock {
+  position: relative; aspect-ratio: 1; border-radius: 50%;
+  border: 2px solid var(--ink); background: var(--paper-2);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--warm) 16%, transparent);
+  container-type: inline-size;
+}
+.clock__wedge, .clock__ticks { position: absolute; inset: 0; border-radius: 50%; }
+.clock__wedge { background: conic-gradient(from 0deg, color-mix(in srgb, var(--warm) 40%, transparent) 0 90deg, transparent 90deg); }
+.clock__ticks {
+  inset: 4%;
+  background: repeating-conic-gradient(from -.7deg, var(--ink) 0 1.4deg, transparent 1.4deg 30deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent 91%, #000 91.5%);
+  mask: radial-gradient(farthest-side, transparent 91%, #000 91.5%);
+}
+.clock__hand {
+  position: absolute; left: 50%; bottom: 50%; width: 3%; height: 33%; margin-left: -1.5%;
+  border-radius: 99px; background: var(--ink); transform-origin: 50% 100%;
+}
+.clock__hand--end { width: 2.2%; margin-left: -1.1%; background: var(--warm-text); transform: rotate(90deg); }
+.clock__pin { position: absolute; left: 50%; top: 50%; width: 8%; aspect-ratio: 1; margin: -4% 0 0 -4%; border-radius: 50%; background: var(--ink); }
+.clock__label { position: absolute; left: 57%; top: 17%; display: grid; justify-items: center; gap: 4px; gap: 2cqw; line-height: 1; color: var(--ink); }
+.clock__label b { font: 300 2rem/1 var(--serif); font-size: 19cqw; }
+.clock__label small { font: 500 .6rem/1.2 var(--sans); font-size: 5.5cqw; letter-spacing: .14em; text-transform: uppercase; }
+@container (max-width: 140px) { .clock__label small { display: none; } }
+
+/* ---- What the call is for: three points, each with a short warm tick above it -------------------------- */
+.call-for h2 { font-size: var(--fs-h3); margin-bottom: clamp(20px, 3vw, 32px); }
+.for-list { list-style: none; display: grid; gap: 32px var(--col-gap); }
+@media (min-width: 760px) { .for-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.for-list li::before { content: ""; display: block; width: 36px; height: 5px; margin-bottom: 16px; border-radius: 3px; background: var(--warm); }
+.for-list h3 { font-size: clamp(1.25rem, 1.05rem + .8vw, 1.5rem); margin-bottom: 8px; }
+.for-list p { margin: 0; color: var(--ink-2); text-wrap: pretty; }
+
+/* ---- The form, framed as picking a time ------------------------------------------------------------------ */
+.wrap--call { max-width: calc(46rem + 2 * var(--gutter)); }
+.call-form h2 { font-size: var(--fs-h3); }
+.pick {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-bottom: 28px; padding: 18px 20px;
+  border: 1px dashed var(--warm); border-radius: var(--radius-2);
+}
+.pick p { margin: 0; flex: 1 1 16rem; }
+.call .form-card { padding: clamp(22px, 5vw, 48px); border-left: 5px solid var(--warm); }
+.call .form { --form-gap: 26px; }
+/* The times field is the point of the page, so it gets its own warm panel. */
+.field--times {
+  padding: 16px; border: 1px solid color-mix(in srgb, var(--warm) 50%, var(--line)); border-radius: 8px;
+  background: color-mix(in srgb, var(--warm) 12%, var(--paper));
+}
+.call .btn--solid[data-fx="ink"]::before { background: var(--warm-text); }
+.form-success--call { border-left: 5px solid var(--ok); }
+.form-success--call .form-success__next { color: var(--ink-2); }
+
+/* ---- Below the form: how the call goes, and the other ways in ------------------------------------------ */
+.call-after { margin-top: clamp(40px, 7vw, 72px); }
+.call-after h2 { margin-bottom: 14px; }
+.call-how { list-style: none; counter-reset: how; display: grid; gap: 16px; margin-bottom: 28px; }
+.call-how li { counter-increment: how; position: relative; padding-left: 52px; min-height: 36px; }
+.call-how li::before {
+  content: counter(how);
+  content: counter(how) / "";
+  position: absolute; left: 0; top: -2px; width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center; border: 1.5px dashed var(--warm-text); color: var(--warm-text);
+  font: 400 1.1rem/1 var(--serif);
+}
+.call-after p { color: var(--ink-2); max-width: var(--maxw-text); }
+.aside__mail { font-weight: 500; overflow-wrap: anywhere; }
+

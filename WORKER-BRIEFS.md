@@ -101,8 +101,9 @@ Each CTA on a page should use a different technique where two sit side by side. 
 ## 2. Effects contract
 
 ### 2.1 Lazy loading (shell.js, already built)
-After `load`, on `requestIdleCallback` (timeout 2.5 s; a 1.2 s timer where it does not exist, i.e. iOS Safari) or on the first `scroll`/`pointermove`, whichever comes first, shell.js does:
+After `load` and the first contentful paint (a `PerformanceObserver` on `paint`, with a 3 s fallback timer; added 2026-10-16 so the effects modules never sit on the critical path of FCP/LCP), on `requestIdleCallback` (timeout 2.5 s; a 1.2 s timer where it does not exist, i.e. iOS Safari), or at once on the first `scroll`/`pointermove`, whichever comes first, shell.js does:
 ```js
+const o = await import('/js/orb.js');       document.querySelectorAll('[data-orb]').forEach(el => o.init(el, opts));   // first, the hero object (§2.2b)
 const m = await import('/js/background.js'); const bg = m.init(document.getElementById('bg-canvas'), opts);
 const s = await import('/js/scene3d.js');   document.querySelectorAll('[data-scene3d]').forEach(el => s.init(el, opts));
 // opts = { tokens: { ink, paper, accent, warm, alpha, dark }, reducedMotion: false, intensity: 'full' | 'low' }
@@ -115,8 +116,19 @@ export function init(canvasEl, { tokens, reducedMotion, intensity }) → { pause
 ```
 - `canvasEl` is `#bg-canvas`, fixed full-viewport behind everything (`z-index: var(--z-bg)`), inside `.bg`, which already paints a static layered gradient (the fallback).
 - Add `.is-live` to `canvasEl.parentElement` after the first frame is drawn (the canvas fades in over the gradient); remove it in `destroy()`.
-- Inputs it reads itself: `scroll` (passive; page progress 0..1 and velocity), `pointermove` (fine pointers only; ignore touch), `resize` (debounced). Draw in response to input with easing and **stop the rAF loop when the eased values settle**: no ambient motion (WCAG 2.2.2: nothing auto-moves for more than 5 s).
-- `intensity: 'full'` on the home page, `'low'` on inner pages (fewer marks, lower alpha, no pointer response).
+- Inputs it reads itself: `scroll` (passive; page progress 0..1 and velocity) and `resize` (debounced). **No pointer input** (removed 2026-10-16, BRIEF-v3 §15.3: Ethan found the field forming around the mouse distracting). Draw in response to scroll with easing and **stop the rAF loop when the eased values settle**: no ambient motion (WCAG 2.2.2: nothing auto-moves for more than 5 s).
+- `intensity: 'full'` on the home page, `'low'` on inner pages (fewer marks, lower alpha, half the scroll-speed response).
+- Four movements tied to scroll depth with a colour drift (BRIEF-v3 §14.1), unchanged.
+
+### 2.2b `js/orb.js` + `styles/orb.css` (the hero object, BRIEF-v3 §15.3; owner: effects)
+```js
+export function init(el, { tokens, reducedMotion }) → { pause(), resume(), destroy(), update({ tokens }) }
+```
+- `el` is each `[data-orb]` element. Hook in the home hero, first child of `.hero > .wrap`: `<div class="orb" data-orb aria-hidden="true"><span class="orb__still"></span></div>`, plus `<link rel="stylesheet" href="/styles/orb.css">` in the head after `effects.css`. shell.js lazy-loads `orb.js` with the other effects (same skips: reduced motion, save-data; the module itself returns quietly without WebGL).
+- `.orb__still` is the static CSS sphere (layered gradients, inset rims, a contact shadow on `.orb::before`): the finished look without JavaScript, without WebGL and under reduced motion. The module appends `<canvas class="orb__canvas">` and adds `.is-live` after its first frame; the canvas fades in over the still sphere.
+- Placement: 900 px and wider, absolute, right of the headline, vertically centred on the hero text (never over a letter); narrower, in the flow above the eyebrow, right-aligned, 132-220 px. The box size is fixed by CSS, so nothing shifts when the canvas arrives. Not an LCP candidate.
+- Motion: scroll only. Rotation, flow and ripple amplitude follow scroll progress over the first two screens; scroll speed adds a small wobble. Every value eases and the loop stops when settled, never later than 1.5 s after the last scroll. No idle animation, no pointer input.
+- WebGL 1, displaced UV sphere (88×60) in the vertex shader, one draw call. DPR cap 2. Paused off screen (IntersectionObserver) and on a hidden tab. Governor: average CPU over 4 ms → render scale 1 → 0.75 → 0.5 → freeze. Context loss → still sphere until restored. No layout reads in the loop. ≤ 20 KB unminified.
 - Colours only from `tokens` (ink-and-paper palette, accent and warm as small highlights). No mark may cover the paper at more than `tokens.alpha` opacity, so text contrast never drops.
 - DPR cap 2 (1.5 below 700 px wide). Pause on `visibilitychange` hidden; resume on visible. Drive time from the rAF timestamp.
 - Frame-time governor: if the average CPU time of the last 30 frames goes over 4 ms, drop the render scale (1 → 0.75 → 0.5), then freeze on a static frame.
@@ -138,6 +150,7 @@ export function init(sectionEl, { tokens, reducedMotion }) → { pause(), resume
 |---|---|
 | Background | already in the shell: `#bg-canvas` with `data-intensity="full"` |
 | Effects stylesheet | `<link rel="stylesheet" href="/styles/effects.css">` in the head slot, after `home.css` |
+| Hero object | `<div class="orb" data-orb aria-hidden="true"><span class="orb__still"></span></div>` as the first child of `.hero > .wrap`, plus `<link rel="stylesheet" href="/styles/orb.css">` right after `effects.css` (render-blocking on purpose: the box size must apply before first paint, or the phone layout shifts). See §2.2b |
 | Type morph script | `<script type="module" src="/js/type-morph.js"></script>` in the head slot (it auto-inits) |
 | The build | `<section id="build" data-morph-root aria-labelledby="build-title">` containing: one `<h2 id="build-title" data-morph-title>` (plain text, no child elements; the effects module clones it into aria-hidden face layers); a list of captions, each `<li data-morph-step data-frame="…" data-font="…">` with an `<h3>` and a `<p>`; the frame `<figure id="frame">` |
 | 3D showcase | `<section id="showcase-3d" data-scene3d aria-labelledby="…">` containing `<div class="scene3d" data-scene3d-stage>` with 2 to 4 `<img data-layer="laptop|phone|card|…" width height alt>` (sample screenshots in `assets/img/samples/`), plus a short text column outside the stage |

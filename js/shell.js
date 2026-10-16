@@ -10,8 +10,8 @@
       the booking button ([data-booking]), the reply promise ([data-promise])
    6. the button catalogue (js/buttons.js)
    7. lazy effects: after load, on idle (or a 1.2 s timer where requestIdleCallback is missing) or the first scroll/pointer
-      move, imports js/background.js for #bg-canvas and js/scene3d.js for each
-      [data-scene3d], unless the visitor asks for reduced motion or save-data. See WORKER-BRIEFS.md, "Effects contract".
+      move, imports js/orb.js for each [data-orb] (the hero object), js/background.js for #bg-canvas and js/scene3d.js
+      for each [data-scene3d], unless the visitor asks for reduced motion or save-data. See WORKER-BRIEFS.md, "Effects contract".
    Page transitions are CSS only (@view-transition in styles/motion.css); nothing to do here. */
 
 import SITE from './config.js';
@@ -178,7 +178,8 @@ function lazyEffects() {
   if (reduceMq.matches || saveData) return;
   const canvas = document.getElementById('bg-canvas');
   const scenes = $$('[data-scene3d]');
-  if (!canvas && !scenes.length) return;
+  const orbs = $$('[data-orb]');
+  if (!canvas && !scenes.length && !orbs.length) return;
   // requestIdleCallback does not exist on iOS Safari: fall back to a timer, and start early on the first scroll or
   // pointer move (whichever comes first). saveData is Chromium-only, so it is a bonus guard, not the main one.
   const idle = window.requestIdleCallback ? (cb) => window.requestIdleCallback(cb, { timeout: 2500 }) : (cb) => setTimeout(cb, 1200);
@@ -188,6 +189,12 @@ function lazyEffects() {
     started = true;
     ['scroll', 'pointermove'].forEach((t) => window.removeEventListener(t, early));
     const opts = () => ({ tokens: readTokens(), reducedMotion: false, intensity: (canvas && canvas.dataset.intensity) || 'low' });
+    if (orbs.length) {
+      try {
+        const m = await import('./orb.js');
+        orbs.forEach((el) => { const ctl = m.init(el, opts()); if (ctl) effects.push(ctl); });
+      } catch (e) { /* the still CSS sphere stays */ }
+    }
     if (canvas) {
       try {
         const m = await import('./background.js');
@@ -203,8 +210,21 @@ function lazyEffects() {
     }
   };
   const early = () => run();
+  // The idle wait starts only once the first contentful paint is in: on a fast load, "load" can fire before the first
+  // paint, and modules fetched then sit on the critical path of the first paint and of LCP. A 3 s timer covers
+  // browsers without paint timing.
+  const afterPaint = (cb) => {
+    let done = false;
+    const go = () => { if (!done) { done = true; cb(); } };
+    try {
+      if (performance.getEntriesByName('first-contentful-paint').length) return go();
+      const po = new PerformanceObserver((list) => { if (list.getEntriesByName('first-contentful-paint').length) { po.disconnect(); go(); } });
+      po.observe({ type: 'paint', buffered: true });
+      setTimeout(() => { po.disconnect(); go(); }, 3000);
+    } catch (e) { go(); }
+  };
   const start = () => {
-    idle(run);
+    afterPaint(() => idle(run));
     window.addEventListener('scroll', early, { passive: true, once: true });
     window.addEventListener('pointermove', early, { passive: true, once: true });
   };

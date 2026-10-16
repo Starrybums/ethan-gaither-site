@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="/styles/buttons.css">
 <link rel="stylesheet" href="/styles/motion.css">
 <link rel="stylesheet" href="/styles/pages/contact.css">
+<link rel="stylesheet" href="/styles/pages/start.css">
 <!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
      reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
@@ -80,20 +81,25 @@
     <symbol id="i-alert" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6v4.2M8 10.9v.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
   </svg>
 
-  <section class="page-hero" aria-labelledby="page-title">
+  <section class="page-hero start-hero" aria-labelledby="page-title">
     <div class="wrap">
       <p class="eyebrow">Start a project</p>
-      <h1 id="page-title">Tell me about the site</h1>
+      <h1 id="page-title">Tell me about the <span class="hl">site</span>.</h1>
       <p class="lede">What it's for and when you need it. I'll tell you if I'm the right fit.</p>
+      <ol class="steps" role="list" aria-label="How it goes" data-reveal-stagger>
+        <li class="step"><p class="step__title">Tell me about it</p><p>Fill in the form below. Rough is fine.</p></li>
+        <li class="step"><p class="step__title">A 15-minute call</p><p>We talk it through. It's free.</p></li>
+        <li class="step"><p class="step__title">A fixed quote</p><p>Agreed before I start, plus WA sales tax.</p></li>
+      </ol>
     </div>
   </section>
 
-  <section class="section section--flush" aria-labelledby="form-title">
-    <div class="wrap contact">
+  <section class="section section--flush">
+    <div class="wrap start">
       <div class="form-col" data-form-col>
         <div class="form-card" data-form-card>
           <h2 id="form-title">Send me the details</h2>
-          <p class="form-lede">What the site is for and when you need it. Rough is fine. Everything goes straight to my email, and I read it myself.</p>
+          <p class="form-lede">What the site is for and when you need it. Rough is fine. It goes straight to my email, and I read it myself.</p>
           <!-- A plain form post to /api/contact/ (the browser checks the required fields; the server answers with a redirect to the sent page or back here with ?error=). With JavaScript, js/form.js posts JSON to the same endpoint instead. -->
           <form class="form" data-contact-form method="post" action="/api/contact/" aria-labelledby="form-title">
             <input type="hidden" name="type" value="project">
@@ -145,10 +151,11 @@
             <p class="form-note">This goes to my email and nowhere else. I don't add you to a mailing list.</p>
           </form>
         </div>
-        <section class="form-success" data-form-success hidden tabindex="-1" aria-labelledby="success-title">
+        <section class="form-success form-success--start" data-form-success hidden tabindex="-1" aria-labelledby="success-title">
           <svg class="form-success__tick" viewBox="0 0 56 56" aria-hidden="true" focusable="false"><circle cx="28" cy="28" r="26" pathLength="1"/><path d="M17 29.5l7.5 7.5L39.5 20" pathLength="1"/></svg>
           <h2 id="success-title">Sent.</h2>
-          <p>I read these myself and reply from my own email.</p>
+          <p>I read these myself and reply from my own email. If I'm the right fit, I'll write back with questions or a time for a 15-minute call.</p>
+          <p class="form-success__next">While you wait, the &ldquo;Have this ready&rdquo; list is worth a look.</p>
           <p class="actions">
             <a class="btn btn--solid" data-fx="ink" href="/">Back to the home page</a>
             <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
@@ -157,18 +164,30 @@
         <div class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-form-live></div>
       </div>
 
-      <aside class="aside" aria-labelledby="next-title">
-        <div>
+      <aside class="start-aside" aria-label="Before you send, and what comes after">
+        <div class="have" data-reveal>
+          <h2>Have this ready</h2>
+          <p>None of it is needed to write to me. It makes the call quicker.</p>
+          <ul class="checks" role="list">
+            <li>Your logo, if you have one</li>
+            <li>The text you want on the site, even rough notes</li>
+            <li>Photos you'd like to use</li>
+            <li>Your domain login, if one exists</li>
+            <li>When you need it live</li>
+          </ul>
+          <p class="have__note">Don't put passwords in this form. We'll sort out access on the call.</p>
+        </div>
+        <div data-reveal>
           <h2 id="next-title">What happens next</h2>
           <ol class="next" role="list">
-        <li>I read it myself.</li>
-        <li>If I'm the right fit, I write back with questions, or a time to talk.</li>
-        <li>If I'm not, I say so, and point you somewhere better if I can.</li>
-        <li>You get a fixed price, agreed before I start, plus WA sales tax. There is nothing to pay to ask.</li>
+            <li>I read it myself.</li>
+            <li>If I'm the right fit, I write back with questions or a time for a 15-minute call.</li>
+            <li>If I'm not, I say so, and point you somewhere better if I can.</li>
+            <li>You get a fixed price, agreed before I start, plus WA sales tax. There's nothing to pay to ask.</li>
           </ol>
         </div>
-        <div>
-    <p>Not ready to write? <a href="/samples/">Look at the sample sites</a> or <a href="/book-a-call/">book a free call</a> first.</p>
+        <div class="start-aside__more" data-reveal>
+          <p>Not ready to write? <a href="/samples/">Look at the sample sites</a> or <a href="/book-a-call/">book a free call</a> first.</p>
           <p>Prefer email? <a class="aside__mail" href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a></p>
         </div>
       </aside>

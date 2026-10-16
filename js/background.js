@@ -3,17 +3,17 @@
    What it draws: four movements, one after another down the page (BRIEF-v3 §14.1). Each one dissolves into the next
    in soft patches as the visitor scrolls, and the colour of the marks and of the wash drifts with them:
      0. Contour lines (the hero): ink lines like an engraved map, every fourth heavier, one level cobalt, a warm wash
-        on the high ground. Scroll speed combs them sideways; a mouse bends them.
+        on the high ground. Scroll speed combs them sideways.
      1. A dot grid (the build): a halftone grid like a design canvas, cobalt crosses every sixth point, a cool wash.
-        The dots swell in drifting islands as the page scrolls, stretch into streaks with scroll speed, and grow
-        under the mouse like a loupe.
-     2. Long slow waves (what you get, the samples): ribbons of fine warm lines that swell with scroll speed and lift
-        around the mouse; the wash cools from warm to cobalt further down.
+        The dots swell in drifting islands as the page scrolls and stretch into streaks with scroll speed.
+     2. Long slow waves (what you get, the samples): ribbons of fine warm lines that swell with scroll speed; the wash
+        cools from warm to cobalt further down.
      3. A near-still field (the calls to action at the end): paper grain and a soft dusk wash that pools low, moving
         at a twentieth of the scroll.
    On the home page the hand-offs follow the sections (#build, #offer, .closing); other pages spread them over their
-   own length, fewer on short pages. Nothing moves on its own: the loop runs only while an eased value is catching up
-   with input, then stops (WCAG 2.2.2: no automatic motion).
+   own length, fewer on short pages. Scroll is the only input: the pointer does nothing (Ethan, 2026-10-16: the field
+   forming around the mouse was distracting). Nothing moves on its own: the loop runs only while an eased value is
+   catching up with the scroll, then stops (WCAG 2.2.2: no automatic motion).
 
    Contract:  init(canvasEl, { tokens, reducedMotion, intensity }) → { pause(), resume(), destroy(), update({ tokens }) }
    - canvasEl is #bg-canvas inside .bg (which paints the static gradient fallback). .is-live goes on .bg after the
@@ -21,7 +21,7 @@
    - tokens: { ink, paper, accent, warm, alpha, dark } from shell.js readTokens(). Every colour is a token or a mix of
      two. Whatever the movement, no pixel covers the paper at more than tokens.alpha (70% of it on light paper, see
      setTokens), and ink is the strongest mark in both schemes, so every text colour keeps AA over the densest mark.
-   - intensity 'full' (home) or 'low' (inner pages: fewer marks, lower alpha, no pointer response).
+   - intensity 'full' (home) or 'low' (inner pages: fewer marks, lower alpha, half the scroll-speed response).
    - DPR capped at 2 (1.5 below 700 px wide, and a pixel budget on big screens). Paused while the tab is hidden.
    - Frame-time governor: if the last 30 drawn frames average over 4 ms of main-thread time, the render scale steps
      1 → 0.75 → 0.5, then the picture freezes on its last frame. Slow frame intervals (GPU-bound) step the scale too.
@@ -47,7 +47,6 @@ uniform float uS;
 uniform float uT;
 uniform float uP;
 uniform float uV;
-uniform vec3 uM;
 uniform vec3 uInk;
 uniform vec3 uAcc;
 uniform vec3 uWarm;
@@ -61,7 +60,6 @@ float noise(vec2 p){
   return mix(mix(dot(grad(i),f),dot(grad(i+vec2(1.,0.)),f-vec2(1.,0.)),u.x),
              mix(dot(grad(i+vec2(0.,1.)),f-vec2(0.,1.)),dot(grad(i+1.),f-1.),u.x),u.y);
 }
-float near(vec2 uv,float k){vec2 d=uv-uM.xy;return uM.z*exp(-dot(d,d)*k);}
 vec4 over(vec3 lc,float la,vec3 wc,float wa){return vec4(lc*la+wc*wa*(1.-la),la+wa*(1.-la));}
 float lineAt(float x,float fw,float wpx){return clamp(wpx*uS+.5-abs(fract(x+.5)-.5)/fw,0.,1.)*(1.-smoothstep(.1,.42,fw));}
 vec4 grid(vec2 uv){
@@ -69,7 +67,7 @@ vec4 grid(vec2 uv){
   vec2 g=vec2(uv.x,uv.y-uT*.55)*n;
   vec2 id=floor(g),c=fract(g)-.5,ac=abs(c);
   float h=noise(id*.085+vec2(3.1,-uT*.3));
-  float r=mix(.04,.18,smoothstep(-.3,.45,h))*(1.+near(uv,20.)*1.4);
+  float r=mix(.04,.18,smoothstep(-.3,.45,h));
   float aa=n/uR.y;
   float dt=1.-smoothstep(r-aa,r+aa,length(vec2(c.x,c.y/(1.+min(abs(uV)*2.4,1.)))));
   float x=step(mod(id.x,6.),.5)*step(mod(id.y,6.),.5);
@@ -101,15 +99,13 @@ void main(){
     vec2 w=vec2(noise(p*.65+vec2(1.7,uT*.21)),noise(p*.65+vec2(8.3,2.8)-vec2(uT*.16,0.)));
     vec2 q=p+w*1.15;
     q.x+=uV*.2*sin(q.y*2.6+uT*.8);
-    vec2 d=uv-uM.xy;
-    q+=d*(uM.z*1.6*exp(-dot(d,d)*16.));
     f=noise(q)+.45*noise(q*2.03+4.1);
     v=f*uD*(1.+.22*uP);
   }
   if(c2){
     yw=uv.y-uT*.32;
     sw=.55*sin(uv.x*1.1+uT*.7+1.4*noise(vec2(uv.x*.4,yw*.3)))+.22*sin(uv.x*2.6-uT*.5+yw*1.3)+.1*sin(uv.x*5.3+yw*2.-uT*.8);
-    sw=sw*(1.+min(abs(uV),1.)*.9)+near(uv,9.)*.5;
+    sw=sw*(1.+min(abs(uV),1.)*.9);
     h=(yw+sw*.14)*uD*2.3;
   }
   float fwv=max(FW(v,uD*2.4/uR.y),1e-4);
@@ -189,7 +185,6 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
   // changes, so a phone's address bar sliding in and out does not make the field jump.
   let sT = 0, s = 0, pT = 0, p = 0, vT = 0, v = 0;
   let lastY = 0, lastScrollT = 0;
-  let mxT = 0.5, myT = 0.5, mx = 0.5, my = 0.5, mT = 0, m = 0;
 
   // Governor accumulators.
   let gN = 0, gCpu = 0, gDt = 0;
@@ -243,7 +238,7 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     uni = {};
-    ['uR', 'uS', 'uT', 'uP', 'uV', 'uM', 'uInk', 'uAcc', 'uWarm', 'uA', 'uD', 'uK'].forEach((n) => { uni[n] = gl.getUniformLocation(prog, n); });
+    ['uR', 'uS', 'uT', 'uP', 'uV', 'uInk', 'uAcc', 'uWarm', 'uA', 'uD', 'uK'].forEach((n) => { uni[n] = gl.getUniformLocation(prog, n); });
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.BLEND);
     gl.clearColor(0, 0, 0, 0);
@@ -312,7 +307,6 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     gl.uniform1f(uni.uT, s);
     gl.uniform1f(uni.uP, p);
     gl.uniform1f(uni.uV, v);
-    gl.uniform3f(uni.uM, mx * vw / vh, my, full ? m : 0);
     gl.uniform3fv(uni.uInk, colours.ink);
     gl.uniform3fv(uni.uAcc, colours.accent);
     gl.uniform3fv(uni.uWarm, colours.warm);
@@ -337,19 +331,15 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     s += (sT - s) * ease(dt, 170);
     p += (pT - p) * ease(dt, 170);
     v += (vT - v) * ease(dt, 140);
-    mx += (mxT - mx) * ease(dt, 110);
-    my += (myT - my) * ease(dt, 110);
-    m += (mT - m) * ease(dt, 260);
 
     draw();
     if (!live) { live = true; wrap && wrap.classList.add('is-live'); }
 
-    const settled = Math.abs(sT - s) < 4e-4 && Math.abs(pT - p) < 1e-4 && Math.abs(v) < 2e-3 && Math.abs(vT) < 2e-3 &&
-      Math.abs(mxT - mx) < 1e-3 && Math.abs(myT - my) < 1e-3 && Math.abs(mT - m) < 2e-3;
+    const settled = Math.abs(sT - s) < 4e-4 && Math.abs(pT - p) < 1e-4 && Math.abs(v) < 2e-3 && Math.abs(vT) < 2e-3;
     govern(performance.now() - t0, dt);
     if (settled || frozen) {
       // Snap to the targets so the last frame is exact, then stop until the next input.
-      if (settled && (s !== sT || v !== 0)) { s = sT; p = pT; v = vT = 0; mx = mxT; my = myT; m = mT; draw(); }
+      if (settled && (s !== sT || v !== 0)) { s = sT; p = pT; v = vT = 0; draw(); }
       lastTs = 0;
       return;
     }
@@ -394,15 +384,6 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     sT = y / unit;
     pT = clamp(y / maxScroll, 0, 1);
   }
-  function onPointer(e) {
-    if (e.pointerType && e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
-    mxT = e.clientX / vw;
-    myT = 1 - e.clientY / vh;
-    if (!mT) { mx = mxT; my = myT; }   // appear where the pointer is, don't fly in from the last spot
-    mT = 1;
-    kick();
-  }
-  function onLeave() { mT = 0; kick(); }
   let resizeTimer = 0;
   function onResize() {
     clearTimeout(resizeTimer);
@@ -442,17 +423,12 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     ro.observe(document.body || docEl);
   }
 
-  const finePointer = full && win.matchMedia && win.matchMedia('(hover: hover) and (pointer: fine)').matches;
   const passive = { passive: true };
   win.addEventListener('scroll', onScroll, passive);
   win.addEventListener('resize', onResize, passive);
   document.addEventListener('visibilitychange', onVisibility);
   canvasEl.addEventListener('webglcontextlost', onLost);
   canvasEl.addEventListener('webglcontextrestored', onRestored);
-  if (finePointer) {
-    win.addEventListener('pointermove', onPointer, passive);
-    docEl.addEventListener('pointerleave', onLeave, passive);
-  }
 
   // ---- Start ---------------------------------------------------------------------------------------------------
   measure();
@@ -473,8 +449,6 @@ export function init(canvasEl, { tokens, reducedMotion = false, intensity = 'ful
     document.removeEventListener('visibilitychange', onVisibility);
     canvasEl.removeEventListener('webglcontextlost', onLost);
     canvasEl.removeEventListener('webglcontextrestored', onRestored);
-    win.removeEventListener('pointermove', onPointer, passive);
-    docEl.removeEventListener('pointerleave', onLeave, passive);
     if (ro) ro.disconnect();
     try {
       if (!gl.isContextLost()) {

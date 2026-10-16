@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/styles/shell.css">
 <link rel="stylesheet" href="/styles/buttons.css">
 <link rel="stylesheet" href="/styles/motion.css">
+<link rel="stylesheet" href="/styles/pages/start.css">
 <!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
      reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
@@ -63,15 +64,32 @@
 </header>
 
 <main id="main" tabindex="-1">
-  <section class="page-hero" aria-labelledby="page-title">
+  <section class="page-hero start-hero" aria-labelledby="page-title">
     <div class="wrap">
       <p class="eyebrow">Start a project</p>
       <h1 id="page-title">Sent.</h1>
-      <p class="lede">I read these myself and reply from my own email.</p>
+      <p class="lede">I read these myself and reply from my own email. If I'm the right fit, I'll write back with questions or a time for a 15-minute call.</p>
       <p class="actions">
         <a class="btn btn--solid" data-fx="ink" href="/">Back to the home page</a>
         <a class="btn" data-fx="draw" href="/samples/">Look at the sample sites</a>
       </p>
+    </div>
+  </section>
+
+  <section class="section section--flush start-sent" aria-labelledby="while-title">
+    <div class="wrap">
+      <div class="have">
+        <h2 id="while-title">While you wait</h2>
+        <p>None of this is needed to get started. It makes the call quicker.</p>
+        <ul class="checks" role="list">
+          <li>Your logo, if you have one</li>
+          <li>The text you want on the site, even rough notes</li>
+          <li>Photos you'd like to use</li>
+          <li>Your domain login, if one exists</li>
+          <li>When you need it live</li>
+        </ul>
+        <p class="have__note">Don't email passwords. We'll sort out access on the call.</p>
+      </div>
     </div>
   </section>
 </main>

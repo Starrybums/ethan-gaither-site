@@ -1,12 +1,10 @@
-/* styles/pages/contact.css — the two request forms (/start-a-project/ and /book-a-call/).
-   Tokens from styles/tokens.css only; nothing redefined. Owner: pages worker. js/form.js drives the states below. */
+/* styles/pages/contact.css — what the two request forms share (/start-a-project/ and /book-a-call/).
+   Fields, inputs, errors, the honeypot, notices and the success panel. Tokens from styles/tokens.css only.
+   Each page adds its own layout and accent on top: styles/pages/start.css and styles/pages/call.css.
+   js/form.js drives the states below (is-invalid, .field__error, .notice, .form-success.is-shown). */
 
 /* The form follows the hero directly, so drop the section's own top padding. */
 .page-hero + .section--flush { padding-top: 0; }
-
-/* Layout: form first, then "what happens next". Side by side from 900 px. */
-.contact { display: grid; gap: clamp(28px, 5vw, 56px); align-items: start; }
-@media (min-width: 900px) { .contact { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
 
 .form-card {
   padding: clamp(20px, 4vw, 40px);
@@ -15,8 +13,8 @@
 .form-card h2 { font-size: var(--fs-h3); margin-bottom: 8px; }
 .form-lede { margin: 0 0 24px; color: var(--ink-2); max-width: var(--maxw-text); }
 
-.form { --field-bd: color-mix(in srgb, var(--ink) 50%, var(--paper)); display: grid; gap: 22px; }
-.form-row { display: grid; gap: 22px; }
+.form { --field-bd: color-mix(in srgb, var(--ink) 50%, var(--paper)); display: grid; gap: var(--form-gap, 22px); }
+.form-row { display: grid; gap: var(--form-gap, 22px); }
 @media (min-width: 640px) { .form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ---- A field: label, optional hint, control, error ------------------------------------------ */
@@ -67,7 +65,7 @@ html.js .no-js-only { display: none; }
 .notice--warn { border-color: var(--warn); }
 .notice a { font-weight: 500; }
 
-/* ---- Success panel ------------------------------------------------------------------------------- */
+/* ---- Success panel (each page words and colours its own; the states are shared) ---------------------- */
 .form-success {
   padding: clamp(24px, 5vw, 48px); border: 1px solid var(--ok); border-radius: var(--radius-2); background: var(--paper);
 }
@@ -84,19 +82,3 @@ html.js .no-js-only { display: none; }
 html.motion-ok .form-success.is-shown .form-success__tick { animation: fx-pop var(--dur-4) var(--ease-out) both; }
 html.motion-ok .form-success.is-shown .form-success__tick circle { animation: fx-draw 520ms var(--ease-in-out) both; }
 html.motion-ok .form-success.is-shown .form-success__tick path { animation: fx-draw 420ms var(--ease-in-out) 320ms both; }
-
-/* ---- "What happens next" ----------------------------------------------------------------------------- */
-.aside { display: grid; gap: 28px; }
-.aside h2 { font-size: var(--fs-h3); margin-bottom: 12px; }
-.next { list-style: none; counter-reset: next; border-top: 1px solid var(--ink); }
-.next li {
-  counter-increment: next; position: relative; padding: 14px 0 14px 44px; border-bottom: 1px solid var(--line);
-}
-.next li::before {
-  content: counter(next);
-  content: counter(next) / "";
-  position: absolute; left: 0; top: 11px; font: 300 1.5rem/1.2 var(--serif); color: var(--ink-2);
-}
-.aside p { margin: 0 0 .8em; color: var(--ink-2); max-width: var(--maxw-text); }
-.aside p:last-child { margin-bottom: 0; }
-.aside__mail { font-weight: 500; overflow-wrap: anywhere; }
