@@ -54,11 +54,11 @@ const SITE = {
   // accent: the card colour, taken from the sample's own palette.
   samples: [
     { slug: "hollow-oak", name: "Hollow Oak Coffee", kind: "Coffee shop", blurb: "Menu, hours, a map and tap-to-call for a small corner shop.", accent: "#1D3A2C", ready: true },
-    { slug: "casa-ortega", name: "Casa Ortega", kind: "Mexican restaurant", blurb: "A full menu, order by phone and a catering request form.", accent: "#C2410C", ready: false },
-    { slug: "north-fork-apparel", name: "North Fork Apparel", kind: "Clothing brand", blurb: "Lookbook, story, sizing and stockists for a small label.", accent: "#2B2A27", ready: false },
-    { slug: "ridgeline-goods", name: "Ridgeline Goods", kind: "Online store", blurb: "Product grid, filters, product pages and a working demo cart.", accent: "#2F5D50", ready: false },
-    { slug: "summit-plumbing", name: "Summit Plumbing", kind: "Licensed plumber", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#1F4E8C", ready: false },
-    { slug: "tempo-fitness", name: "Tempo Fitness", kind: "Fitness studio", blurb: "Class schedule, memberships and a free-trial form.", accent: "#B4235A", ready: false }
+    { slug: "casa-ortega", name: "Casa Ortega", kind: "Mexican restaurant", blurb: "A full menu, order by phone and a catering request form.", accent: "#B3261E", ready: true },
+    { slug: "north-fork-apparel", name: "North Fork Apparel", kind: "Clothing brand", blurb: "Lookbook, story, sizing and stockists for a small label.", accent: "#9C3D1A", ready: true },
+    { slug: "ridgeline-goods", name: "Ridgeline Goods", kind: "Online store", blurb: "Product grid, filters, product pages and a working demo cart.", accent: "#2F5D50", ready: true },
+    { slug: "summit-plumbing", name: "Switchback Plumbing", kind: "Licensed plumber", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#12305A", ready: true },
+    { slug: "tempo-fitness", name: "Tempo Fitness", kind: "Fitness studio", blurb: "Class schedule, memberships and a free-trial form.", accent: "#FF3D7F", ready: true }
   ],
 
   // Tools Ethan uses, for the About page. True list only. [ETHAN] Figma is left off until he confirms it.

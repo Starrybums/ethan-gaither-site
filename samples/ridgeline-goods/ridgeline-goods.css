@@ -253,6 +253,8 @@ html:not(.js) [data-add], html:not(.js) [data-cart-count] { display: none; }
 .sum-row dd { font: 600 1.5rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
 .summary .small { font-size: .9375rem; color: var(--slate-2); }
 .cart-empty { padding: 40px 0; display: grid; gap: 14px; justify-items: start; }
+/* Reserve the empty-cart height before the deferred script fills the cart, so the footer does not jump (CLS). */
+html.js .cart-main { min-height: 196px; }
 .cart-empty p { max-width: 40ch; font-size: 1.125rem; }
 @media (min-width: 900px) { .cart-layout { grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; } .line { grid-template-columns: 96px minmax(0, 1fr) auto; } .line-tile { width: 96px; } }
 
