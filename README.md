@@ -77,7 +77,7 @@ Rules every sample follows:
 - Fictional and labelled. A banner at the top and the same sentence in the footer: "Sample site for a fictional business, built as a demonstration by Ethan Gaither." with a link back to the gallery. Made-up addresses are marked as made up.
 - `noindex` on every page, and none of them are in the sitemap. Don't add them to `robots.txt` either: a crawler that can't fetch a page can't see its `noindex`.
 - Self-contained: its own HTML, CSS and a little JS. It may reuse the font files, nothing else from the portfolio.
-- No photos, reviews, ratings, awards or customer counts. Forms are `mailto:hello@<slug>.example` forms (a reserved domain that never resolves), with a note that a real build sends through a form service.
+- No photos, reviews, ratings, awards or customer counts. Forms are demo forms: with JavaScript the submit is prevented and a "this is a demo" note appears; without it the form GETs its own page and `#sent:target` shows the note. (Changed 2026-10-15 from `mailto:` actions, which Chrome flags as mixed content on HTTPS.)
 - `summit-plumbing` keeps its original slug. The business was renamed to Switchback Plumbing.
 
 The gallery and the home teaser cards come from `samples` in `js/config.js` (only entries with `ready: true`). `samples/index.html` also carries static cards for visitors without JavaScript, so keep them in step by hand.
@@ -91,7 +91,7 @@ v2's sample address `/sample/` (and anything under it) redirects to `/samples/ho
 Edit `js/config.js`. The pages ship with the same values written into the HTML, and `shell.js` re-applies the text values at load. So after a change, find and replace the old string in the HTML too: `grep -rn "Ethan Gaither" --include=*.html .`
 
 Values Ethan still has to confirm (`[ETHAN]` in `js/config.js` marks the first three):
-- `email`: the address on the site and in the mailto fallback.
+- `email`: the address shown on the site and used by the "or email me" links and the JavaScript-side fallback.
 - `bookingUrl`: empty, so `/book-a-call/` shows only the request form. Set it and a "Pick a time" button appears.
 - Figma on the tools list: left off until he says yes.
 - `certifications`: empty, so the About page has no certifications block at all. Add one and the block appears.
@@ -111,7 +111,7 @@ When a custom domain is attached, update these, then redeploy:
 
 - An inline script in each head adds `js` to `<html>`, and `motion-ok` unless the visitor asked for reduced motion. Every animation is gated on `motion-ok`. Reveals hide content only under `js` and `motion-ok`, and a CSS failsafe shows everything after 4 s if `shell.js` never starts.
 - Reduced motion: the background stays a static gradient, the build section shows its finished state, the 3D stack is a still angled composition, the hero gets one 200 ms fade, buttons only change colour.
-- JavaScript off: all content shows, the nav works, the forms are plain `mailto:` forms, and the samples grid shows its static cards.
+- JavaScript off: all content shows, the nav works, the request forms post form-encoded to `/api/contact/` and land on `start-a-project/sent/` or `book-a-call/sent/` (or come back with `?error=`), and the samples grid shows its static cards.
 - The background and 3D modules load after `load`, on idle (a 1.2 s timer where `requestIdleCallback` is missing, as on iOS Safari) or on the first scroll or pointer move. They don't load under reduced motion or save-data. The background draws only in answer to scroll and pointer, stops when it settles, and pauses in a hidden tab.
 - Keyboard: skip link first, a visible focus ring on every stop, reading order follows the page. The form honeypot has `tabindex="-1"`.
 - Phones: below 560 px the header is two rows (brand and nav, then the two CTAs). It falls back to three rows under about 370 px.
@@ -190,7 +190,7 @@ Missing `RESEND_API_KEY` or `CONTACT_TO` makes the function answer `503 {"error"
 
 ### The test-sender rule (read this before the first test)
 
-Without a verified domain, the sender is `onboarding@resend.dev`. Resend says that address "can only send emails to the email address associated with your Resend account". So `CONTACT_TO` has to be the email you sign up to Resend with. Any other address gets a 403 from Resend, which the function turns into a 502 `send_failed`, and the visitor sees the mailto fallback.
+Production and preview currently set `RESEND_FROM` to a verified domain on the connected Resend account (set 2026-10-15), so delivery is not limited to the account's own address. Without a verified domain, the sender is `onboarding@resend.dev`. Resend says that address "can only send emails to the email address associated with your Resend account". So `CONTACT_TO` has to be the email you sign up to Resend with. Any other address gets a 403 from Resend, which the function turns into a 502 `send_failed`, and the visitor sees the mailto fallback.
 
 One oddity in Resend's docs: step 3 of the troubleshooting list on that page says "not trying to send to your own email address", which contradicts the page's own rule and the API's error text. Read it as a typo. The first real test will settle it.
 
