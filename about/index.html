@@ -79,7 +79,7 @@ fill('[data-areas-list]', SITE.serviceAreas);
     </nav>
     <div class="site-cta">
       <a class="btn btn--solid btn--sm" data-fx="ink" href="/start-a-project/">Start a project</a>
-      <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+      <a class="site-cta__tel" href="sms:" data-site-sms hidden>Text me</a>
     </div>
   </div>
 </header>
@@ -215,10 +215,10 @@ fill('[data-areas-list]', SITE.serviceAreas);
     <div class="wrap">
       <div class="cta-panel">
         <h2 id="cta-title">Want to see if we fit?</h2>
-        <p>Tell me about the site, or book a free call. If I'm not the right person, I'll say so.</p>
+        <p>Tell me about the site, or ask for a call. If I'm not the right person, I'll say so.</p>
         <p class="actions">
           <a class="btn btn--solid" data-fx="ink" href="/start-a-project/">Start a project</a>
-          <a class="btn" data-fx="press3d" href="/book-a-call/">Book a free call</a>
+          <a class="text-cta" href="/book-a-call/">or ask for a call</a>
         </p>
       </div>
     </div>
@@ -239,10 +239,12 @@ fill('[data-areas-list]', SITE.serviceAreas);
         <li><a href="/samples/">Samples</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/start-a-project/">Start a project</a></li>
-        <li><a href="/book-a-call/">Book a free call</a></li>
+        <li><a href="/book-a-call/">Ask for a call</a></li>
       </ul>
     </nav>
     <div class="site-footer__contact" data-copy-scope>
+      <a href="tel:" data-site-tel hidden><span data-site="phone"></span></a>
+      <a href="sms:" data-site-sms hidden>Text me</a>
       <a href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a>
       <button type="button" class="btn btn--sm" data-fx="magnetic" data-copy-email hidden>Copy email</button>
       <span class="copy-note" data-copy-note role="status" aria-live="polite"></span>

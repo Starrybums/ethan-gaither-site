@@ -26,12 +26,12 @@ const MSG = {
   type: 'Pick a project or a call.',
   name: 'Add your name.',
   email: "That email address doesn't look right.",
-  business: 'Add your business name.',
+  business: 'Keep the business name under 120 characters.',
   website: 'Keep the website under 200 characters.',
   phone: 'Use digits and + ( ) - only.',
   messageEmpty: 'Add a few words about what you need.',
   messageLong: 'Keep it under 4,000 characters.',
-  times: 'Give me two times that work for you.'
+  times: 'Keep the times under 300 characters.'
 };
 
 /* Control characters other than tab (09) and newline (0A), plus C1 controls, line/paragraph
@@ -262,7 +262,7 @@ function validate(data) {
   } else out.email = email;
 
   const business = field(data.business, false);
-  if (business === null || business === '' || len(business) > 120) errors.business = MSG.business;
+  if (business === null || len(business) > 120) errors.business = MSG.business;
   else out.business = business;
 
   const website = field(data.website, false);
@@ -280,7 +280,7 @@ function validate(data) {
 
   if (out.type === 'call') {
     const times = field(data.times, true);
-    if (times === null || times === '' || len(times) > 300) errors.times = MSG.times;
+    if (times === null || len(times) > 300) errors.times = MSG.times;
     else out.times = times;
   }
 
@@ -297,11 +297,11 @@ function buildEmail(v, origin, path) {
     `Type: ${label}`,
     `Name: ${v.name}`,
     `Email: ${v.email}`,
-    `Business: ${v.business}`,
+    `Business: ${v.business || '-'}`,
     `Website: ${v.website || '-'}`,
     `Phone: ${v.phone || '-'}`
   ];
-  if (isCall) lines.push(`Good times: ${v.times}`);
+  if (isCall) lines.push(`Good times: ${v.times || '-'}`);
   lines.push('', v.message, '', '--');
   lines.push(`Sent from the form on ${origin}${path} at ${new Date().toISOString()}.`);
   lines.push('Reply to this email to answer them directly.');

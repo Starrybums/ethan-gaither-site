@@ -28,11 +28,11 @@ const MULTILINE = { message: true, times: true };
 const RULES = {
   name:     { max: 100, need: true, msg: 'Add your name.' },
   email:    { max: 254, need: true, missing: 'Add your email.', msg: "That email address doesn't look right.", test: (v) => v.length >= 3 && EMAIL_RE.test(v) },
-  business: { max: 120, need: true, msg: 'Add your business name.' },
+  business: { max: 120, msg: 'Keep the business name under 120 characters.' },
   website:  { max: 200, msg: 'Keep the website under 200 characters.' },
   phone:    { max: 40, msg: 'Use digits and + ( ) - only.', test: (v) => PHONE_RE.test(v) },
   message:  { max: 4000, need: true, msg: 'Add a few words about what you need.', longMsg: 'Keep it under 4,000 characters.' },
-  times:    { max: 300, needCall: true, msg: 'Give me two times that work for you.' }
+  times:    { max: 300, msg: 'Keep the times under 300 characters.' }
 };
 
 const clean = (s) => String(s == null ? '' : s).replace(/\r\n?/g, '\n').trim();
@@ -59,7 +59,7 @@ function check(name, raw, type) {
 function mailtoHref(v, type) {
   const label = type === 'call' ? 'Call request' : 'Project request';
   const who = v.name.replace(/\s+/g, ' ').slice(0, 60);
-  const lines = ['Type: ' + label, 'Name: ' + v.name, 'Email: ' + v.email, 'Business: ' + v.business,
+  const lines = ['Type: ' + label, 'Name: ' + v.name, 'Email: ' + v.email, 'Business: ' + (v.business || '-'),
     'Website: ' + (v.website || '-'), 'Phone: ' + (v.phone || '-')];
   if (type === 'call') lines.push('Good times: ' + (v.times || '-'));
   const body = lines.join('\n') + '\n\n' + v.message;

@@ -19,11 +19,11 @@ Body (UTF-8 JSON object, at most 16 KB):
 | `type` | `"project"` or `"call"` | yes | exactly one of the two |
 | `name` | string | yes | 1-100 characters |
 | `email` | string | yes | 3-254 characters, matches `^[^\s@]+@[^\s@]+\.[^\s@]{2,}$` |
-| `business` | string | yes | 1-120 characters (the business or project name) |
+| `business` | string | no | 0-120 characters (the business or project name) |
 | `website` | string | no | 0-200 characters (their current site, if any; not validated as a URL) |
 | `phone` | string | no | 0-40 characters, only digits, spaces and `+ ( ) - . x` |
 | `message` | string | yes | 1-4000 characters |
-| `times` | string | when `type` is `"call"` | 1-300 characters for calls ("two times that work"); ignored for projects |
+| `times` | string | no | 0-300 characters for calls ("two times that work"); ignored for projects |
 | `company` | string | yes, must be `""` | honeypot. Hidden field a person never fills. Non-empty: answer `200 {"ok":true}` and send nothing |
 
 Unknown fields are ignored. Any field with control characters other than newline and tab is invalid. Newlines are allowed only in `message` and `times`.
@@ -63,11 +63,11 @@ Field messages for 400 `invalid` (the api worker uses these exact strings; the f
 | `type` | "Pick a project or a call." |
 | `name` | "Add your name." |
 | `email` | "That email address doesn't look right." |
-| `business` | "Add your business name." |
+| `business` | "Keep the business name under 120 characters." |
 | `website` | "Keep the website under 200 characters." |
 | `phone` | "Use digits and + ( ) - only." |
 | `message` | "Add a few words about what you need." (empty) or "Keep it under 4,000 characters." (too long) |
-| `times` | "Give me two times that work for you." |
+| `times` | "Keep the times under 300 characters." |
 
 The front end runs the same checks before posting (same limits, same messages) so most errors never reach the server.
 

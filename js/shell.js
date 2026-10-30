@@ -33,6 +33,12 @@ function applyConfig() {
     if (typeof v === 'string' && v) el.textContent = v;
   });
   $$('[data-site-mailto]').forEach((a) => { if (SITE.email) a.setAttribute('href', 'mailto:' + SITE.email); });
+  // Phone links exist in the HTML but stay hidden until SITE.phone is set.
+  const digits = (SITE.phone || '').replace(/[^\d+]/g, '');
+  if (digits) {
+    $$('[data-site-tel]').forEach((a) => { a.setAttribute('href', 'tel:' + digits); a.hidden = false; });
+    if (SITE.texts !== false) $$('[data-site-sms]').forEach((a) => { a.setAttribute('href', 'sms:' + digits); a.hidden = false; });
+  }
   $$('[data-site-link]').forEach((a) => {
     const u = SITE.links && SITE.links[a.getAttribute('data-site-link')];
     if (u) a.setAttribute('href', u);

@@ -26,6 +26,13 @@ const SITE = {
   // [ETHAN] Contact address shown on the site and used by the mailto fallback of the forms.
   email: "gaitherethan@icloud.com",
 
+  // [ETHAN] The number for tap-to-call and tap-to-text, for example "(360) 555-0100". Empty: no phone link appears
+  // anywhere (the [data-site-tel] and [data-site-sms] links stay hidden). Never a guessed number. When it is set, also
+  // bake it into each page's JSON-LD "telephone" so crawlers see it with JavaScript off.
+  phone: "",
+  // false: the call link only, no "Text me".
+  texts: true,
+
   // Public address of the site, no trailing slash. Also baked into every page's canonical and og:url.
   siteUrl: "https://ethan-gaither.vercel.app",
   ogImage: "og.png",

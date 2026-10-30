@@ -77,7 +77,7 @@
     </nav>
     <div class="site-cta">
       <a class="btn btn--solid btn--sm" data-fx="ink" href="/start-a-project/">Start a project</a>
-      <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+      <a class="site-cta__tel" href="sms:" data-site-sms hidden>Text me</a>
     </div>
   </div>
 </header>
@@ -91,14 +91,14 @@
     <div class="wrap">
       <p class="eyebrow hero__eyebrow" data-site="location">Battle Ground, Washington</p>
       <h1 id="hero-title" class="hero__title"><span class="w" style="--i:0">I</span> <span class="w" style="--i:1">build</span> <span class="w" style="--i:2">websites</span> <span class="w" style="--i:3">for</span> <em><span class="w" style="--i:4">small</span> <span class="w" style="--i:5">businesses.</span></em></h1>
-      <p class="lede hero__lede">Fast sites you own outright. Scroll down and watch one get built.</p>
+      <p class="lede hero__lede">When someone looks you up on their phone, they should find you and be able to reach you. I build sites that do that, at a fixed price, and you own all of it.</p>
       <!-- The two soft colour discs sit behind the buttons so the glass one has something to refract. -->
       <div class="hero__cta">
         <span class="hero__orb hero__orb--a" aria-hidden="true"></span>
         <span class="hero__orb hero__orb--b" aria-hidden="true"></span>
         <p class="actions">
           <a class="btn btn--solid hero__btn hero__btn--1" data-fx="glass" href="/start-a-project/">Start a project</a>
-          <a class="btn hero__btn hero__btn--2" data-fx="press3d" href="/book-a-call/">Book a free call</a>
+          <a class="text-cta" href="/book-a-call/">or ask for a call</a>
         </p>
       </div>
     </div>
@@ -134,7 +134,7 @@
           <h2 id="build-title" data-morph-title>Watch a website get built</h2>
           <p class="build-stage__cta actions">
             <a class="btn btn--solid btn--sm" data-fx="magnetic" href="/start-a-project/">Start a project</a>
-            <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+            <a class="text-cta" href="/book-a-call/">or ask for a call</a>
           </p>
         </div>
       </div>
@@ -244,7 +244,7 @@
             <p class="build-step__owns">You own the domain, the hosting account and the code.</p>
             <p class="actions">
               <a class="btn btn--solid btn--sm" data-fx="draw" href="/start-a-project/">Start a project</a>
-              <a class="btn btn--sm" data-fx="ink" href="/book-a-call/">Book a free call</a>
+              <a class="text-cta" href="/book-a-call/">or ask for a call</a>
             </p>
           </div>
         </li>
@@ -286,7 +286,7 @@
         <p class="offer-foot__price"><span class="label">Price</span>Fixed price, agreed before I start, plus WA sales tax.</p>
         <p class="actions">
           <a class="btn btn--solid" data-fx="ink" href="/start-a-project/">Start a project</a>
-          <a class="btn" data-fx="draw" href="/book-a-call/">Book a free call</a>
+          <a class="text-cta" href="/book-a-call/">or ask for a call</a>
         </p>
         <p class="small muted">Not sure what's in or out? <a href="/services/">The services page lists all of it.</a></p>
       </div>
@@ -399,7 +399,7 @@
       <p class="lede">Tell me what it's for. I'll tell you if I'm the right fit.</p>
       <p class="actions">
         <a class="btn btn--solid" data-fx="press3d" href="/start-a-project/">Start a project</a>
-        <a class="btn" data-fx="magnetic" href="/book-a-call/">Book a free call</a>
+        <a class="text-cta" href="/book-a-call/">or ask for a call</a>
       </p>
       <p class="small muted">Fixed price, agreed before I start, plus WA sales tax.</p>
     </div>
@@ -420,10 +420,12 @@
         <li><a href="/samples/">Samples</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/start-a-project/">Start a project</a></li>
-        <li><a href="/book-a-call/">Book a free call</a></li>
+        <li><a href="/book-a-call/">Ask for a call</a></li>
       </ul>
     </nav>
     <div class="site-footer__contact" data-copy-scope>
+      <a href="tel:" data-site-tel hidden><span data-site="phone"></span></a>
+      <a href="sms:" data-site-sms hidden>Text me</a>
       <a href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a>
       <button type="button" class="btn btn--sm" data-fx="magnetic" data-copy-email hidden>Copy email</button>
       <span class="copy-note" data-copy-note role="status" aria-live="polite"></span>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book a free call | Ethan Gaither</title>
+<title>Ask for a call | Ethan Gaither</title>
 <meta name="description" content="Ask Ethan Gaither for a free call about a website for your business. Give two times that work and he'll confirm one. Battle Ground and Clark County, WA.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F5F1EA" media="(prefers-color-scheme: light)">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://ethan-gaither.vercel.app/book-a-call/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ethan Gaither">
-<meta property="og:title" content="Book a free call | Ethan Gaither">
+<meta property="og:title" content="Ask for a call | Ethan Gaither">
 <meta property="og:description" content="Ask Ethan Gaither for a free call about a website for your business. Give two times that work and he'll confirm one. Battle Ground and Clark County, WA.">
 <meta property="og:image" content="https://ethan-gaither.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -32,7 +32,7 @@
 <!-- "js": JavaScript runs, so reveals may hide content until it is seen. "motion-ok": the visitor has not asked for
      reduced motion; every animation is gated on it, so reduced-motion visitors get the finished page. -->
 <script>(function(){var d=document.documentElement,c=' js';try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' motion-ok'}catch(e){}d.className+=c})()</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Book a free call","url":"https://ethan-gaither.vercel.app/book-a-call/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Ask for a call","url":"https://ethan-gaither.vercel.app/book-a-call/"}</script>
 <script type="module" src="/js/shell.js"></script>
 <script type="module" src="/js/form.js"></script>
 </head>
@@ -70,7 +70,7 @@
     </nav>
     <div class="site-cta">
       <a class="btn btn--solid btn--sm" data-fx="ink" href="/start-a-project/">Start a project</a>
-      <a class="btn btn--sm" data-fx="draw" href="/book-a-call/">Book a free call</a>
+      <a class="site-cta__tel" href="sms:" data-site-sms hidden>Text me</a>
     </div>
   </div>
 </header>
@@ -139,9 +139,9 @@
         </div>
             </div>
         <div class="field field--times" data-field="times">
-          <label class="field__label" for="f-times">Two times that work</label>
+          <label class="field__label" for="f-times">Two times that work <span class="field__opt">(optional)</span></label>
           <p class="field__hint" id="f-times-hint">In Pacific time. For example, Tuesday after 4 pm, or Thursday before noon.</p>
-          <textarea class="textarea textarea--short" id="f-times" name="times" rows="3" required aria-describedby="f-times-hint f-times-err"></textarea>
+          <textarea class="textarea textarea--short" id="f-times" name="times" rows="3" aria-describedby="f-times-hint f-times-err"></textarea>
           <p class="field__error" id="f-times-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
             <div class="form-row">
@@ -151,8 +151,8 @@
           <p class="field__error" id="f-phone-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
         <div class="field" data-field="business">
-          <label class="field__label" for="f-business">Business or project name</label>
-          <input class="input" id="f-business" name="business" type="text" autocomplete="organization" required aria-describedby="f-business-err">
+          <label class="field__label" for="f-business">Business name <span class="field__opt">(optional)</span></label>
+          <input class="input" id="f-business" name="business" type="text" autocomplete="organization" aria-describedby="f-business-err">
           <p class="field__error" id="f-business-err" hidden><svg aria-hidden="true" focusable="false"><use href="#i-alert"/></svg><span data-error-text></span></p>
         </div>
             </div>
@@ -221,10 +221,12 @@
         <li><a href="/samples/">Samples</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/start-a-project/">Start a project</a></li>
-        <li><a href="/book-a-call/">Book a free call</a></li>
+        <li><a href="/book-a-call/">Ask for a call</a></li>
       </ul>
     </nav>
     <div class="site-footer__contact" data-copy-scope>
+      <a href="tel:" data-site-tel hidden><span data-site="phone"></span></a>
+      <a href="sms:" data-site-sms hidden>Text me</a>
       <a href="mailto:gaitherethan@icloud.com" data-site="email" data-site-mailto>gaitherethan@icloud.com</a>
       <button type="button" class="btn btn--sm" data-fx="magnetic" data-copy-email hidden>Copy email</button>
       <span class="copy-note" data-copy-note role="status" aria-live="polite"></span>
