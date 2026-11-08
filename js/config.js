@@ -1,4 +1,4 @@
-/* js/config.js — every brand-dependent value for the portfolio (replaces v2's site.config.js).
+/* js/config.js - every brand-dependent value for the portfolio (replaces v2's site.config.js).
    An ES module. shell.js imports it; other modules can too:  import SITE from '/js/config.js';
    It also sets window.SITE for plain scripts.
 
