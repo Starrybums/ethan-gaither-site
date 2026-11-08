@@ -138,7 +138,7 @@ html.motion-ok .bg { animation: fx-fade-in var(--dur-4) var(--ease-out) both; }
 /* ---- Sample card (rendered by shell.js from js/config.js → samples, same markup as the no-JS list) ----
    <li class="sample-card" style="--card-accent: #hex">
      <a class="sample-card__link" href="/samples/<slug>/">
-       <span class="sample-card__swatch" aria-hidden="true"></span>
+       <span class="sample-card__swatch" aria-hidden="true"></span>   (or <img class="sample-card__thumb"> when config has a thumb)
        <span class="label">Sample site · fictional business</span>
        <span class="sample-card__name">Name</span>
        <span class="sample-card__kind">Kind</span>
@@ -155,7 +155,12 @@ html.motion-ok .bg { animation: fx-fade-in var(--dur-4) var(--ease-out) both; }
   background: var(--paper); color: var(--ink); text-decoration: none;
   transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease);
 }
-.sample-card__link > :not(.sample-card__swatch) { margin-inline: 22px; }
+.sample-card__link > :not(.sample-card__swatch, .sample-card__thumb) { margin-inline: 22px; }
+/* A screenshot of the sample, when config gives one. Same place and job as the swatch. No hover zoom. */
+.sample-card__thumb {
+  display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top;
+  margin-bottom: 18px; border-bottom: 1px solid var(--line); background: var(--card-accent);
+}
 .sample-card__swatch {
   display: block; aspect-ratio: 16 / 7; margin-bottom: 18px;
   background:

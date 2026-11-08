@@ -125,7 +125,9 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':
 export function sampleCard(s) {
   return '<li class="sample-card" style="--card-accent:' + esc(s.accent) + '">' +
     '<a class="sample-card__link" href="/samples/' + esc(s.slug) + '/">' +
-    '<span class="sample-card__swatch" aria-hidden="true"></span>' +
+    (s.thumb
+      ? '<img class="sample-card__thumb" src="' + esc(s.thumb) + '" width="1200" height="750" loading="lazy" decoding="async" alt="' + esc(s.thumbAlt) + '">'
+      : '<span class="sample-card__swatch" aria-hidden="true"></span>') +
     '<span class="label">Sample site · fictional business</span>' +
     '<span class="sample-card__name">' + esc(s.name) + '</span>' +
     '<span class="sample-card__kind">' + esc(s.kind) + '</span>' +

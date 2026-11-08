@@ -59,13 +59,14 @@ const SITE = {
   // The sample sites, in gallery order. shell.js renders /samples/ and the home teaser from this list.
   // ready: false keeps a card out of the gallery until its sample is built and reviewed (the integrator flips it).
   // accent: the card colour, taken from the sample's own palette.
+  // thumb: a screenshot of the sample (1200 by 750 or the same 16:10 shape). thumbAlt says what it shows. Empty thumb: the colour swatch.
   samples: [
-    { slug: "hollow-oak", name: "Hollow Oak Coffee", kind: "Coffee shop", blurb: "Menu, hours, a map and tap-to-call for a small corner shop.", accent: "#1D3A2C", ready: true },
-    { slug: "casa-ortega", name: "Casa Ortega", kind: "Mexican restaurant", blurb: "A full menu, order by phone and a catering request form.", accent: "#B3261E", ready: true },
-    { slug: "north-fork-apparel", name: "North Fork Apparel", kind: "Clothing brand", blurb: "Lookbook, story, sizing and stockists for a small label.", accent: "#9C3D1A", ready: true },
-    { slug: "ridgeline-goods", name: "Ridgeline Goods", kind: "Online store", blurb: "Product grid, filters, product pages and a working demo cart.", accent: "#2F5D50", ready: true },
-    { slug: "summit-plumbing", name: "Switchback Plumbing", kind: "Plumbing company", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#12305A", ready: true },
-    { slug: "tempo-fitness", name: "Tempo Fitness", kind: "Fitness studio", blurb: "Class schedule, memberships and a free-trial form.", accent: "#FF3D7F", ready: true }
+    { slug: "hollow-oak", name: "Hollow Oak Coffee", kind: "Coffee shop", blurb: "Menu, hours, a map and tap-to-call for a small corner shop.", accent: "#1D3A2C", thumb: "/assets/img/samples/hollow-oak-card.webp", thumbAlt: "The Hollow Oak Coffee sample: the menu, with coffee on one side and food on the other, each item with a made-up price.", ready: true },
+    { slug: "casa-ortega", name: "Casa Ortega", kind: "Mexican restaurant", blurb: "A full menu, order by phone and a catering request form.", accent: "#B3261E", thumb: "/assets/img/samples/casa-ortega-card.webp", thumbAlt: "The Casa Ortega sample home page: a red banner with the name in large letters, a call to order button and a round patterned emblem.", ready: true },
+    { slug: "north-fork-apparel", name: "North Fork Apparel", kind: "Clothing brand", blurb: "Lookbook, story, sizing and stockists for a small label.", accent: "#9C3D1A", thumb: "/assets/img/samples/north-fork-apparel-card.webp", thumbAlt: "The North Fork Apparel sample home page: the headline Clothes for the long way home beside a drawing of a road through hills.", ready: true },
+    { slug: "ridgeline-goods", name: "Ridgeline Goods", kind: "Online store", blurb: "Product grid, filters, product pages and a working demo cart.", accent: "#2F5D50", thumb: "/assets/img/samples/ridgeline-goods-card.webp", thumbAlt: "The Ridgeline Goods sample store: the headline, category and price filters, and the first row of drawn products.", ready: true },
+    { slug: "summit-plumbing", name: "Switchback Plumbing", kind: "Plumbing company", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#12305A", thumb: "/assets/img/samples/summit-plumbing-card.webp", thumbAlt: "The Switchback Plumbing sample home page: a navy banner with the headline Plumbing help across Clark County and an orange call button.", ready: true },
+    { slug: "tempo-fitness", name: "Tempo Fitness", kind: "Fitness studio", blurb: "Class schedule, memberships and a free-trial form.", accent: "#FF3D7F", thumb: "/assets/img/samples/tempo-fitness-card.webp", thumbAlt: "The Tempo Fitness sample home page: a black banner with the headline Train on the beat and a drawing of a metronome.", ready: true }
   ],
 
   // Tools Ethan uses, for the About page. True list only. [ETHAN] Figma is left off until he confirms it.
