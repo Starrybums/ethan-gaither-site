@@ -64,7 +64,7 @@ const SITE = {
     { slug: "casa-ortega", name: "Casa Ortega", kind: "Mexican restaurant", blurb: "A full menu, order by phone and a catering request form.", accent: "#B3261E", ready: true },
     { slug: "north-fork-apparel", name: "North Fork Apparel", kind: "Clothing brand", blurb: "Lookbook, story, sizing and stockists for a small label.", accent: "#9C3D1A", ready: true },
     { slug: "ridgeline-goods", name: "Ridgeline Goods", kind: "Online store", blurb: "Product grid, filters, product pages and a working demo cart.", accent: "#2F5D50", ready: true },
-    { slug: "summit-plumbing", name: "Switchback Plumbing", kind: "Licensed plumber", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#12305A", ready: true },
+    { slug: "summit-plumbing", name: "Switchback Plumbing", kind: "Plumbing company", blurb: "Services, service area, tap-to-call everywhere and a quote form.", accent: "#12305A", ready: true },
     { slug: "tempo-fitness", name: "Tempo Fitness", kind: "Fitness studio", blurb: "Class schedule, memberships and a free-trial form.", accent: "#FF3D7F", ready: true }
   ],
 
