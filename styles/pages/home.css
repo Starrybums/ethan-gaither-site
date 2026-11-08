@@ -56,6 +56,11 @@ html.motion-ok .hero__btn--2 { animation: hero-rise 520ms var(--ease-out) 1060ms
   .hero__orb--a { width: 168px; height: 168px; left: -10px; top: -52px; }
   .hero__orb--b { width: 132px; height: 132px; left: 170px; top: 22px; }
 }
+/* Phones: the header button would be a second "Start a project" on the first screen, right above the hero one. Home only
+   (only home loads this file), so the other pages keep their header button. The text-me link stays as it is. */
+@media (max-width: 559px) {
+  .site-cta .btn { display: none; }
+}
 
 /* ============================================================================================================
    2. What I do
